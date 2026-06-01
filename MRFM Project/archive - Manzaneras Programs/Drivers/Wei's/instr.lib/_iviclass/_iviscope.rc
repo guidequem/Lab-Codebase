@@ -1,0 +1,915 @@
+library: iviscope.dll
+
+class: "IviScope"
+flags: 16
+sorted: no
+super: ivi, IviScopeObsolete, iviResourceMgr
+attribute: "Range Check"
+	"Inherent IVI Settings:User Options:Range Check"
+	bool readwrite local 00100592
+"Specifies whether to validate property values and VI parameters.  If enabled, the instrument driver validates the parameter values that you pass to driver VIs.  Range checking parameters is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable range checking and maximize performance.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Query Instrument Status"
+	"Inherent IVI Settings:User Options:Query Instrument Status"
+	bool readwrite local 00100593
+"Specifies whether the instrument driver queries the instrument status after each operation.  Querying the instrument status is very useful for debugging.  After you validate your program, you can set this  property to FALSE to disable status checking and maximize performance.
+    The instrument driver can choose to ignore status checking for particular properties regardless of the setting of this property.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Cache"
+	"Inherent IVI Settings:User Options:Cache"
+	bool readwrite local 00100594
+"Specifies whether to cache the value of properties.  When caching is enabled, the instrument driver keeps track of the current instrument settings and avoids sending redundant commands to the instrument.  Thus, you can significantly increase execution speed.
+    The instrument driver can choose always to cache or never to cache particular properties regardless of the setting of this property.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Record Value Coercions"
+	"Inherent IVI Settings:User Options:Record Value Coercions"
+	bool readwrite local 00100596
+"Specifies whether the instrument driver keeps a list of the value coercions it makes for ViInt32 and ViReal64 properties.  If IviScope>>Inherent IVI Settings>>User Options>>Spy is set to TRUE, you use the NI-Spy utility to view coercion information.  If IviScope>>Inherent IVI Settings>>User Options>>Spy is set to FALSE you call Get Next Coercion Record to extract and delete the oldest coercion record from the list.
+    The default value is FALSE.   Use the IVI Configuration utility or the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Simulate"
+	"Inherent IVI Settings:User Options:Simulate"
+	bool readwrite local 00100595
+"Specifies whether or not to simulate instrument driver I/O operations.  If simulation is enabled, instrument driver VIs perform range checking and set and get properties, but they do not perform instrument I/O.  For output parameters that represent instrument data, the instrument driver VIs return calculated values.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Use Specific Simulation"
+	"Inherent IVI Settings:User Options:Use Specific Simulation"
+	bool readwrite local 001005A7
+"Specifies whether to simulate instrument driver I/O operations in the specific or class driver.  This property affects instrument driver operation only when the IviScope>>Inherent IVI Settings>>User Options>>Simulate property is set to TRUE.
+    The default value is FALSE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Interchange Check"
+	"Inherent IVI Settings:User Options:Interchange Check"
+	bool readwrite local 001005A5
+"Specifies whether to record interchangeability warnings when you call one of the following VIs:
+
+    Initiate Acquisition
+    Read Waveform
+    Read Min/Max Waveform [MmW]
+
+    Read WaveformMeasurement
+    Fetch WaveformMeasurement
+
+    The default value is FALSE.  Interchangeability warnings indicate that using your application with a different instrument might cause different behavior.  If IviScope>>Inherent IVI Settings>>User Options>>Spy is set to FALSE, you call Get Next Interchange Warning to extract interchange warnings.  Call the Clear Interchange Warnings VI to clear the list of interchangeability warnings without reading them.
+If the IviScope>>Inherent IVI Settings>>User Options>>Spy property is set to TRUE, you use the NI-Spy utility to view interchangeability warnings.
+Interchangeability checking examines the properties in a capability group only if you specify a value for at least one property within that group.  Interchangeability warnings can occur under the following conditions:
+
+(1) A property affects the behavior of the instrument and you have not set that property.
+
+(2) The IviScope class defines values for a property and you have set that property to a value not defined by the IviScope class.
+
+(3) The IviScope class defines a property as read-only and you have set that property.
+
+The IviScope class provides the following exceptions to these interchangeability checking rules.  The exceptions are listed under the capability group to which they refer:
+
+(1) IviScopeBase Capabilities:
+
+ - The following properties are required to be in a user-specified state on a channel only if the IviScope>>Channel Subsystem>>Channel Enabled property is set to TRUE for that channel:
+
+    IviScope>>Channel Subsystem>>Vertical Range
+    IviScope>>Channel Subsystem>>Vertical Offset
+    IviScope>>Channel Subsystem>>Vertical Coupling
+    IviScope>>Channel Subsystem>>Probe Attenuation
+    IviScope>>Channel Subsystem>>Maximum Input Frequency
+    IviScope>>Channel Subsystem>>Input Impedance
+
+ - The IviScope>>Trigger Subsystem>>Trigger Level property is required to be in a user-specified state only if the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_EDGE_TRIGGER, IVISCOPE_VAL_GLITCH_TRIGGER or IVISCOPE_VAL_WIDTH_TRIGGER.
+
+ - The IviScope>>Trigger Subsystem>>Trigger Coupling and IviScope>>Trigger Subsystem>>Trigger Slope properties are required to be in a user-specified state only if the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_EDGE.
+
+(2) IviScopeTVTrigger Capabilities:
+
+ - Interchangeability checking is performed on this extension group only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_TV_TRIGGER.
+
+ - The IviScope>>Trigger Subsystem>>TV Triggering [TV]>>TV Trigger Line Number [TV] property must be in a user-specified state only if the IviScope>>Trigger Subsystem>>TV Triggering [TV]>>TV Trigger Event [TV] property is set to IVISCOPE_VAL_LINE_NUMBER.
+
+(3) IviScopeRuntTrigger Capabilities:
+
+ - Interchangeability checking is performed on this extension group only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_RUNT_TRIGGER.
+
+(4) IviScopeGlitchTrigger Capabilities:  - Interchangeability checking is performed on this extension group only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_GLITCH_TRIGGER.
+
+(5) IviScopeWidthTrigger Capabilities:
+
+ - Interchangeability checking is performed on this extension group only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_WIDTH_TRIGGER.
+
+(6) IviScopeAcLineTrigger Capabilities:
+
+ - Interchangeability checking is performed on this extension group only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_AC_LINE_TRIGGER.
+
+(7) IviScopeWaveformMeas Capabilities:
+
+ - Interchangeability checking is performed on this extension group only when the Read WaveformMeasurement VI is called.
+
+ - The IviScope>>Waveform Measurement [WM]>>Measurement Low Reference [WM], IviScope>>Waveform Measurement [WM]>>Measurement Mid Reference [WM], and IviScope>>Waveform Measurement [WM]>>Measurement High Reference [WM] properties are required to be in a user-specified state only if you request a waveform measurement that requires reference levels.
+
+(8) IviScopeMinMaxWaveform Capabilities:
+
+ - Interchangeability checking is performed on this extension group only when the IviScope>>Acquisition>>Acquisition Type property is set to IVISCOPE_VAL_ENVELOPE or IVISCOPE_VAL_PEAK_DETECT.
+
+ - The IviScope>>Acquisition>>Number of Envelopes [MmW] property is required to be in a user-specified state only when the IviScope>>Acquisition>>Acquisition Type property is set to IVISCOPE_VAL_ENVELOPE.
+
+(9) IviScopeAverageAcquisition Capabilities:
+
+ - Interchangeability checking is performed on this extension group only when the IviScope>>Acquisition>>Acquisition Type property is set to IVISCOPE_VAL_AVERAGE.
+
+
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Spy"
+	"Inherent IVI Settings:User Options:Spy"
+	bool readwrite local 001005A6
+"Specifies whether to log class VI calls to the NI Spy utility.  If spying is enabled, you can use NI Spy to view the input and output parameters, return values, coercion records, and interchangeability warnings of class VI calls.
+    The default value is TRUE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Description"
+	"Inherent IVI Settings:Class Driver Identification:Description"
+	string readonly local 00100796
+"A string that contains a brief description of the class driver
+    "
+attribute: "Class Driver Prefix"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Prefix"
+	string readonly local 001006BD
+"A string that contains the prefix for the class driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Class Driver Vendor"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Vendor"
+	string readonly local 00100795
+"A string that contains the name of the vendor that supplies this class driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Class Driver Identification:Revision"
+	string readonly local 001007B8
+"A string that contains additional version information about the class driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Major Version"
+	iL readonly local 00100797
+"The major version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100798
+"The minor version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Description"
+	"Inherent IVI Settings:Specific Driver Identification:Description"
+	string readonly local 00100792
+"A string that contains a brief description of the specific driver
+    "
+attribute: "Specific Driver Prefix"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Prefix"
+	string readonly local 001006BE
+"A string that contains the prefix for the instrument driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Specific Driver Locator"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Locator"
+	string readonly local 001006BF
+"Indicates the location at which the class driver attempts to find the specific driver module file.
+"
+attribute: "Specific Driver Vendor"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Vendor"
+	string readonly local 00100791
+"A string that contains the name of the vendor that supplies this driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Specific Driver Identification:Revision"
+	string readonly local 001007B7
+"A string that contains additional version information about the specific driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Major Version"
+	iL readonly local 00100793
+"The major version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100794
+"The minor version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Supported Instrument Models"
+	"Inherent IVI Settings:Specific Driver Capabilities:Supported Instrument Models"
+	string readonly local 001006D7
+"Contains a model code of the instrument. For specific drivers that support more than one device, this property contains a comma-separated list of supported instrument models.
+    "
+attribute: "Group Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Group Capabilities"
+	string readonly local 00100721
+"Indicates the IviScope capability groups that the specific instrument driver supports.  This property is a comma-delimited list of the following group names:
+
+'IviScopeBase' - Supports fundamental oscilloscope capabilities.
+
+'IviScopeInterpolation' - Supports IviScopeBase with the ability to configure the oscilloscope to interpolate missing points in a waveform.
+
+'IviScopeTVTrigger' - Supports IviScopeBase with the ability to trigger on standard television signals.
+
+'IviScopeRuntTrigger' - Supports IviScopeBase with the ability to trigger on runts.
+
+'IviScopeGlitchTrigger' - Supports IviScopeBase with the ability to trigger on glitches.
+
+'IviScopeWidthTrigger' - Supports IviScopeBase with the ability to trigger on a variety of conditions regarding pulse widths.
+
+'IviScopeAcLineTrigger' - Supports IviScopeBase with the ability to trigger on zero crossings of a network supply voltage.
+
+'IviScopeWaveformMeas' - Supports IviScopeBase with the ability to calculate waveform measurements.
+
+'IviScopeMinMaxWaveform' - Supports IviScopeBase with the ability to acquire minimum and maximum waveforms that correspond to the same time range.
+
+'IviScopeProbeAutoSense' - Supports IviScopeBase with the ability to automatically sense the probe attenuation of an attached probe.
+
+'IviScopeContinuousAcquisition' - Supports IviScopeBase with the ability to continuously acquire data from the input.
+
+'IviScopeAverageAcquisition' - Supports IviScopeBase with the ability to create a waveform that is the average of multiple waveform acquisitions.
+
+'IviScopeSampleMode' - Supports IviScopeBase with the ability to return the actual sample mode.
+
+'IviScopeTriggerModifier' - Supports IviScopeBase with the ability to modify the behavior of the triggering subsystem in the absence of an expected trigger.
+
+'IviScopeAutoSetup' - Supports IviScopeBase with the ability to perform an auto-setup operation.
+
+'IviScopeSoftwareTrigger' - Supports IviScopeBase with the ability to use the software trigger as the exclusive trigger type.
+
+    "
+attribute: "Function Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Function Capabilities"
+	string readonly local 00100722
+"Indicates the IviScope VIs that the specific instrument driver supports.  This property is a comma-delimited list of the following functions:
+
+    'IviScope_init'
+    'IviScope_close'
+    'IviScope_reset'
+    'IviScope_self_test'
+    'IviScope_error_query'
+    'IviScope_error_message'
+    'IviScope_revision_query'
+    'IviScope_Abort'
+    'IviScope_AcquisitionStatus'
+    'IviScope_ActualRecordLength'
+    'IviScope_ConfigureAcquisitionRecord'
+    'IviScope_ConfigureAcquisitionType'
+    'IviScope_ConfigureChannel'
+    'IviScope_ConfigureChanCharacteristics'
+    'IviScope_ConfigureEdgeTriggerSource'
+    'IviScope_ConfigureTrigger'
+    'IviScope_ConfigureTriggerCoupling'
+    'IviScope_FetchWaveform'
+    'IviScope_InitiateAcquisition'
+    'IviScope_IsInvalidWfmElement'
+    'IviScope_ReadWaveform'
+    'IviScope_SampleRate'
+    'IviScope_ConfigureInterpolation'
+    'IviScope_ConfigureTVTriggerSource'
+    'IviScope_ConfigureTVTriggerLineNumber'
+    'IviScope_ConfigureRuntTriggerSource'
+    'IviScope_ConfigureGlitchTriggerSource'
+    'IviScope_ConfigureWidthTriggerSource'
+    'IviScope_ConfigureAcLineTriggerSlope'
+    'IviScope_ConfigureRefLevels'
+    'IviScope_FetchWaveformMeasurement'
+    'IviScope_ReadWaveformMeasurement'
+    'IviScope_ConfigureNumEnvelopes'
+    'IviScope_FetchMinMaxWaveform'
+    'IviScope_ReadMinMaxWaveform'
+    'IviScope_AutoProbeSenseValue'
+    'IviScope_ConfigureInitiateContinuous'
+    'IviScope_ConfigureNumAverages'
+    'IviScope_SampleMode'
+    'IviScope_ConfigureTriggerModifier'
+    'IviScope_AutoSetup'
+    "
+
+attribute: "Attribute Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Attribute Capabilities"
+	string readonly local 00100723
+"Indicates the IviScope properties that the specific instrument driver supports.  This property is a comma-delimited list of the following properties:
+
+    'IVISCOPE_ATTR_VERTICAL_RANGE'
+    'IVISCOPE_ATTR_VERTICAL_OFFSET'
+    'IVISCOPE_ATTR_VERTICAL_COUPLING'
+    'IVISCOPE_ATTR_PROBE_ATTENUATION'
+    'IVISCOPE_ATTR_CHANNEL_ENABLED'
+    'IVISCOPE_ATTR_MAX_INPUT_FREQUENCY'
+    'IVISCOPE_ATTR_INPUT_IMPEDANCE'
+    'IVISCOPE_ATTR_ACQUISITION_TYPE'
+    'IVISCOPE_ATTR_HORZ_TIME_PER_RECORD'
+    'IVISCOPE_ATTR_HORZ_RECORD_LENGTH'
+    'IVISCOPE_ATTR_HORZ_MIN_NUM_PTS'
+    'IVISCOPE_ATTR_HORZ_SAMPLE_RATE'
+    'IVISCOPE_ATTR_ACQUISITION_START_TIME'
+    'IVISCOPE_ATTR_TRIGGER_TYPE'
+    'IVISCOPE_ATTR_TRIGGER_SOURCE'
+    'IVISCOPE_ATTR_TRIGGER_COUPLING'
+    'IVISCOPE_ATTR_TRIGGER_HOLDOFF'
+    'IVISCOPE_ATTR_TRIGGER_LEVEL'
+    'IVISCOPE_ATTR_TRIGGER_SLOPE'
+    'IVISCOPE_ATTR_INTERPOLATION'
+    'IVISCOPE_ATTR_TV_TRIGGER_SIGNAL_FORMAT'
+    'IVISCOPE_ATTR_TV_TRIGGER_EVENT'
+    'IVISCOPE_ATTR_TV_TRIGGER_LINE_NUMBER'
+    'IVISCOPE_ATTR_TV_TRIGGER_POLARITY'
+    'IVISCOPE_ATTR_RUNT_HIGH_THRESHOLD'
+    'IVISCOPE_ATTR_RUNT_LOW_THRESHOLD'
+    'IVISCOPE_ATTR_RUNT_POLARITY'
+    'IVISCOPE_ATTR_GLITCH_WIDTH'
+    'IVISCOPE_ATTR_GLITCH_POLARITY'
+    'IVISCOPE_ATTR_GLITCH_CONDITION'
+    'IVISCOPE_ATTR_WIDTH_LOW_THRESHOLD'
+    'IVISCOPE_ATTR_WIDTH_HIGH_THRESHOLD'
+    'IVISCOPE_ATTR_WIDTH_POLARITY'
+    'IVISCOPE_ATTR_WIDTH_CONDITION'
+    'IVISCOPE_ATTR_AC_LINE_TRIGGER_SLOPE'
+    'IVISCOPE_ATTR_MEAS_HIGH_REF'
+    'IVISCOPE_ATTR_MEAS_LOW_REF'
+    'IVISCOPE_ATTR_MEAS_MID_REF'
+    'IVISCOPE_ATTR_NUM_ENVELOPES'
+    'IVISCOPE_ATTR_PROBE_SENSE_VALUE'
+    'IVISCOPE_ATTR_INITIATE_CONTINUOUS'
+    'IVISCOPE_ATTR_NUM_AVERAGES'
+    'IVISCOPE_ATTR_SAMPLE_MODE'
+    'IVISCOPE_ATTR_TRIGGER_MODIFIER'
+    "
+attribute: "Channel Count"
+	"Inherent IVI Settings:Specific Driver Capabilities:Channel Count"
+	iL readonly local 0010065B
+"Indicates the number of channels that the specific driver supports.  
+    For each property for which the IVI_VAL_MULTI_CHANNEL flag property is set, the instrument driver maintains a separate cache value for each channel.
+    "
+attribute: "Manufacturer"
+	"Inherent IVI Settings:Instrument Identification:Manufacturer"
+	string readonly local 0010078F
+"A string that contains the name of the instrument manufacturer you are currently using.
+    "
+attribute: "Model"
+	"Inherent IVI Settings:Instrument Identification:Model"
+	string readonly local 00100790
+"A string that contains the model number or name of the instrument that you are currently using.
+    "
+attribute: "Firmware Revision"
+	"Inherent IVI Settings:Instrument Identification:Firmware Revision"
+	string readonly local 0010078E
+"A string that contains the firmware revision information for the instrument you are currently using.
+    "
+attribute: "Driver Setup"
+	"Inherent IVI Settings:Advanced Session Information:Driver Setup"
+	string readonly local 00100597
+"     Some cases exist where you must specify instrument driver options at initialization time.  An example of this is specifying a particular instrument model from among a family of instruments that the driver supports.  This is useful when using simulation.  
+     You can specify driver-specific options through the DriverSetup keyword in the optionsString parameter to the Init With Options VI.  If you open an instrument using a logical name, you can also specify the options through the IVI Configuration Utility.
+     The default value is an empty string.
+     "
+attribute: "Logical Name"
+	"Inherent IVI Settings:Advanced Session Information:Logical Name"
+	string readonly local 001006C1
+"A string containing the logical name you specified when opening the current IVI session.
+     You may pass a logical name to the Initialize or Initialize With Options VIs.  The IVI Configuration utility must contain an entry for the logical name.  The logical name entry refers to a virtual instrument section in the IVI Configuration file.  The virtual instrument section specifies a physical device and initial user options.
+    "
+attribute: "IO Resource Descriptor"
+	"Inherent IVI Settings:Advanced Session Information:IO Resource Descriptor"
+	string readonly local 001006C0
+"Indicates the resource descriptor the driver uses to identify the physical device.
+    If you initialize the driver with a logical name, this property contains the resource descriptor that corresponds to the entry in the IVI Configuration utility.  
+    If you initialize the instrument driver with the resource descriptor, this property contains that value.
+    "
+attribute: "Acquisition Type"
+	"Acquisition:Acquisition Type"
+	iL enum { IVISCOPE_VAL_NORMAL=0, IVISCOPE_VAL_PEAK_DETECT=1, IVISCOPE_VAL_HI_RES=2, IVISCOPE_VAL_ENVELOPE=3, IVISCOPE_VAL_AVERAGE=4} readwrite local 00131335
+"Specifies how the oscilloscope acquires data and fills the waveform record.  When you set this property to IVISCOPE_VAL_ENVELOPE or IVISCOPE_VAL_PEAK_DETECT, the oscilloscope acquires minimum and maximum waveforms.  To retrieve the minimum and maximum waveforms, use the Read Min/Max Waveform [MmW] and Fetch Min/Max Waveform [MmW] VIs.
+    
+IVISCOPE_VAL_NORMAL 0
+Sets the oscilloscope to the normal acquisition mode.  The oscilloscope acquires one sample for each point in the waveform record.  The oscilloscope can use real-time or equivalent-time sampling.
+
+IVISCOPE_VAL_PEAK_DETECT 1
+Sets the oscilloscope to the peak-detect acquisition mode.  The oscilloscope oversamples the input signal and keeps the minimum and maximum values that correspond to each position in the waveform record.  The oscilloscope uses only real-time sampling.
+
+IVISCOPE_VAL_HI_RES 2
+Sets the oscilloscope to the high-resolution acquisition mode.  The oscilloscope oversamples the input signal and calculates an average value for each position in the waveform record.  The oscilloscope uses only real-time sampling.
+
+IVISCOPE_VAL_ENVELOPE 3
+Sets the oscilloscope to the envelope acquisition mode.  The oscilloscope acquires multiple waveforms and keeps the minimum and maximum voltages it acquires for each point in the waveform record.  You specify the number of waveforms the oscilloscope acquires with the IviScope>>Acquisition>>Number of Envelopes [MmW] property.  The oscilloscope can use real-time or equivalent-time sampling.
+
+IVISCOPE_VAL_AVERAGE 4
+Sets the oscilloscope to the average acquisition mode.  The oscilloscope acquires multiple waveforms and calculates an average value for each point in the waveform record.  You specify the number of waveforms the oscilloscope acquires with the IviScope>>Acquisition>>Number of Averages [AA] property.  The oscilloscope can use real-time or equivalent-time sampling."
+attribute: "Horizontal Time Per Record"
+	"Acquisition:Horizontal Time Per Record"
+	fD readwrite local 001312D7
+"This property specifies the time in seconds that corresponds to the record length.
+    "
+attribute: "Horizontal Minimum Number of Points"
+	"Acquisition:Horizontal Minimum Number of Points"
+	iL readwrite local 001312D9
+"Specifies the minimum number of points you require in the waveform record for each channel.  This instrument driver uses the value you specify to configure the record length that the oscilloscope uses for waveform acquisition.  Use the IviScope>>Acquisition>>Horizontal Record Length property to obtain the actual record length.
+    "
+attribute: "Horizontal Record Length"
+	"Acquisition:Horizontal Record Length"
+	iL readonly local 001312D8
+"Returns the actual number of points the oscilloscope acquires for each channel.  The value is equal to or greater than the minimum number of points you specify with the IviScope>>Acquisition>>Horizontal Minimum Number of Points property.  Allocate a ViReal64 array of this size or greater to pass as the Waveform Array parameter of the Read Waveform and Fetch Waveform VIs.  
+    Note:  The oscilloscope may use different size records depending on the value you specify for the IviScope>>Acquisition>>Acquisition Type property.
+    "
+attribute: "Horizontal Sample Rate"
+	"Acquisition:Horizontal Sample Rate"
+	fD readonly local 001312DA
+"Returns the effective digitizing rate using the current configuration.  The units are samples per second.
+    "
+attribute: "Acquisition Start Time"
+	"Acquisition:Acquisition Start Time"
+	fD readwrite local 0013133D
+"This properties specifies the length of time from the trigger event to the first point in the waveform record.  The units are seconds.  If the value is positive, the first point in the waveform record occurs after the trigger event.  If the value is negative, the first point in the waveform record occurs before the trigger event.
+    "
+attribute: "Interpolation [I]"
+	"Acquisition:Interpolation [I]"
+	iL enum { IVISCOPE_VAL_NO_INTERPOLATION=1, IVISCOPE_VAL_SINE_X=2, IVISCOPE_VAL_LINEAR=3} readwrite local 001312E3
+"Specifies the interpolation method the oscilloscope uses when it cannot sample a voltage for every point in the waveform record.
+
+Note:
+(1) This property is part of the IviScopeInterpolation [I] extension group.
+    
+IVISCOPE_VAL_NO_INTERPOLATION 1
+The oscilloscope does not interpolate points in the waveform.  Instead, the driver sets every element in the waveform array for which the oscilloscope cannot resolve a value to an IEEE defined NaN (Not a Number) value.
+
+IVISCOPE_VAL_SINE_X 2
+sin(x)/x interpolation
+
+IVISCOPE_VAL_LINEAR 3
+Linear interpolation"
+attribute: "Number of Averages [AA]"
+	"Acquisition:Number of Averages [AA]"
+	iL readwrite local 00131338
+"Specifies the number of waveforms the oscilloscope acquires and averages.  After the oscilloscope acquires as many waveforms as this property specifies, it returns to the idle state.  This property affects instrument behavior only when the IviScope>>Acquisition>>Acquisition Type property is set to IVISCOPE_VAL_AVERAGE.
+
+Note:
+(1) This property is part of the IviScopeAverageAcquisition [AA] extension group.
+    "
+attribute: "Number of Envelopes [MmW]"
+	"Acquisition:Number of Envelopes [MmW]"
+	iL readwrite local 00131339
+"When you set the IviScope>>Acquisition>>Acquisition Type property to IVISCOPE_VAL_ENVELOPE, the oscilloscope acquires multiple waveforms.  After each waveform acquisition, the oscilloscope keeps the minimum and maximum values it finds for each point in the waveform record.  This property specifies the number of waveforms the oscilloscope acquires and analyzes to create the minimum and maximum waveforms.  After the oscilloscope acquires as many waveforms as this property specifies, it returns to the idle state.  This property affects instrument operation only when the IviScope>>Acquisition>>Acquisition Type property is set to IVISCOPE_VAL_ENVELOPE.
+
+Note:
+(1) This property is part of the IviScopeMinMaxWaveform [MmW] extension group.
+    "
+attribute: "Sample Mode [SM]"
+	"Acquisition:Sample Mode [SM]"
+	iL enum { IVISCOPE_VAL_REAL_TIME=0, IVISCOPE_VAL_EQUIVALENT_TIME=1} readonly local 0013133A
+"Returns the sample mode the oscilloscope is currently using.
+
+  
+IVISCOPE_VAL_REAL_TIME 0
+Indicates that the oscilloscope is using real-time sampling.
+
+IVISCOPE_VAL_EQUIVALENT_TIME 1
+Indicates that the oscilloscope is using equivalent-time sampling."
+attribute: "Initiate Continuous [CA]"
+	"Acquisition:Initiate Continuous [CA]"
+	bool readwrite local 0013133B
+"Specifies whether the oscilloscope continuously initiates waveform acquisition.  If you set this property to TRUE, the oscilloscope immediately waits for another trigger after the previous waveform acquisition is complete.  Setting this property to TRUE is useful when you require continuous updates of the oscilloscope display.
+
+Note:
+(1) This property is part of the IviScopeContinuousAcquisition [CA] extension group.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Channel Enabled"
+	"Channel Subsystem:Channel Enabled"
+	bool readwrite local 001312D5
+"This channel-based property specifies whether the oscilloscope acquires a waveform for a channel when you call the  Initiate Acquisition, Read Waveform, Read Min/Max Waveform [MmW], or Read WaveformMeasurement VI.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Probe Attenuation"
+	"Channel Subsystem:Probe Attenuation"
+	fD enum { IVISCOPE_VAL_PROBE_SENSE_ON=-1.000000E+0} readwrite local 001312D4
+"This channel-based property specifies the scaling factor by which the probe you attach to the channel attenuates the input.  For example, when you use a 10:1 probe, set this property to 10.0.
+    This driver reserves negative values to control the oscilloscope's automatic probe sense capability.  Setting this property to IVISCOPE_VAL_PROBE_SENSE_ON configures the oscilloscope to sense the attenuation of the probe automatically.  After you enable the automatic probe sense, subsequent queries of this property return the value IVISCOPE_VAL_PROBE_SENSE_ON.  Use the IviScope>>Channel Subsystem>>Probe Sense Value [PAS] property to obtain the actual probe attenuation.
+    If you set the oscilloscope to sense the probe attenuation automatically, the probe attenuation value can change at any time.  When the oscilloscope detects a new probe attenuation value, other settings in the oscilloscope might also change.  The driver has no way of knowing when these changes occur.  Therefore, when you enable the automatic probe sense capability, this driver disables caching for properties that depend on the probe attenuation.  These properties include IviScope>>Channel Subsystem>>Vertical Range, IviScope>>Channel Subsystem>>Vertical Offset, and all the properties that configure trigger levels.  To maximize performance, set this property to a manual probe attenuation setting.
+    If the oscilloscope is set to sense the probe attenuation automatically, setting this property to a positive value disables the automatic probe sense and configures the oscilloscope to use the manual probe attenuation you specify.
+    If you use a manual probe attenuation, you must set this property to reflect the new probe attenuation each time you attach a different probe.
+    
+IVISCOPE_VAL_PROBE_SENSE_ON -1
+Enables the oscilloscope's automatic probe sense capability."
+attribute: "Probe Sense Value [PAS]"
+	"Channel Subsystem:Probe Sense Value [PAS]"
+	fD readonly local 0013133C
+"This channel-based property returns the probe attenuation value the oscilloscope automatically senses.  If you disable the automatic probe sense capability, this property returns the manual probe attenuation setting.
+
+Note:
+(1) This property is part of the IviScopeProbeAutoSense [PAS] extension group.
+    "
+attribute: "Vertical Range"
+	"Channel Subsystem:Vertical Range"
+	fD readwrite local 001312D1
+"This channel-based property specifies the absolute value of the input range the oscilloscope can acquire for the channel.  The units are volts.  For example, to acquire a sine wave which spans between -5.0 and 5.0 volts, you set this property to 10.0 volts.
+    "
+attribute: "Vertical Offset"
+	"Channel Subsystem:Vertical Offset"
+	fD readwrite local 001312D2
+"This channel-based property specifies the location of the center of the range that you specify with the IviScope>>Channel Subsystem>>Vertical Range property.  Express the value in volts and with respect to ground.  For example, to acquire a sine wave that spans between 0.0 and 10.0 volts, set this property to 5.0 volts.
+    "
+attribute: "Vertical Coupling"
+	"Channel Subsystem:Vertical Coupling"
+	iL enum { IVISCOPE_VAL_AC=0, IVISCOPE_VAL_DC=1, IVISCOPE_VAL_GND=2} readwrite local 001312D3
+"This channel-based property specifies how the oscilloscope couples the input signal for the channel.
+    
+IVISCOPE_VAL_AC 0
+The oscilloscope AC couples the input signal.
+
+IVISCOPE_VAL_DC 1
+The oscilloscope DC couples the input signal.
+
+IVISCOPE_VAL_GND 2
+The oscilloscope ground couples the input signal."
+attribute: "Maximum Input Frequency"
+	"Channel Subsystem:Maximum Input Frequency"
+	fD readwrite local 001312D6
+"This channel-based property specifies the maximum input frequency of the channel.  Express this value as the frequency at which the input circuitry attenuates the input signal by 3 dB.  The units for this property are hertz.
+    "
+attribute: "Input Impedance"
+	"Channel Subsystem:Input Impedance"
+	fD readwrite local 00131337
+"This channel-based property specifies the input impedance for the channel.  The units are ohms.
+    "
+attribute: "Trigger Type"
+	"Trigger Subsystem:Trigger Type"
+	iL enum { IVISCOPE_VAL_EDGE_TRIGGER=1, IVISCOPE_VAL_RUNT_TRIGGER=3, IVISCOPE_VAL_GLITCH_TRIGGER=4, IVISCOPE_VAL_WIDTH_TRIGGER=2, IVISCOPE_VAL_TV_TRIGGER=5, IVISCOPE_VAL_AC_LINE_TRIGGER=7, IVISCOPE_VAL_IMMEDIATE_TRIGGER=6} readwrite local 001312DC
+"This property specifies the trigger type.
+    
+IVISCOPE_VAL_EDGE_TRIGGER 1
+Configures the oscilloscope for edge triggering.  An edge trigger occurs when the trigger signal passes through the voltage threshold that you specify with the IviScope>>Trigger Subsystem>>Trigger Level property and has the slope that you specify with the IviScope>>Trigger Subsystem>>Trigger Slope property.
+
+IVISCOPE_VAL_RUNT_TRIGGER 3
+Configures the oscilloscope for runt triggering.  A runt trigger occurs when the trigger signal crosses one of the runt thresholds twice without crossing the other runt threshold.  You specify the runt thresholds with the IviScope>>Trigger Subsystem>>Runt Triggering [RT]>>Runt High Threshold [RT] and IviScope>>Trigger Subsystem>>Runt Triggering [RT]>>Runt Low Threshold [RT] properties.  You specify the polarity of the runt with the IviScope>>Trigger Subsystem>>Runt Triggering [RT]>>Runt Polarity [RT] property.
+
+IVISCOPE_VAL_GLITCH_TRIGGER 4
+Configures the oscilloscope for glitch triggering.  A glitch trigger occurs when the trigger signal has a pulse with a width that is less than the glitch width.  You specify the glitch width with the IviScope>>Trigger Subsystem>>Glitch Triggering [GT]>>Glitch Width [GT] property.   You specify the polarity of the pulse with the IviScope>>Trigger Subsystem>>Glitch Triggering [GT]>>Glitch Polarity [GT] property.  The trigger does not actually occur until the edge of a pulse that corresponds to the glitch width and polarity you specify crosses the trigger level you specify with the IviScope>>Trigger Subsystem>>Trigger Level property.
+
+IVISCOPE_VAL_WIDTH_TRIGGER 2
+Configures the oscilloscope for width triggering.  A width trigger occurs when the oscilloscope detects a positive or negative pulse with a width between, or optionally outside, the width thresholds.  You specify the width thresholds with the IviScope>>Trigger Subsystem>>Width Triggering [WT]>>Width High Threshold [WT] and IviScope>>Trigger Subsystem>>Width Triggering [WT]>>Width Low Threshold [WT] properties.  You specify whether the oscilloscope triggers on pulse widths that are within or outside the width thresholds with the IviScope>>Trigger Subsystem>>Width Triggering [WT]>>Width Condition [WT] property.  You specify the polarity of the pulse with the IviScope>>Trigger Subsystem>>Width Triggering [WT]>>Width Polarity [WT] property.  The trigger does not actually occur until the edge of a pulse that corresponds to the width thresholds, width condition, and polarity you specify crosses the trigger level you specify with the IviScope>>Trigger Subsystem>>Trigger Level property.
+
+
+IVISCOPE_VAL_TV_TRIGGER 5
+Configures the oscilloscope for TV triggering.  You configure the TV trigger with the IviScope>>Trigger Subsystem>>TV Triggering [TV]>>TV Trigger Signal Format [TV], IviScope>>Trigger Subsystem>>TV Triggering [TV]>>TV Trigger Event [TV], IviScope>>Trigger Subsystem>>TV Triggering [TV]>>TV Trigger Line Number [TV], and IviScope>>Trigger Subsystem>>TV Triggering [TV]>>TV Trigger Polarity [TV] properties.
+
+IVISCOPE_VAL_AC_LINE_TRIGGER 7
+Configures the oscilloscope for AC line triggering.
+
+IVISCOPE_VAL_IMMEDIATE_TRIGGER 6
+Configures the oscilloscope for immediate triggering."
+attribute: "Trigger Source"
+	"Trigger Subsystem:Trigger Source"
+	string readwrite local 001312DD
+"Specifies the source the oscilloscope monitors for a trigger.  Set this property to a channel name or to one of the values below.
+    
+Additional Trigger Sources:
+    IVISCOPE_VAL_EXTERNAL ('VAL_EXTERNAL') - The oscilloscope waits for a trigger on the external trigger input.
+    IVISCOPE_VAL_GPIB_GET ('VAL_GPIB_GET') - The oscilloscope waits until it receives a GPIB Group Execute Trigger (GET).
+    IVISCOPE_VAL_TTL0 ('VAL_TTL0') - The oscilloscope waits until it receives a trigger on the PXI TRIG0 line (for PXI instruments) or the VXI TTL0 line (for VXI instruments).
+    IVISCOPE_VAL_TTL1 ('VAL_TTL1') - The oscilloscope waits until it receives a trigger on the PXI TRIG1 line (for PXI instruments) or the VXI TTL1 line (for VXI instruments).
+    IVISCOPE_VAL_TTL2 ('VAL_TTL2') - The oscilloscope waits until it receives a trigger on the PXI TRIG2 line (for PXI instruments) or the VXI TTL2 line (for VXI instruments).
+    IVISCOPE_VAL_TTL3 ('VAL_TTL3') - The oscilloscope waits until it receives a trigger on the PXI TRIG3 line (for PXI instruments) or the VXI TTL3 line (for VXI instruments).
+    IVISCOPE_VAL_TTL4 ('VAL_TTL4') - The oscilloscope waits until it receives a trigger on the PXI TRIG4 line (for PXI instruments) or the VXI TTL4 line (for VXI instruments).
+    IVISCOPE_VAL_TTL5 ('VAL_TTL5') - The oscilloscope waits until it receives a trigger on the PXI TRIG5 line (for PXI instruments) or the VXI TTL5 line (for VXI instruments).
+    IVISCOPE_VAL_TTL6 ('VAL_TTL6') - The oscilloscope waits until it receives a trigger on the PXI TRIG6 line (for PXI instruments) or the VXI TTL6 line (for VXI instruments).
+    IVISCOPE_VAL_TTL7 ('VAL_TTL7') - The oscilloscope waits until it receives a trigger on the PXI TRIG7 line (for PXI instruments) or the VXI TTL7 line (for VXI instruments).
+    IVISCOPE_VAL_ECL0 ('VAL_ECL0') - The oscilloscope waits for a trigger on the ECL line 0.
+    IVISCOPE_VAL_ECL1 ('VAL_ECL1') - The oscilloscope waits for a trigger on the ECL line 1.
+    IVISCOPE_VAL_PXI_STAR ('VAL_PXI_STAR') - The oscilloscope waits for a trigger on the PXI Star bus.
+    IVISCOPE_VAL_RTSI_0 ('VAL_RTSI_0') - The oscilloscope waits for a trigger on RTSI line 0.
+    IVISCOPE_VAL_RTSI_1 ('VAL_RTSI_1') - The oscilloscope waits for a trigger on RTSI line 1.
+    IVISCOPE_VAL_RTSI_2 ('VAL_RTSI_2') - The oscilloscope waits for a trigger on RTSI line 2.
+    IVISCOPE_VAL_RTSI_3 ('VAL_RTSI_3') - The oscilloscope waits for a trigger on RTSI line 3.
+    IVISCOPE_VAL_RTSI_4 ('VAL_RTSI_4') - The oscilloscope waits for a trigger on RTSI line 4.
+    IVISCOPE_VAL_RTSI_5 ('VAL_RTSI_5') - The oscilloscope waits for a trigger on RTSI line 5.
+    IVISCOPE_VAL_RTSI_6 ('VAL_RTSI_6') - The oscilloscope waits for a trigger on RTSI line 6.
+    "
+attribute: "Trigger Coupling"
+	"Trigger Subsystem:Trigger Coupling"
+	iL enum { IVISCOPE_VAL_AC=0, IVISCOPE_VAL_DC=1, IVISCOPE_VAL_LF_REJECT=4, IVISCOPE_VAL_HF_REJECT=3, IVISCOPE_VAL_NOISE_REJECT=5} readwrite local 001312DE
+"Specifies how the oscilloscope couples the trigger source.
+    
+IVISCOPE_VAL_AC 0
+The oscilloscope AC couples the trigger signal.
+
+IVISCOPE_VAL_DC 1
+The oscilloscope DC couples the trigger signal.
+
+IVISCOPE_VAL_LF_REJECT 4
+The oscilloscope rejects low frequencies from the trigger signal.
+
+IVISCOPE_VAL_HF_REJECT 3
+The oscilloscope rejects high frequencies from the trigger signal.
+
+IVISCOPE_VAL_NOISE_REJECT 5
+The oscilloscope rejects noise from the trigger signal."
+attribute: "Trigger Holdoff"
+	"Trigger Subsystem:Trigger Holdoff"
+	fD readwrite local 001312E0
+"Specifies the length of time the oscilloscope waits after it detects a trigger until the oscilloscope enables the trigger subsystem to detect another trigger.  The units are seconds.
+    The IviScope>>Trigger Subsystem>>Trigger Holdoff property affects instrument operation only when the oscilloscope requires multiple acquisitions to build a complete waveform.  The oscilloscope requires multiple waveform acquisitions when it uses equivalent-time sampling or when you set the IviScope>>Acquisition>>Acquisition Type property to IVISCOPE_VAL_ENVELOPE or IVISCOPE_VAL_AVERAGE.
+    "
+attribute: "Trigger Level"
+	"Trigger Subsystem:Trigger Level"
+	fD readwrite local 001312E1
+"Specifies the voltage threshold for the trigger subsystem.  The units are volts.  This property affects instrument behavior only when you set the IviScope>>Trigger Subsystem>>Trigger Type to IVISCOPE_VAL_EDGE_TRIGGER, IVISCOPE_VAL_GLITCH_TRIGGER, or IVISCOPE_VAL_WIDTH_TRIGGER.
+    "
+attribute: "Trigger Slope"
+	"Trigger Subsystem:Trigger Slope"
+	iL enum { IVISCOPE_VAL_POSITIVE=1, IVISCOPE_VAL_NEGATIVE=0} readwrite local 001312E2
+"Specifies whether a rising or a falling edge triggers the oscilloscope.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_EDGE_TRIGGER.
+    
+IVISCOPE_VAL_POSITIVE 1
+A positive (rising) edge passing through the trigger level triggers the oscilloscope.
+
+IVISCOPE_VAL_NEGATIVE 0
+A negative (falling) edge passing through the trigger level triggers the oscilloscope."
+attribute: "Trigger Modifier [TM]"
+	"Trigger Subsystem:Trigger Modifier [TM]"
+	iL enum { IVISCOPE_VAL_NO_TRIGGER_MOD=1, IVISCOPE_VAL_AUTO=2, IVISCOPE_VAL_AUTO_LEVEL=3} readwrite local 00131336
+"Specifies the trigger modifier.  The trigger modifier determines the oscilloscope's behavior in the absence of the trigger you configure.
+
+Note:
+(1) This property is part of the IviScopeTriggerModifier [TM] extension group.
+    
+IVISCOPE_VAL_NO_TRIGGER_MOD 1
+The oscilloscope waits indefinitely for the trigger you specify.
+
+IVISCOPE_VAL_AUTO 2
+If the trigger you specify does not occur within the oscilloscope's timeout period, the oscilloscope automatically triggers.
+
+IVISCOPE_VAL_AUTO_LEVEL 3
+If the trigger you specify does not occur within the oscilloscope's timeout period, the oscilloscope automatically adjusts the trigger level to a value that causes a trigger.  The trigger level remains at the new value."
+attribute: "TV Trigger Signal Format [TV]"
+	"Trigger Subsystem:TV Triggering [TV]:TV Trigger Signal Format [TV]"
+	iL enum { IVISCOPE_VAL_NTSC=1, IVISCOPE_VAL_PAL=2, IVISCOPE_VAL_SECAM=3} readwrite local 00131399
+"Specifies the format of the TV signal on which the oscilloscope triggers.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_TV_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeTVTrigger [TV] extension group.
+    
+IVISCOPE_VAL_NTSC 1
+NTSC video signal
+
+IVISCOPE_VAL_PAL 2
+PAL video signal
+
+IVISCOPE_VAL_SECAM 3
+SECAM video signal"
+attribute: "TV Trigger Event [TV]"
+	"Trigger Subsystem:TV Triggering [TV]:TV Trigger Event [TV]"
+	iL enum { IVISCOPE_VAL_TV_EVENT_FIELD1=1, IVISCOPE_VAL_TV_EVENT_FIELD2=2, IVISCOPE_VAL_TV_EVENT_ANY_FIELD=3, IVISCOPE_VAL_TV_EVENT_ANY_LINE=4, IVISCOPE_VAL_TV_EVENT_LINE_NUMBER=5} readwrite local 0013139D
+"Specifies the event on which the oscilloscope triggers.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_TV_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeTVTrigger [TV] extension group.
+    
+IVISCOPE_VAL_TV_EVENT_FIELD1 1
+Field 1 of the video signal
+
+IVISCOPE_VAL_TV_EVENT_FIELD2 2
+Field 2 of the video signal
+
+IVISCOPE_VAL_TV_EVENT_ANY_FIELD 3
+Any field of the video signal
+
+IVISCOPE_VAL_TV_EVENT_ANY_LINE 4
+Any line of the video signal
+
+IVISCOPE_VAL_TV_EVENT_LINE_NUMBER 5
+A specified line of the video signal"
+attribute: "TV Trigger Line Number [TV]"
+	"Trigger Subsystem:TV Triggering [TV]:TV Trigger Line Number [TV]"
+	iL readwrite local 0013139E
+"Specifies the line on which the oscilloscope triggers.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_TV_TRIGGER and when the IviScope>>Trigger Subsystem>>TV Triggering [TV]>>TV Trigger Event [TV] property is set to IVISCOPE_VAL_LINE_NUMBER.  The line number setting is independent of the field.  This means that to trigger on the first line of the second field, you must set this property to the value of 263 (if we presume that field one had 262 lines).
+
+Note:
+(1) This property is part of the IviScopeTVTrigger [TV] extension group.
+    "
+attribute: "TV Trigger Polarity [TV]"
+	"Trigger Subsystem:TV Triggering [TV]:TV Trigger Polarity [TV]"
+	iL enum { IVISCOPE_VAL_TV_POSITIVE=1, IVISCOPE_VAL_TV_NEGATIVE=0} readwrite local 0013139C
+"Specifies the polarity of the TV signal.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_TV_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeTVTrigger [TV] extension group.
+    
+IVISCOPE_VAL_TV_POSITIVE 1
+Positive video sync pulse
+
+IVISCOPE_VAL_TV_NEGATIVE 0
+Negative video sync pulse"
+attribute: "Runt High Threshold [RT]"
+	"Trigger Subsystem:Runt Triggering [RT]:Runt High Threshold [RT]"
+	fD readwrite local 001313FD
+"Specifies the high threshold the oscilloscope uses for runt triggering.  The units are volts.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_RUNT_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeRuntTrigger [RT] extension group.
+    "
+attribute: "Runt Low Threshold [RT]"
+	"Trigger Subsystem:Runt Triggering [RT]:Runt Low Threshold [RT]"
+	fD readwrite local 001313FE
+"Specifies the low threshold the oscilloscope uses for runt triggering.  The units are volts. This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_RUNT_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeRuntTrigger [RT] extension group.
+    "
+attribute: "Runt Polarity [RT]"
+	"Trigger Subsystem:Runt Triggering [RT]:Runt Polarity [RT]"
+	iL enum { IVISCOPE_VAL_RUNT_POSITIVE=1, IVISCOPE_VAL_RUNT_NEGATIVE=2, IVISCOPE_VAL_RUNT_EITHER=3} readwrite local 001313FF
+"Specifies the polarity of the runt that triggers the oscilloscope. This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_RUNT_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeRuntTrigger [RT] extension group.
+    
+IVISCOPE_VAL_RUNT_POSITIVE 1
+The oscilloscope triggers on a positive runt.  A positive runt occurs when a rising edge crosses the low runt threshold and does not cross the high runt threshold before re-crossing the low runt threshold.
+
+IVISCOPE_VAL_RUNT_NEGATIVE 2
+The oscilloscope triggers on a negative runt.  A negative runt occurs when a falling edge crosses the high runt threshold and does not cross the low runt threshold before re-crossing the high runt threshold.
+
+IVISCOPE_VAL_RUNT_EITHER 3
+The oscilloscope triggers on either a positive or negative runt."
+attribute: "Glitch Width [GT]"
+	"Trigger Subsystem:Glitch Triggering [GT]:Glitch Width [GT]"
+	fD readwrite local 00131461
+"Specifies the glitch width.  The units are seconds.  The oscilloscope triggers when it detects a pulse with a width that is less than the value you specify. This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_GLITCH_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeGlitchTrigger [GT] extension group.
+    "
+attribute: "Glitch Polarity [GT]"
+	"Trigger Subsystem:Glitch Triggering [GT]:Glitch Polarity [GT]"
+	iL enum { IVISCOPE_VAL_GLITCH_POSITIVE=1, IVISCOPE_VAL_GLITCH_NEGATIVE=2, IVISCOPE_VAL_GLITCH_EITHER=3} readwrite local 00131462
+"Specifies the polarity of the glitch that triggers the oscilloscope. This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_GLITCH_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeGlitchTrigger [GT] extension group.
+    
+IVISCOPE_VAL_GLITCH_POSITIVE 1
+The oscilloscope triggers on a positive glitch.
+
+IVISCOPE_VAL_GLITCH_NEGATIVE 2
+The oscilloscope triggers on a negative glitch.
+
+IVISCOPE_VAL_GLITCH_EITHER 3
+The oscilloscope triggers on either a positive or negative glitch."
+attribute: "Glitch Condition [GT]"
+	"Trigger Subsystem:Glitch Triggering [GT]:Glitch Condition [GT]"
+	iL enum { IVISCOPE_VAL_GLITCH_LESS_THAN=1, IVISCOPE_VAL_GLITCH_GREATER_THAN=2} readwrite local 00131463
+"Specifies the glitch condition that triggers the oscilloscope.  The glitch trigger occurs when the oscilloscope detects a pulse with a width less than or greater than the width value you specify  with the IviScope>>Trigger Subsystem>>Glitch Triggering [GT]>>Glitch Width [GT] property.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_GLITCH_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeGlitchTrigger [GT] extension group.
+    
+IVISCOPE_VAL_GLITCH_LESS_THAN 1
+The oscilloscope triggers on a less-than glitch.
+
+IVISCOPE_VAL_GLITCH_GREATER_THAN 2
+The oscilloscope triggers on a greater-than glitch."
+attribute: "Width Condition [WT]"
+	"Trigger Subsystem:Width Triggering [WT]:Width Condition [WT]"
+	iL enum { IVISCOPE_VAL_WIDTH_WITHIN=1, IVISCOPE_VAL_WIDTH_OUTSIDE=2} readwrite local 001314C8
+"Specifies whether a pulse that is within or outside the high and low thresholds triggers the oscilloscope.  You specify the high and low thresholds with the IviScope>>Trigger Subsystem>>Width Triggering [WT]>>Width High Threshold [WT] and IviScope>>Trigger Subsystem>>Width Triggering [WT]>>Width Low Threshold [WT] properties.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_WIDTH_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeWidthTrigger [WT] extension group.
+    
+IVISCOPE_VAL_WIDTH_WITHIN 1
+The oscilloscope triggers on pulses that have a width that is less than the high threshold and greater than the low threshold.  
+
+IVISCOPE_VAL_WIDTH_OUTSIDE 2
+The oscilloscope triggers on pulses that have a width that is either greater than the high width threshold or less than a low width threshold."
+attribute: "Width High Threshold [WT]"
+	"Trigger Subsystem:Width Triggering [WT]:Width High Threshold [WT]"
+	fD readwrite local 001314C6
+"Specifies the high width threshold time.  The units are seconds.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_WIDTH_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeWidthTrigger [WT] extension group.
+    "
+attribute: "Width Low Threshold [WT]"
+	"Trigger Subsystem:Width Triggering [WT]:Width Low Threshold [WT]"
+	fD readwrite local 001314C5
+"Specifies the low width threshold time.  The units are seconds.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_WIDTH_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeWidthTrigger [WT] extension group.
+    "
+attribute: "Width Polarity [WT]"
+	"Trigger Subsystem:Width Triggering [WT]:Width Polarity [WT]"
+	iL enum { IVISCOPE_VAL_WIDTH_POSITIVE=1, IVISCOPE_VAL_WIDTH_NEGATIVE=2} readwrite local 001314C7
+"Specifies the polarity of the pulse that triggers the oscilloscope.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_WIDTH_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeWidthTrigger [WT] extension group.
+    
+IVISCOPE_VAL_WIDTH_POSITIVE 1
+The oscilloscope triggers on a positive pulse.
+
+IVISCOPE_VAL_WIDTH_NEGATIVE 2
+The oscilloscope triggers on a negative pulse."
+attribute: "AC Line Trigger Slope [AT]"
+	"Trigger Subsystem:AC Line Triggering [AT]:AC Line Trigger Slope [AT]"
+	iL enum { IVISCOPE_VAL_AC_LINE_POSITIVE=1, IVISCOPE_VAL_AC_LINE_NEGATIVE=2, IVISCOPE_VAL_AC_LINE_EITHER=3} readwrite local 0013158D
+"Specifies the slope of the zero crossing upon which the scope triggers.  This property affects instrument operation only when the IviScope>>Trigger Subsystem>>Trigger Type property is set to IVISCOPE_VAL_AC_LINE_TRIGGER.
+
+Note:
+(1) This property is part of the IviScopeTVTrigger [AT] extension group.
+    
+IVISCOPE_VAL_AC_LINE_POSITIVE 1
+The oscilloscope triggers on positive slope zero crossings of the network supply voltage.
+
+IVISCOPE_VAL_AC_LINE_NEGATIVE 2
+The oscilloscope triggers on negative slope zero crossings of the network supply voltage.
+
+IVISCOPE_VAL_AC_LINE_EITHER 3
+The oscilloscope triggers on either positive or negative slope zero crossings of the network supply voltage."
+attribute: "Measurement High Reference [WM]"
+	"Waveform Measurement [WM]:Measurement High Reference [WM]"
+	fD readwrite local 0013152F
+"Specifies the high reference the oscilloscope uses for waveform measurements.  The value is a percentage of the difference between the Voltage High and Voltage Low.  The oscilloscope calculates the Voltage High and the Voltage Low using either the min/max or histogram methods.  The min/max method uses the maximum and minimum values found.  The histogram method uses the most common values found above and below the middle of the waveform.
+
+Note:
+(1) This property is part of the IviScopeWaveformMeas [WM] extension group.
+    "
+attribute: "Measurement Low Reference [WM]"
+	"Waveform Measurement [WM]:Measurement Low Reference [WM]"
+	fD readwrite local 00131530
+"Specifies the low reference the oscilloscope uses for waveform measurements.  The value is a percentage of the difference between the Voltage High and Voltage Low.  The oscilloscope calculates the Voltage High and the Voltage Low using either the min/max or histogram methods.  The min/max method uses the maximum and minimum values found.  The histogram method uses the most common values found above and below the middle of the waveform.
+
+Note:
+(1) This property is part of the IviScopeWaveformMeas [WM] extension group.
+    "
+attribute: "Measurement Mid Reference [WM]"
+	"Waveform Measurement [WM]:Measurement Mid Reference [WM]"
+	fD readwrite local 00131531
+"Specifies the mid reference the oscilloscope uses for waveform measurements.  The value is a percentage of the difference between the Voltage High and Voltage Low.  The oscilloscope calculates the Voltage High and the Voltage Low using either the min/max or histogram methods.  The min/max method uses the maximum and minimum values found.  The histogram method uses the most common values found above and below the middle of the waveform.
+
+Note:
+(1) This property is part of the IviScopeWaveformMeas [WM] extension group.
+    "
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Major Version"
+	iL readonly local 00100789
+"The major version number of the class driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Minor Version"
+	iL readonly local 0010078A
+"The minor version number of the class driver.
+    "
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Major Version"
+	iL readonly local 00100787
+"The major version number of this instrument driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Minor Version"
+	iL readonly local 00100788
+"The minor version number of the specific driver.
+    "    

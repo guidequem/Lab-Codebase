@@ -1,0 +1,368 @@
+library: IviPwrMeter.dll
+
+class: "IviPwrMeter"
+flags: 16
+sorted: no
+implements: ivi, iviResourceMgr
+attribute: "Range Check"
+	"Inherent IVI Settings:User Options:Range Check"
+	bool readwrite local 00100592
+"Specifies whether to validate property values and VI parameters.  If enabled, the instrument driver validates the parameter values that you pass to driver VIs.  Range checking parameters is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable range checking and maximize performance.
+    The default value is TRUE.   Use the IviPwrMeter Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Query Instrument Status"
+	"Inherent IVI Settings:User Options:Query Instrument Status"
+	bool readwrite local 00100593
+"Specifies whether the instrument driver queries the instrument status after each operation.  Querying the instrument status is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable status checking and maximize performance
+    The instrument driver can choose to ignore status checking for particular properties regardless of the setting of this property.
+    The default value is FALSE.   Use the IviPwrMeter Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Cache"
+	"Inherent IVI Settings:User Options:Cache"
+	bool readwrite local 00100594
+"Specifies whether to cache the value of properties.  When caching is enabled, the instrument driver keeps track of the current instrument settings and avoids sending redundant commands to the instrument.  Thus, you can significantly increase execution speed.
+    The instrument driver can choose always to cache or never to cache particular properties regardless of the setting of this property.
+    The default value is TRUE.   Use the IviPwrMeter Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Simulate"
+	"Inherent IVI Settings:User Options:Simulate"
+	bool readwrite local 00100595
+"Specifies whether or not to simulate instrument driver I/O operations.  For output parameters that represent instrument data, the instrument driver VIs return calculated values.
+    The default value is FALSE.   Use the IviPwrMeter Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Record Value Coercions"
+	"Inherent IVI Settings:User Options:Record Value Coercions"
+	bool readwrite local 00100596
+"Specifies whether the IVI engine keeps a list of the value coercions it makes for integer and real type properties.  You call IviPwrMeter Get Next Coercion Record.vi to extract and delete the oldest coercion record from the list.
+    The default value is FALSE.   Use the IviPwrMeter Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Interchange Check"
+	"Inherent IVI Settings:User Options:Interchange Check"
+	bool readwrite local 001005A5
+"Specifies whether to perform interchangeability checking and retrieve interchangeability warnings.
+
+The default value is FALSE.
+
+Interchangeability warnings indicate that using your application with a different instrument might cause different behavior.  You call IviPwrMeter Get Next Interchange Warning.vi to extract interchange warnings.  Call the IviPwrMeter Clear Interchange Warnings.vi to clear the list of interchangeability warnings without reading them.
+Interchangeability checking logs a warning for each property you have not set that affects the behavior of the instrument.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Description"
+	"Inherent IVI Settings:Driver Identification:Description"
+	string readonly local 00100792
+"A string that contains a brief description of the specific driver.
+    "
+attribute: "Driver Prefix"
+	"Inherent IVI Settings:Driver Identification:Driver Prefix"
+	string readonly local 001006BE
+"A string that contains the prefix for the instrument driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Driver Vendor"
+	"Inherent IVI Settings:Driver Identification:Driver Vendor"
+	string readonly local 00100791
+"A string that contains the name of the vendor that supplies this driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Driver Identification:Revision"
+	string readonly local 001007B7
+"A string that contains additional version information about this instrument driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Driver Identification:Class Specification Major Version"
+	iL readonly local 00100793
+"The major version number of the class specification with which this driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100794
+"The minor version number of the class specification with which this driver is compliant.
+    "
+attribute: "Channel Count"
+	"Inherent IVI Settings:Driver Capabilities:Channel Count"
+	iL readonly local 0010065B
+"Indicates the number of channels that the specific instrument driver supports.  
+    For each property for which the IVI_VAL_MULTI_CHANNEL flag is set, the IVI engine maintains a separate cache value for each channel.
+    "
+attribute: "Supported Instrument Models"
+	"Inherent IVI Settings:Driver Capabilities:Supported Instrument Models"
+	string readonly local 001006D7
+"Contains a model code of the instrument. For drivers that support more than one device, this property contains a comma-separated list of supported instrument models.
+    "
+attribute: "Class Group Capabilities"
+	"Inherent IVI Settings:Driver Capabilities:Class Group Capabilities"
+	string readonly local 00100721
+"A string that contains a comma-separated list of class-extention groups that this driver implements.
+    "
+attribute: "Manufacturer"
+	"Inherent IVI Settings:Instrument Identification:Manufacturer"
+	string readonly local 0010078F
+"A string that contains the name of the instrument manufacturer you are currently using.
+    "
+attribute: "Model"
+	"Inherent IVI Settings:Instrument Identification:Model"
+	string readonly local 00100790
+"A string that contains the model number or name of the instrument that you are currently using.
+    "
+attribute: "Firmware Revision"
+	"Inherent IVI Settings:Instrument Identification:Firmware Revision"
+	string readonly local 0010078E
+"A string that contains the firmware revision information for the instrument you are currently using.
+    "
+attribute: "Logical Name"
+	"Inherent IVI Settings:Advanced Session Information:Logical Name"
+	string readonly local 001006C1
+"A string containing the logical name you specified when opening the current IVI session.
+     You may pass a logical name to the IviPwrMeter Initialize.vi or IviPwrMeter Initialize With Options.vi VIs.  The IVI Configuration utility must contain an entry for the logical name.  The logical name entry refers to a virtual instrument section in the IVI Configuration file.  The virtual instrument section specifies a physical device and initial user options.
+    "
+attribute: "I/O Resource Descriptor"
+	"Inherent IVI Settings:Advanced Session Information:I/O Resource Descriptor"
+	string readonly local 001006C0
+"Indicates the resource descriptor the driver uses to identify the physical device.
+    If you initialize the driver with a logical name, this property contains the resource descriptor that corresponds to the entry in the IVI Configuration utility.  
+    If you initialize the instrument driver with the resource descriptor, this property contains that value.
+    "
+attribute: "Driver Setup"
+	"Inherent IVI Settings:Advanced Session Information:Driver Setup"
+	string readonly local 00100597
+"Some cases exist where you must specify instrument driver options at initialization time.  An example of this is specifying a particular instrument model from among a family of instruments that the driver supports.  This is useful when using simulation.  You can specify driver-specific options through the DriverSetup keyword in the optionsString parameter to the IviPwrMeter Initialize With Options VI.  If you open an instrument using a logical name, you can also specify the options through the IVI Configuration Utility.
+    The default value is an empty string.
+    "
+attribute: "Averaging Auto Enabled"
+	"Basic Operation:Averaging Auto Enabled"
+	bool readwrite local 001312D3
+"This channel-based property specifies the auto-averaging mode used by the instrument for the specified input channel.
+If auto averaging is enabled, the instrument determines the best value for the averaging count automatically. The averaging count specifies the number of samples that the instrument takes before the measurement is complete.
+If auto averaging is disabled, specify the averaging count explicitly by setting the IviPwrMeter>>Averaging Count>>Average Count [AVG] property. 
+
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Correction Frequency"
+	"Basic Operation:Correction Frequency"
+	fD readwrite local 001312D4
+"This channel-based property specifies the frequency of the input signal in Hertz.  The instrument uses this value to determine the appropriate correction factor for the sensor.
+To obtain the most accurate measurement, specify the correction frequency as close as possible to the actual frequency of the input signal.
+"
+attribute: "Offset"
+	"Basic Operation:Offset"
+	fD readwrite local 001312D5
+"This channel-based property specifies an offset to be added to the measured value on a channel in units of dB.  This property can be used to compensate for system losses or gains between the unit under test and the sensor of the power meter.  
+A positive value is used for loss compensation.  A negative value is used for gain compensation. For example, a cable loss of 2 dB could be compensated for by setting this property to +2.  Similarly, a gain stage of 10 dB could be accounted for by setting the value of this property to -10.  In both cases, the reading from the power meter will indicate the power at the unit under test rather than power at the power meter's sensor.
+"
+attribute: "Range Auto Enabled"
+	"Basic Operation:Range Auto Enabled"
+	bool readwrite local 001312D2
+"This channel-based property specifies if the power meter should automatically determine the best range for the measurement.
+If this property is set to TRUE, the instrument automatically determines the best range for the measurement. If this property is set to FALSE, specify the lower and upper limits of the measurement range by explicitly setting the IviPwrMeter>>Manual Range>>Range Lower [RNG] and  IviPwrMeter>>Manual Range>>Range Upper [RNG] properties.
+
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Units"
+	"Basic Operation:Units"
+	iL enum { IVIPWRMETER_VAL_DBM=1, IVIPWRMETER_VAL_DBMV=2, IVIPWRMETER_VAL_DBUV=3, IVIPWRMETER_VAL_WATTS=4} readwrite local 001312D1
+"Specifies the unit to which the RF power is converted after measurement. 
+The actual RF power of the signal on a channel is always measured in Watts. The value of this property is used to determine the units in which the IviPwrMeter>>Manual Range>>Range Upper [RNG] and IviPwrMeter>>Manual Range>>Range Lower [RNG] properties are specified. The unit of the measurement result returned by the Read and Fetch VIs also depends on the value of this property.
+
+IVIPWRMETER_VAL_DBM 1
+Sets the units to dBm.
+
+IVIPWRMETER_VAL_DBMV 2
+Sets the units to dB millivolts.
+
+IVIPWRMETER_VAL_DBUV 3
+Sets the units to dB microvolts.
+
+IVIPWRMETER_VAL_WATTS 4
+Sets the units to Watts."
+attribute: "Channel Enabled [CH]"
+	"Basic Operation:Channel Acquisition:Channel Enabled [CH]"
+	bool readwrite local 00131303
+"This channel-based property specifies if the power meter takes a measurement on the specified input channel. The power meter will take a measurement on a channel only if that channel is enabled.
+Channels are also enabled when you call the IviPwrMeter Configure Measurement.vi. See the VI description for more details.
+
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Range Lower [RNG]"
+	"Manual Range:Range Lower [RNG]"
+	fD readwrite local 00131335
+"This channel-based property specifies the lower limit (minimum) of the expected value of the measurement.  The specific driver coerces this value to the appropriate range for the instrument. The value of this property is specified in the same units as the value of the IviPwrMeter>>Basic Operation>>Units property.
+This property affects the behavior of the instrument only when the IviPwrMeter>>Basic Operation>>Range Auto Enabled property is set to FALSE.
+"
+attribute: "Range Upper [RNG]"
+	"Manual Range:Range Upper [RNG]"
+	fD readwrite local 00131336
+"This channel-based property specifies the upper limit (maximum) of the expected value of the measurement.  The specific driver coerces this value to the appropriate range for the instrument. The value of this property is specified in the same units as the value of the IviPwrMeter>>Basic Operation>>Units.
+This property affects the behavior of the instrument only when the IviPwrMeter>>Basic Operation>>Range Auto Enabled property is set to FALSE.
+"
+attribute: "Trigger Source [TRG]"
+	"Trigger:Trigger Source [TRG]"
+	iL enum { IVIPWRMETER_VAL_IMMEDIATE=1, IVIPWRMETER_VAL_EXTERNAL=2, IVIPWRMETER_VAL_INTERNAL=3, IVIPWRMETER_VAL_SOFTWARE_TRIG=4, IVIPWRMETER_VAL_TTL0=100, IVIPWRMETER_VAL_TTL1=101, IVIPWRMETER_VAL_TTL2=102, IVIPWRMETER_VAL_TTL3=103, IVIPWRMETER_VAL_TTL4=104, IVIPWRMETER_VAL_TTL5=105, IVIPWRMETER_VAL_TTL6=106, IVIPWRMETER_VAL_TTL7=107, IVIPWRMETER_VAL_ECL0=200, IVIPWRMETER_VAL_ECL1=201, IVIPWRMETER_VAL_PXI_STAR=300, IVIPWRMETER_VAL_RTSI_0=400, IVIPWRMETER_VAL_RTSI_1=401, IVIPWRMETER_VAL_RTSI_2=402, IVIPWRMETER_VAL_RTSI_3=403, IVIPWRMETER_VAL_RTSI_4=404, IVIPWRMETER_VAL_RTSI_5=405, IVIPWRMETER_VAL_RTSI_6=406} readwrite local 00131399
+"Specifies the trigger source the power meter monitors for the trigger event.
+When the trigger event occurs on the source specified by this property, the power meter leaves the Wait-For-Trigger state and takes a measurement on all enabled channels.
+If this property is set to the Internal defined value, the power meter uses the channel specified by the IviPwrMeter>>Trigger>>Internal Trigger>>Internal Trigger Event Source [IT] property to monitor the internal trigger event.
+
+IVIPWRMETER_VAL_IMMEDIATE 1
+The power meter exits the Wait-For-Trigger state immediately after entering.  It does not wait for a trigger of any kind.
+
+IVIPWRMETER_VAL_EXTERNAL 2
+The power meter exits the Wait-For-Trigger state when a trigger occurs on the external trigger input.
+
+IVIPWRMETER_VAL_INTERNAL 3
+The power meter exits the Wait-For-Trigger state when an internal trigger event occurs on the measurement signal.
+
+IVIPWRMETER_VAL_SOFTWARE_TRIG 4
+The power meter exits the Wait-For-Trigger state when it receives a software trigger.
+
+IVIPWRMETER_VAL_TTL0 100
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL0.
+
+IVIPWRMETER_VAL_TTL1 101
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL1.
+
+IVIPWRMETER_VAL_TTL2 102
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL2.
+
+IVIPWRMETER_VAL_TTL3 103
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL3.
+
+IVIPWRMETER_VAL_TTL4 104
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL4.
+
+IVIPWRMETER_VAL_TTL5 105
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL5.
+
+IVIPWRMETER_VAL_TTL6 106
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL6.
+
+IVIPWRMETER_VAL_TTL7 107
+The power meter exits the Wait-For-Trigger state when it receives a trigger on TTL7.
+
+IVIPWRMETER_VAL_ECL0 200
+The power meter exits the Wait-For-Trigger state when it receives a trigger on ECL0.
+
+IVIPWRMETER_VAL_ECL1 201
+The power meter exits the Wait-For-Trigger state when it receives a trigger on ECL1.
+
+IVIPWRMETER_VAL_PXI_STAR 300
+The power meter exits the Wait-For-Trigger state when it receives a trigger on PXI Star trigger bus.
+
+IVIPWRMETER_VAL_RTSI_0 400
+The power meter exits the Wait-For-Trigger state when it receives a trigger on the RTSI0 line.
+
+IVIPWRMETER_VAL_RTSI_1 401
+The power meter exits the Wait-For-Trigger state when it receives a trigger on the RTSI1 line.
+
+IVIPWRMETER_VAL_RTSI_2 402
+The power meter exits the Wait-For-Trigger state when it receives a trigger on the RTSI2 line.
+
+IVIPWRMETER_VAL_RTSI_3 403
+The power meter exits the Wait-For-Trigger state when it receives a trigger on the RTSI3 line.
+
+IVIPWRMETER_VAL_RTSI_4 404
+The power meter exits the Wait-For-Trigger state when it receives a trigger on the RTSI4 line.
+
+IVIPWRMETER_VAL_RTSI_5 405
+The power meter exits the Wait-For-Trigger state when it receives a trigger on the RTSI5 line.
+
+IVIPWRMETER_VAL_RTSI_6 406
+The power meter exits the Wait-For-Trigger state when it receives a trigger on the RTSI6 line."
+attribute: "Internal Trigger Event Source [IT]"
+	"Trigger:Internal Trigger:Internal Trigger Event Source [IT]"
+	string readwrite local 001313CB
+"Specifies the channel that the power meter uses to monitor the internal trigger event. The power meter leaves the Idle state when the measurement signal on this channel meets the conditions set by the IviPwrMeter>>Trigger>>Internal Trigger>>Internal Trigger Level [IT] and the IviPwrMeter>>Trigger>>Internal Trigger>> Internal Trigger Slope [IT] properties.
+This property affects the behavior of the instrument only if the IviPwrMeter>>Trigger>>Trigger Source [TRG] property is set to Internal.
+"
+attribute: "Internal Trigger Level [IT]"
+	"Trigger:Internal Trigger:Internal Trigger Level [IT]"
+	fD readwrite local 001313CC
+"Specifies the trigger level for the measurement signal. The power meter leaves the Idle state when the measurement signal on the channel specified by the IviPwrMeter>>Trigger>>Internal Trigger>>Internal Trigger Event Source [IT] property crosses the value specified by this property. The value of this property is specified in the same unit as the value of the IviPwrMeter>>Basic Operation>>Units.
+This property affects the behavior of the instrument only if the IviPwrMeter>>Trigger>>Trigger Source [TRG] property is set to Internal.
+"
+attribute: "Internal Trigger Slope [IT]"
+	"Trigger:Internal Trigger:Internal Trigger Slope [IT]"
+	iL enum { IVIPWRMETER_VAL_POSITIVE=1, IVIPWRMETER_VAL_NEGATIVE=0} readwrite local 001313CD
+"Specifies the polarity of the internal trigger slope. The power meter triggers on the rising or falling edge of the internal trigger source depending on the value of this property.
+This property affects the behavior of the instrument only if the IviPwrMeter>>Trigger>>Trigger Source [TRG] property is set to Internal.
+
+IVIPWRMETER_VAL_POSITIVE 1
+Sets the trigger event to occur on the rising edge of the trigger pulse.
+
+IVIPWRMETER_VAL_NEGATIVE 0
+Sets the trigger event to occur on the falling edge of the trigger pulse."
+attribute: "Duty Cycle Correction [DC]"
+	"Duty Cycle:Duty Cycle Correction [DC]"
+	fD readwrite local 00131462
+"This channel-based property specifies the duty cycle correction the power meter uses to calculate the pulse power of a pulse-modulated signal.  The power meter measures the average power of the pulsed input signal and then divides the result by the value specified for this property to obtain a pulse power reading. 
+The value of this property is specified as a percentage.
+"
+attribute: "Duty Cycle Correction Enabled [DC]"
+	"Duty Cycle:Duty Cycle Correction Enabled [DC]"
+	bool readwrite local 00131461
+"This channel-based property specifies if the power meter performs a duty cycle correction on the specified channel.
+
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Average Count [AVG]"
+	"Averaging Count:Average Count [AVG]"
+	iL readwrite local 001313FD
+"This channel-based property specifies the average count that the instrument uses in manual averaging mode. When the IviPwrMeter>>Basic Operation>>Averaging Auto Enabled property is set to FALSE, the driver filters the input signal by averaging it the number of times specified by this property.
+"
+attribute: "Ref Oscillator Enabled [RO]"
+	"Reference Oscillator:Ref Oscillator Enabled [RO]"
+	bool readwrite local 001314C5
+"Specifies if the internal reference oscillator is enabled.
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Ref Oscillator Frequency [RO]"
+	"Reference Oscillator:Ref Oscillator Frequency [RO]"
+	fD readwrite local 001314C6
+"Specifies the frequency of the signal generated by the reference oscillator in Hertz. This property affects the behavior of the instrument only if the IviPwrMeter>>Reference Oscillator>>Ref Oscillator Enabled [RO] property is set to TRUE.
+"
+attribute: "Ref Oscillator Level [RO]"
+	"Reference Oscillator:Ref Oscillator Level [RO]"
+	fD readwrite local 001314C7
+"Specifies the power level of the signal generated by the reference oscillator in dBm. This property affects the behavior of the instrument only if the IviPwrMeter>>Reference Oscillator>>Ref Oscillator Enabled [RO] property is set to TRUE.
+    "

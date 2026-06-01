@@ -1,0 +1,390 @@
+library: bin
+
+class: "ag3325b"
+implements: ivi, ivifgen, iviResourceMgr
+attribute: "Range Check"
+	"Inherent IVI Attributes:User Options:Range Check"
+	bool readwrite local 00100592
+"Specifies whether to validate property values and VI parameters.  If enabled, the instrument driver validates the parameter values that you pass to driver VIs.  Range checking parameters is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable range checking and maximize performance.
+    The default value is TRUE.   Use the ag3325b Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Query Instrument Status"
+	"Inherent IVI Attributes:User Options:Query Instrument Status"
+	bool readwrite local 00100593
+"Specifies whether the instrument driver queries the instrument status after each operation.  Querying the instrument status is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable status checking and maximize performance
+    The instrument driver can choose to ignore status checking for particular properties regardless of the setting of this property.
+    The default value is TRUE.   Use the ag3325b Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Cache"
+	"Inherent IVI Attributes:User Options:Cache"
+	bool readwrite local 00100594
+"Specifies whether to cache the value of properties.  When caching is enabled, the instrument driver keeps track of the current instrument settings and avoids sending redundant commands to the instrument.  Thus, you can significantly increase execution speed.
+    The instrument driver can choose always to cache or never to cache particular properties regardless of the setting of this property.
+    The default value is TRUE.   Use the ag3325b Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Simulate"
+	"Inherent IVI Attributes:User Options:Simulate"
+	bool readwrite local 00100595
+"Specifies whether or not to simulate instrument driver I/O operations.  If simulation is enabled, instrument driver VIs perform range checking and call Ivi_GetAttribute and Ivi_SetAttribute VIs, but they do not perform instrument I/O.  For output parameters that represent instrument data, the instrument driver VIs return calculated values.
+    The default value is FALSE.   Use the ag3325b Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Record Value Coercions"
+	"Inherent IVI Attributes:User Options:Record Value Coercions"
+	bool readwrite local 00100596
+"Specifies whether the IVI engine keeps a list of the value coercions it makes for ViInt32 and ViReal64 properties.  You call ag3325b Get Next Coercion Record.vi to extract and delete the oldest coercion record from the list.
+    The default value is FALSE.   Use the ag3325b Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Interchange Check"
+    "Inherent IVI Settings:User Options:Interchange Check"
+	bool readwrite local 001005A5
+"Specifies whether to perform interchangeability checking and log interchangeability warnings when you call ag3325b Initiate Generation.vi.
+
+The default value is VI_FALSE.
+
+Interchangeability warnings indicate that using your application with a different instrument might cause different behavior.  You call ag3325b Get Next Interchange Warning.vi to extract interchange warnings.  Call ag3325b Clear Interchange Warnings.vi to clear the list of interchangeability warnings without reading them.
+
+Interchangeability checking examines the attributes in a capability group only if you specify a value for at least one attribute within that group.  Interchangeability warnings can occur when an attribute affects the behavior of the instrument and you have not set that attribute, or the attribute has been invalidated since you set it.
+
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Driver Setup"
+    "Inherent IVI Settings:Driver Setup"
+	string readonly local 00100597
+"This property indicates the Driver Setup string that the user specified when initializing the driver.
+
+Some cases exist where the end-user must specify instrument driver options at initialization time.  An example of this is specifying a particular instrument model from among a family of instruments that the driver supports.  This is useful when using simulation.  The end-user can specify driver-specific options through the DriverSetup keyword in the optionsString parameter to the ag3325b Init With Options.vi, or through the IVI Configuration Utility.
+
+If the user does not specify a Driver Setup string, this property returns an empty string.
+"
+attribute: "Description"
+	"Inherent IVI Attributes:Driver Identification:Description"
+	string readonly local 00100792
+"A string that contains a brief description of the specific driver
+    "
+attribute: "Driver Prefix"
+	"Inherent IVI Attributes:Driver Identification:Driver Prefix"
+	string readonly local 001006BE
+"A string that contains the prefix for the instrument driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Driver Vendor"
+	"Inherent IVI Attributes:Driver Identification:Driver Vendor"
+	string readonly local 00100791
+"A string that contains the name of the vendor that supplies this driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Attributes:Driver Identification:Revision"
+	string readonly local 001007B7
+"A string that contains additional version information about this instrument driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Attributes:Driver Identification:Class Specification Major Version"
+	iL readonly local 00100793
+"The major version number of the class specification with which this driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Attributes:Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100794
+"The minor version number of the class specification with which this driver is compliant.
+    "
+attribute: "Supported Instrument Models"
+	"Inherent IVI Attributes:Driver Capabilities:Supported Instrument Models"
+	string readonly local 001006D7
+"Contains a model code of the instrument. For drivers that support more than one device, this property contains a comma-separated list of supported instrument models.
+    "
+attribute: "Class Group Capabilities"
+	"Inherent IVI Attributes:Driver Capabilities:Class Group Capabilities"
+	string readonly local 00100721
+"A string that contains a comma-separated list of class-extention groups that this driver implements.
+    "
+attribute: "Channel Count"
+	"Inherent IVI Attributes:Driver Capabilities:Channel Count"
+	iL readonly local 0010065B
+"Indicates the number of channels that the specific instrument driver supports.  
+    For each property for which the IVI_VAL_MULTI_CHANNEL flag property is set, the IVI engine maintains a separate cache value for each channel.
+    "
+attribute: "Manufacturer"
+	"Inherent IVI Attributes:Instrument Identification:Manufacturer"
+	string readonly local 0010078F
+"A string that contains the name of the instrument manufacturer you are currently using.
+    "
+attribute: "Model"
+	"Inherent IVI Attributes:Instrument Identification:Model"
+	string readonly local 00100790
+"A string that contains the model number or name of the instrument that you are currently using.
+    "
+attribute: "Firmware Revision"
+	"Inherent IVI Attributes:Instrument Identification:Firmware Revision"
+	string readonly local 0010078E
+"A string that contains the firmware revision information for the instrument you are currently using.
+    "
+attribute: "Logical Name"
+	"Inherent IVI Attributes:Advanced Session Information:Logical Name"
+	string readonly local 001006C1
+"A string containing the logical name you specified when opening the current IVI session.
+     You may pass a logical name to the ag3325b Initialize.vi or ag3325b Initialize With Options.vi VIs.  The IVI Configuration utility must contain an entry for the logical name.  The logical name entry refers to a virtual instrument section in the IVI Configuration file.  The virtual instrument section specifies a physical device and initial user options.
+    "
+attribute: "IO Resource Descriptor"
+	"Inherent IVI Attributes:Advanced Session Information:IO Resource Descriptor"
+	string readonly local 001006C0
+"Indicates the resource descriptor the driver uses to identify the physical device.
+    If you initialize the driver with a logical name, this property contains the resource descriptor that corresponds to the entry in the IVI Configuration utility.  
+    If you initialize the instrument driver with the resource descriptor, this property contains that value.
+    "
+attribute: "Operation Mode"
+	"Basic Operation:Operation Mode"
+	iL readwrite local 001312D5
+"This property determines how the function generator produces waveforms. The only supported value is  AG3325B_VAL_OPERATE_CONTINUOUS."
+attribute: "Output Mode"
+	"Basic Operation:Output Mode"
+	iL readwrite local 001312D1
+"Determines the kind of waveform the function generator produces.  The value you specify determines which VIs and properties you use to configure the waveform the function generator produces. The only supported value is AG3325B_VAL_OUTPUT_FUNC. 
+
+    When you set this property to AG3325B_VAL_OUTPUT_FUNC, you use the following properties and VIs to configure standard waveforms:
+
+ag3325b>>Standard Function Output>>Waveform
+ag3325b>>Standard Function Output>>Amplitude
+ag3325b>>Standard Function Output>>DC Offset
+ag3325b>>Standard Function Output>>Frequency
+ag3325b>>Standard Function Output>>Start Phase
+ag3325b>>Standard Function Output>>Duty Cycle High
+
+ag3325b Configure Standard Waveform.vi      "
+attribute: "Reference Clock Source"
+	"Basic Operation:Reference Clock Source"
+	iL readwrite local 001312D2
+"Specifies the reference clock source.  The function generator derives frequencies and sample rates that it uses to generate waveforms from the source you specify.  The only supported value is AG3325B_VAL_REF_CLOCK_INTERNAL."
+attribute: "Output Enabled"
+	"Basic Operation:Output Enabled"
+	bool readwrite local 001312D3
+"This property specifies whether the signal the function generator produces appears at the output connector.  The only supported value is TRUE.
+      
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Output Impedance"
+	"Basic Operation:Output Impedance"
+	fD readwrite local 001312D4
+"This property specifies the function generator's output impedance at the output connector. The only supported value is 50.0 Ohms.
+      "
+attribute: "Waveform"
+	"Standard Function Output:Waveform"
+	iL enum { AG3325B_VAL_WFM_SINE=1, AG3325B_VAL_WFM_SQUARE=2, AG3325B_VAL_WFM_TRIANGLE=3, AG3325B_VAL_WFM_RAMP_UP=4, AG3325B_VAL_WFM_RAMP_DOWN=5, AG3325B_VAL_WFM_DC=6} readwrite local 00131335
+"This property specifies which standard waveform the function generator produces.
+    You use this property only when the ag3325b>>Basic Operation>>Output Mode property is set to AG3325B_VAL_OUTPUT_FUNC.
+      
+AG3325B_VAL_WFM_SINE 1
+Configures the function generator to produce a sinusoid waveform.
+
+AG3325B_VAL_WFM_SQUARE 2
+Configures the function generator to produce a square waveform.
+
+AG3325B_VAL_WFM_TRIANGLE 3
+Configures the function generator to produce a triangle waveform.
+
+AG3325B_VAL_WFM_RAMP_UP 4
+Configures the function generator to produce a positive ramp waveform.
+
+AG3325B_VAL_WFM_RAMP_DOWN 5
+Configures the function generator to produce a negative ramp waveform.
+
+AG3325B_VAL_WFM_DC 6
+Configures the function generator to produce a constant voltage."
+attribute: "Amplitude"
+	"Standard Function Output:Amplitude"
+	fD readwrite local 00131336
+"This property specifies the amplitude of the standard waveform the function generator produces.  This value is the amplitude at the output terminal.  The units are volts peak-to-peak (Vpp).  For example, to produce a waveform ranging from -5.0 to +5.0 volts, you set this value to 10.0 volts.
+    You use this property only when the ag3325b>>Basic Operation>>Output Mode property is set to AG3325B_VAL_OUTPUT_FUNC.  This property does not affect function generator behavior when you set the ag3325b>>Standard Function Output>>Waveform property to AG3325B_VAL_WFM_DC.
+      "
+attribute: "DC Offset"
+	"Standard Function Output:DC Offset"
+	fD readwrite local 00131337
+"This channel-based property specifies the DC offset of the standard waveform the function generator produces.  This value is the offset at the output terminal.  The units are volts (V).  The value is the offset from ground to the center of the waveform you specify with the ag3325b>>Standard Function Output>>Waveform property.  For example, a standard waveform ranging from +5.0 volts to 0.0 volts has a DC offset of 2.5 volts.
+    You use this property only when the ag3325b>>Basic Operation>>Output Mode property is set to AG3325B_VAL_OUTPUT_FUNC.
+      "
+attribute: "Frequency"
+	"Standard Function Output:Frequency"
+	fD readwrite local 00131338
+"This channel-based property specifies the frequency of the standard waveform the function generator produces.  The units are hertz (Hz).  You use this property only when the ag3325b>>Basic Operation>>Output Mode property is set to AG3325B_VAL_OUTPUT_FUNC.
+    This property does not affect function generator behavior when you set the ag3325b>>Standard Function Output>>Waveform property to AG3325B_VAL_WFM_DC.
+     "
+attribute: "Start Phase"
+	"Standard Function Output:Start Phase"
+	fD readwrite local 00131339
+"This channel-based property specifies the horizontal offset of the standard waveform the function generator produces.  You specify this property in degrees of one waveform cycle.  For example, a 180 degree phase offset means output generation begins half way through the waveform.  A start phase of 360 degrees offsets the output by an entire waveform cycle.  It is therefore identical to a start phase of 0 degrees.
+    You use this property only when the ag3325b>>Basic Operation>>Output Mode property is set to AG3325B_VAL_OUTPUT_FUNC.  This property does not affect function generator behavior when you set the ag3325b>>Standard Function Output>>Waveform property to AG3325B_VAL_WFM_DC.
+      "
+attribute: "Duty Cycle High"
+	"Standard Function Output:Duty Cycle High"
+	fD readwrite local 0013133A
+"This channel-based property specifies the length of time the output voltage level remains high in a square waveform.  You specify this property as a percentage of one waveform cycle.
+    You use this property only when the ag3325b>>Basic Operation>>Output Mode property is set to AG3325B_VAL_OUTPUT_FUNC and the ag3325b>>Standard Function Output>>Waveform property to AG3325B_VAL_WFM_SQUARE.
+    The only supported value for this property is 50.00 percent.      "
+attribute: "AM Enabled"
+	"Amplitude Modulation:AM Enabled"
+	bool readwrite local 00131461
+"This channel-based property specifies whether the function generator applies amplitude modulation to the output signal.
+      
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "AM Source"
+	"Amplitude Modulation:AM Source"
+	iL readwrite local 00131462
+"This channel-based property specifies the signal that the function generator uses to modulate the output signal.
+      "
+attribute: "PM Enabled"
+	"Phase Modulation:PM Enabled"
+	bool readwrite local 00118C94
+"This channel-based property specifies whether the function generator applies phase modulation to the output signal.
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "PM Source"
+	"Phase Modulation:PM Source"
+	iL readwrite local 00118C95
+"This channel-based property specifies the signal that the function generator uses to modulate the output signal."
+attribute: "Sweep Mode"
+	"Frequency Sweep:Sweep Mode"
+	iL enum { AG3325B_VAL_SWEEP_LINEAR=1, AG3325B_VAL_SWEEP_LINEAR_SEQUENCE=2, AG3325B_VAL_SWEEP_LOGARITHMIC=3} readwrite local 00118CF8
+"This property determines how the function generator produces frequency sweeps. 
+AG3325B_VAL_SWEEP_LINEAR 1
+
+AG3325B_VAL_SWEEP_LINEAR_SEQUENCE 2
+
+AG3325B_VAL_SWEEP_LOGARITHMIC 3"
+attribute: "Sweep Start Frequency"
+	"Frequency Sweep:Sweep Start Frequency"
+	fD readwrite local 00118E89
+"This property determines the starting frequency used during a frequency sweep."
+attribute: "Sweep Stop Frequency"
+	"Frequency Sweep:Sweep Stop Frequency"
+	fD readwrite local 00118E8A
+"This property determines the stopping frequency used during a frequency sweep."
+attribute: "Sweep Time"
+	"Frequency Sweep:Sweep Time"
+	fD readwrite local 00118CFB
+"This property determines the time interval used during a frequency sweep.  The time interval is the amount of time it takes the function generator to transition between the start frequency and the stop frequency."
+attribute: "Sweep Marker Frequency"
+	"Frequency Sweep:Sweep Marker Frequency"
+	fD readwrite local 00118CFC
+"This property determines the merker frequency used during a frequency sweep.  When the marker frequency is reached during frequency sweep output, the Market TTL output is driven to low voltage."
+attribute: "ModSource Mode"
+	"Modulation Source:ModSource Mode"
+	iL enum { AG3325B_VAL_MODSOURCE_OFF=1, AG3325B_VAL_MODSOURCE_SINE=2, AG3325B_VAL_MODSOURCE_SQUARE=3, AG3325B_VAL_MODSOURCE_ARBITRARY=0} readwrite local 00118D5C
+"This property determines how the function generator produces  modulation output. 
+AG3325B_VAL_MODSOURCE_OFF 1
+
+AG3325B_VAL_MODSOURCE_SINE 2
+
+AG3325B_VAL_MODSOURCE_SQUARE 3
+
+AG3325B_VAL_MODSOURCE_ARBITRARY 0"
+attribute: "ModSource Amplitude"
+	"Modulation Source:ModSource Amplitude"
+	fD readwrite local 00118D5D
+"This property specifies the amplitude of the modulation source waveform the function generator produces.  This value is the amplitude at the output terminal.  The units are volts peak-to-peak (Vpp).  
+    You use this property only when the ag3325b>>Modulation Source>>ModSource Mode property is set to AG3325B_VAL_MODSOURCE_SINE or AG3325B_VAL_MODSOURCE_SQUARE.  This property does not affect function generator behavior when you set the ag3325b>>Modulation Source>>ModSource Mode property to AG3325B_VAL_MODSOURCE_OFF or AG3325B_VAL_MODSOURCE_ARBITRARY.
+"
+attribute: "ModSource Frequency"
+	"Modulation Source:ModSource Frequency"
+	fD readwrite local 00118D5E
+"This property specifies the frequency of the modulation source waveform the function generator produces.  The units are hertz (Hz).  
+    You use this property only when the ag3325b>>Modulation Source>>ModSource Mode property is set to AG3325B_VAL_MODSOURCE_SINE or AG3325B_VAL_MODSOURCE_SQUARE.
+    This property does not affect function generator behavior when you set the ag3325b>>Modulation Source>>ModSource Mode property to AG3325B_VAL_MODSOURCE_OFF or AG3325B_VAL_MODSOURCE_ARBITRARY.
+"
+attribute: "ID Query Response"
+	"Miscellaneous Attributes:ID Query Response"
+	string readonly local 00118C31
+"Returns the ID Query response string.  The instrument driver gets the value of this property when you pass TRUE for the ID Query parameter to the ag3325b Initialize.vi or ag3325b Initialize With Options.vi.
+    "
+attribute: "Display Enabled"
+	"Miscellaneous Attributes:Display Enabled"
+	bool writeonly local 00118E24
+"This property enables or disables the front panel display on the instrument.
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Output Terminal"
+	"Miscellaneous Attributes:Output Terminal"
+	iL enum { AG3325B_VAL_TERMINAL_FRONT=1, AG3325B_VAL_TERMINAL_REAR=2} readwrite local 00118E88
+"This property determines wihich output terminal is enabled for the main output (channel 1).
+
+AG3325B_VAL_TERMINAL_FRONT 1
+
+AG3325B_VAL_TERMINAL_REAR 2"
+attribute: "Calibrate On Function Change"
+	"Miscellaneous Attributes:Calibrate On Function Change"
+	bool writeonly local 00118DC0
+"This property determines the instruments calibration mode.  When enabled, the instrument will calibrate every time the waveform type is changed. When disabled, the instrument will calibrate only once.
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+
+attribute: "Primary Error"
+	"Obsolete:Inherent IVI Attributes:Error Info:Primary Error"
+	iL readwrite local 001005F5
+"A code that describes the most recent error that occurred on the session.  The value follows the VXIplug&play completion code conventions.  A negative value describes an error condition.  A positive value describes a warning condition and indicates that no error occurred.  A zero indicates that no error or warning occurred. The error and warning values can be status codes defined by IVI, VISA, class drivers, or specific drivers.
+    "
+attribute: "Secondary Error"
+	"Obsolete:Inherent IVI Attributes:Error Info:Secondary Error"
+	iL readwrite local 001005F6
+"An optional code that provides additional information concerning the primary error condition.  The error and warning values can be status codes defined by IVI, VISA, class drivers, or specific drivers.  Zero indicates no additional information.
+    "
+attribute: "Error Elaboration"
+	"Obsolete:Inherent IVI Attributes:Error Info:Error Elaboration"
+	string readwrite local 001005F7
+"An optional string that contains additional information concerning the primary error condition.
+    "
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Attributes:Driver Identification:Major Version"
+	iL readonly local 00100787
+"The major version number of this instrument driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Attributes:Driver Identification:Minor Version"
+	iL readonly local 00100788
+"The minor version number of this instrument driver.
+    "
+attribute: "I/O Session Type"
+	"Obsolete:Inherent IVI Attributes:Advanced Session Information:I/O Session Type"
+	string readonly local 001006D4
+"Contains the type of the I/O session that this driver uses to communicate with the instrument.
+     "

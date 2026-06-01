@@ -1,0 +1,863 @@
+library: ividmm.dll
+
+class: "IviDmm"
+flags: 16
+sorted: no
+super: ivi, IviDmmObsolete, iviResourceMgr
+attribute: "Range Check"
+	"Inherent IVI Settings:User Options:Range Check"
+	bool readwrite local 00100592
+"Specifies whether to validate property values and VI parameters.  If enabled, the instrument driver validates the parameter values that you pass to driver VIs.  Range checking parameters is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable range checking and maximize performance.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Query Instrument Status"
+	"Inherent IVI Settings:User Options:Query Instrument Status"
+	bool readwrite local 00100593
+"Specifies whether the instrument driver queries the instrument status after each operation.  Querying the instrument status is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable status checking and maximize performance
+    The instrument driver can choose to ignore status checking for particular properties regardless of the setting of this property.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Cache"
+	"Inherent IVI Settings:User Options:Cache"
+	bool readwrite local 00100594
+"Specifies whether to cache the value of properties.  When caching is enabled, the instrument driver keeps track of the current instrument settings and avoids sending redundant commands to the instrument.  Thus, you can significantly increase execution speed.
+    The instrument driver can choose always to cache or never to cache particular properties regardless of the setting of this property.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Simulate"
+	"Inherent IVI Settings:User Options:Simulate"
+	bool readwrite local 00100595
+"Specifies whether or not to simulate instrument driver I/O operations.  If simulation is enabled, instrument driver VIs perform range checking and set and get properties, but they do not perform instrument I/O.  For output parameters that represent instrument data, the instrument driver VIs return calculated values.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Use Specific Simulation"
+	"Inherent IVI Settings:User Options:Use Specific Simulation"
+	bool readwrite local 001005A7
+"Specifies whether to simulate instrument driver I/O operations in the specific or class driver.  This property affects instrument driver operation only when the IviDmm>>Inherent IVI Settings>>User Options>>Simulate property is set to TRUE.
+    The default value is FALSE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Record Value Coercions"
+	"Inherent IVI Settings:User Options:Record Value Coercions"
+	bool readwrite local 00100596
+"Specifies whether the instrument driver keeps a list of the value coercions it makes for ViInt32 and ViReal64 properties.  If IviDmm>>Inherent IVI Settings>>User Options>>Spy is set to TRUE, you use the NI-Spy utility to view coercion information.  If IviDmm>>Inherent IVI Settings>>User Options>>Spy is set to FALSE you call Get Next Coercion Record to extract and delete the oldest coercion record from the list.
+    The default value is FALSE.   Use the IVI Configuration utility or the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Interchange Check"
+	"Inherent IVI Settings:User Options:Interchange Check"
+	bool readwrite local 001005A5
+"Specifies whether to perform interchangeability checking and retrieve interchangeability warnings when you call the Initiate, Read, and ReadMultiPoint VIs.  The default value is FALSE.  Interchangeability warnings indicate that using your application with a different instrument might cause different behavior.  If IviDmm>>Inherent IVI Settings>>User Options>>Spy is set to FALSE, you call Get Next Interchange Warning to extract interchange warnings.  Call the Clear Interchange Warnings VI to clear the list of interchangeability warnings without reading them.
+If IviDmm>>Inherent IVI Settings>>User Options>>Spy is set to TRUE, you can use the NI Spy utility to view interchange warnings.
+     Interchangeability checking examines the properties in a capability group only if you specify a value for at least one property within that group.  Interchangeability warnings can occur under the following conditions:
+
+(1) A property affects the behavior of the instrument and you have not set that property.
+
+(2) The IviDmm class defines values for a property and you have set that property to a value not defined by the IviDmm class.
+
+(3) The IviDmm class defines a property as read-only and you have set that property.
+
+     The IviDmm class provides the following additional rules and exceptions to these interchangeability checking rules.  They are listed under the capability group to which they refer:
+
+(1) IviDmmBase Capabilities:
+
+ - If the IviDmm>>Basic Operation>>Function property is set to IVIDMM_VAL_TEMPERATURE, the IviDmm>>Basic Operation>>Resolution property is not required to be in a user specified state.
+
+(2) IviDmmACMeasurement Capabilities:
+
+ - If the IviDmm>>Basic Operation>>Function property is not set to IVIDMM_VAL_AC_VOLTS, IVIDMM_VAL_AC_CURRENT, IVIDMM_VAL_AC_PLUS_DC_VOLTS, or IVIDMM_VAL_AC_PLUS_DC_CURRENT, then the IviDmm>>AC Measurements>>AC Minimum Frequency [AC] and IviDmm>>AC Measurements>>AC Maximum Frequency [AC] properties are not required to be in a user specified state.
+
+(3) IviDmmTemperatureMeasurement Capabilities:
+
+ - If the IviDmm>>Basic Operation>>Function property is not set to IVIDMM_VAL_TEMPERATURE, the IviDmm>>Temperature Measurements>>Transducer Type [TMP] property is not required to be in a user specified state.
+
+(4) IviDmmThermocouple Capabilities:
+
+ - If the IviDmm>>Temperature Measurements>>Transducer Type [TMP] property is not set to IVIDMM_VAL_THERMOCOUPLE, then the IviDmm>>Temperature Measurements>>Thermocouple>>Thermocouple Type [TC], IviDmm>>Temperature Measurements>>Thermocouple>>Reference Junction Type [TC], and IviDmm>>Temperature Measurements>>Thermocouple>>Fixed Reference Junction [TC] properties are not required to be in a user specified state.
+
+(5) IviDmmResistanceTemperatureDevice Capabilities:
+
+ - If the IviDmm>>Temperature Measurements>>Transducer Type [TMP] property is not set to IVIDMM_VAL_2_WIRE_RTD or IVIDMM_VAL_4_WIRE_RTD, then the IviDmm>>Temperature Measurements>>Resistance Temperature Device>>RTD Alpha [RTD] and IviDmm>>Temperature Measurements>>Resistance Temperature Device>>RTD Resistance [RTD] properties are not required to be in a user specified state.
+
+(6) IviDmmThermistor Capabilities:
+
+ - If the IviDmm>>Temperature Measurements>>Transducer Type [TMP] property is not set to IVIDMM_VAL_THERMISTOR, the IviDmm>>Temperature Measurements>>Thermistor>>Thermistor Resistance [THM] property is not required to be in a user specified state.
+
+(7) IviDmmMultiPoint Capabilities:
+
+ - If the IviDmm>>Multi-Point Acquisition>>Sample Count [MP] property is set to 1, then the IviDmm>>Multi-Point Acquisition>>Sample Trigger [MP] property is not required to be in a user specified state.
+
+ - If the IviDmm>>Multi-Point Acquisition>>Sample Count [MP] property is set 1 and the IviDmm>>Multi-Point Acquisition>>Sample Trigger [MP] property is set to a value other than IVIDMM_VAL_INTERVAL, then the IviDmm>>Multi-Point Acquisition>>Sample Interval [MP] property is not required to be in a user specified state.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Spy"
+	"Inherent IVI Settings:User Options:Spy"
+	bool readwrite local 001005A6
+"Specifies whether to log class VI calls to the NI Spy utility.  If spying is enabled, you can use NI Spy to view the input and output parameters, return values, coercion records, and interchangeability warnings of class VI calls.
+    The default value is TRUE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Description"
+	"Inherent IVI Settings:Class Driver Identification:Description"
+	string readonly local 00100796
+"A string that contains a brief description of the class driver
+    "
+attribute: "Class Driver Prefix"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Prefix"
+	string readonly local 001006BD
+"A string that contains the prefix for the class driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Class Driver Vendor"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Vendor"
+	string readonly local 00100795
+"A string that contains the name of the vendor that supplies this class driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Class Driver Identification:Revision"
+	string readonly local 001007B8
+"A string that contains additional version information about the class driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Major Version"
+	iL readonly local 00100797
+"The major version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100798
+"The minor version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Description"
+	"Inherent IVI Settings:Specific Driver Identification:Description"
+	string readonly local 00100792
+"A string that contains a brief description of the specific driver
+    "
+attribute: "Specific Driver Prefix"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Prefix"
+	string readonly local 001006BE
+"A string that contains the prefix for the instrument driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Specific Driver Locator"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Locator"
+	string readonly local 001006BF
+"Indicates the location at which the class driver attempts to find the specific driver module file.
+"
+attribute: "Specific Driver Vendor"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Vendor"
+	string readonly local 00100791
+"A string that contains the name of the vendor that supplies this driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Specific Driver Identification:Revision"
+	string readonly local 001007B7
+"A string that contains additional version information about the specific driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Major Version"
+	iL readonly local 00100793
+"The major version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100794
+"The minor version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Supported Instrument Models"
+	"Inherent IVI Settings:Specific Driver Capabilities:Supported Instrument Models"
+	string readonly local 001006D7
+"Contains a model code of the instrument. For specific drivers that support more than one device, this property contains a comma-separated list of supported instrument models.
+    "
+attribute: "Group Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Group Capabilities"
+	string readonly local 00100721
+"Indicates the IviDmm capability groups that the specific instrument driver supports.  This property is a comma-delimited list of the following group names:
+
+'IviDmmBase' - Supports fundamental dmm capabilities.
+
+'IviDmmACMeasurement' - Supports IviDmmBase with the capability to take AC measurements.
+
+'IviDmmFrequencyMeasurement' - Supports IviDmmBase with the capability to take frequency measurements.
+
+'IviDmmTemperatureMeasurement' - Supports IviDmmBase with the capability to take temperature measurements.
+
+'IviDmmThermocouple' - Supports IviDmmBase with the capability to take temperature measurements with a thermocouple.
+
+'IviDmmResistanceTemperatureDevice' - Supports IviDmmBase with the capability to take temperature measurements with a resistance temperature device.
+
+'IviDmmThermistor' - Supports IviDmmBase with the capability to take temperature measurements with a thermistor.
+
+'IviDmmMultiPoint' - Supports IviDmm with the capability to accept multiple triggers and acquire multiple samples per trigger.
+
+'IviDmmTriggerSlope' - Supports IviDmmBase with the capability to specify trigger slope.
+
+'IviDmmSoftwareTrigger' - Supports IviDmmBase with the capability to send a software trigger.
+
+'IviDmmDeviceInfo' - Supports IviDmmBase with the capability to return properties that give extra information concerning the instrument's state such as aperture time.
+
+'IviDmmAutoRangeValue' - Supports IviDmmBase with the capability to return the actual range when auto ranging.
+
+'IviDmmAutoZero' - Supports IviDmmBase with the capability to take an auto-zero reading.
+
+'IviDmmPowerLineFrequency' - Supports IviDmmBase with the capability to specify the power line frequency.
+
+    "
+attribute: "Function Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Function Capabilities"
+	string readonly local 00100722
+"Indicates the IviDmm VIs that the specific instrument driver supports.  This property is a comma-delimited list of the following functions:
+
+    'IviDmm_init'
+    'IviDmm_close'
+    'IviDmm_reset'
+    'IviDmm_self_test'
+    'IviDmm_error_query'
+    'IviDmm_error_message'
+    'IviDmm_revision_query'
+    'IviDmm_ConfigureMeasurement'
+    'IviDmm_ConfigureTrigger'
+    'IviDmm_Read'
+    'IviDmm_Fetch'
+    'IviDmm_Abort'
+    'IviDmm_Initiate'
+    'IviDmm_IsOverRange'
+    'IviDmm_ConfigureACBandwidth'
+    'IviDmm_ConfigureFrequencyVoltageRange'
+    'IviDmm_ConfigureTransducerType'
+    'IviDmm_ConfigureFixedRefJunction'
+    'IviDmm_ConfigureThermocouple'
+    'IviDmm_ConfigureRTD'
+    'IviDmm_ConfigureThermistor'
+    'IviDmm_ConfigureMeasCompleteDest'
+    'IviDmm_ConfigureMultiPoint'
+    'IviDmm_ReadMultiPoint'
+    'IviDmm_FetchMultiPoint'
+    'IviDmm_ConfigureTriggerSlope'
+    'IviDmm_SendSoftwareTrigger'
+    'IviDmm_GetApertureTimeInfo'
+    'IviDmm_GetAutoRangeValue'
+    'IviDmm_ConfigureAutoZeroMode'
+    'IviDmm_ConfigurePowerLineFrequency'
+    "
+attribute: "Attribute Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Attribute Capabilities"
+	string readonly local 00100723
+"Indicates the IviDmm properties that the specific instrument driver supports.  This property is a comma-delimited list of the following properties:
+
+    'IVIDMM_ATTR_FUNCTION'
+    'IVIDMM_ATTR_RANGE'
+    'IVIDMM_ATTR_RESOLUTION_ABSOLUTE'
+    'IVIDMM_ATTR_TRIGGER_SOURCE'
+    'IVIDMM_ATTR_TRIGGER_DELAY'
+    'IVIDMM_ATTR_AC_MIN_FREQ'
+    'IVIDMM_ATTR_AC_MAX_FREQ'
+    'IVIDMM_ATTR_FREQ_VOLTAGE_RANGE'
+    'IVIDMM_ATTR_TEMP_TRANSDUCER_TYPE'
+    'IVIDMM_ATTR_TEMP_TC_TYPE'
+    'IVIDMM_ATTR_TEMP_TC_REF_JUNC_TYPE'
+    'IVIDMM_ATTR_TEMP_TC_FIXED_REF_JUNC'
+    'IVIDMM_ATTR_TEMP_RTD_ALPHA'
+    'IVIDMM_ATTR_TEMP_RTD_RES'
+    'IVIDMM_ATTR_TEMP_THERMISTOR_RES'
+    'IVIDMM_ATTR_SAMPLE_COUNT'
+    'IVIDMM_ATTR_SAMPLE_TRIGGER'
+    'IVIDMM_ATTR_SAMPLE_INTERVAL'
+    'IVIDMM_ATTR_TRIGGER_COUNT'
+    'IVIDMM_ATTR_MEAS_COMPLETE_DEST'
+    'IVIDMM_ATTR_TRIGGER_SLOPE'
+    'IVIDMM_ATTR_APERTURE_TIME'
+    'IVIDMM_ATTR_APERTURE_TIME_UNITS'
+    'IVIDMM_ATTR_AUTO_RANGE_VALUE'
+    'IVIDMM_ATTR_AUTO_ZERO'
+    'IVIDMM_ATTR_POWERLINE_FREQ'
+    "
+attribute: "Manufacturer"
+	"Inherent IVI Settings:Instrument Identification:Manufacturer"
+	string readonly local 0010078F
+"A string that contains the name of the instrument manufacturer you are currently using.
+    "
+attribute: "Model"
+	"Inherent IVI Settings:Instrument Identification:Model"
+	string readonly local 00100790
+"A string that contains the model number or name of the instrument that you are currently using.
+    "
+attribute: "Firmware Revision"
+	"Inherent IVI Settings:Instrument Identification:Firmware Revision"
+	string readonly local 0010078E
+"A string that contains the firmware revision information for the instrument you are currently using.
+    "
+attribute: "Driver Setup"
+	"Inherent IVI Settings:Advanced Session Information:Driver Setup"
+	string readonly local 00100597
+"     Some cases exist where you must specify instrument driver options at initialization time.  An example of this is specifying a particular instrument model from among a family of instruments that the driver supports.  This is useful when using simulation.  
+     You can specify driver-specific options through the DriverSetup keyword in the optionsString parameter to the Init With Options VI.  If you open an instrument using a logical name, you can also specify the options through the IVI Configuration Utility.
+     The default value is an empty string.
+     "
+attribute: "Logical Name"
+	"Inherent IVI Settings:Advanced Session Information:Logical Name"
+	string readonly local 001006C1
+"A string containing the logical name you specified when opening the current IVI session.
+     You may pass a logical name to the Initialize or Initialize With Options VIs.  The IVI Configuration utility must contain an entry for the logical name.  The logical name entry refers to a virtual instrument section in the IVI Configuration file.  The virtual instrument section specifies a physical device and initial user options.
+    "
+attribute: "IO Resource Descriptor"
+	"Inherent IVI Settings:Advanced Session Information:IO Resource Descriptor"
+	string readonly local 001006C0
+"Indicates the resource descriptor the driver uses to identify the physical device.
+    If you initialize the driver with a logical name, this property contains the resource descriptor that corresponds to the entry in the IVI Configuration utility.  
+    If you initialize the instrument driver with the resource descriptor, this property contains that value.
+    "
+attribute: "Function"
+	"Basic Operation:Function"
+	iL enum { IVIDMM_VAL_DC_VOLTS=1, IVIDMM_VAL_AC_VOLTS=2, IVIDMM_VAL_DC_CURRENT=3, IVIDMM_VAL_AC_CURRENT=4, IVIDMM_VAL_2_WIRE_RES=5, IVIDMM_VAL_4_WIRE_RES=101, IVIDMM_VAL_AC_PLUS_DC_VOLTS=106, IVIDMM_VAL_AC_PLUS_DC_CURRENT=107, IVIDMM_VAL_FREQ=104, IVIDMM_VAL_PERIOD=105, IVIDMM_VAL_TEMPERATURE=108} readwrite local 001312D1
+"Specifies the measurement function.
+    
+IVIDMM_VAL_DC_VOLTS 1
+DC Volts
+
+IVIDMM_VAL_AC_VOLTS 2
+AC Volts
+
+IVIDMM_VAL_DC_CURRENT 3
+DC Current
+
+IVIDMM_VAL_AC_CURRENT 4
+AC Current
+
+IVIDMM_VAL_2_WIRE_RES 5
+2 Wire Resistance
+
+IVIDMM_VAL_4_WIRE_RES 101
+4 Wire Resistance
+
+IVIDMM_VAL_AC_PLUS_DC_VOLTS 106
+AC + DC Volts
+
+IVIDMM_VAL_AC_PLUS_DC_CURRENT 107
+AC + DC Current
+
+IVIDMM_VAL_FREQ 104
+Frequency
+
+IVIDMM_VAL_PERIOD 105
+Period
+
+IVIDMM_VAL_TEMPERATURE 108
+Temperature"
+attribute: "Range"
+	"Basic Operation:Range"
+	fD readwrite local 001312D2
+"Specifies the measurement range.  You use positive values to represent the absolute value of the maximum expected measurement.  The value is in units appropriate for the current value of the IviDmm>>Basic Operation>>Function property.  For example, when you set the IviDmm>>Basic Operation>>Function property to IVIDMM_VAL_DC_VOLTS, the units are volts.  For example, setting this property to 10.0 configures the DMM to measure DC voltages from -10.0 to +10.0 volts.
+    Negative values are reserved for controlling the DMM's auto-ranging capability.
+- IVIDMM_VAL_AUTO_RANGE_ON (-1.0) - Configures the DMM to calculate the range before each measurement automatically.
+- IVIDMM_VAL_AUTO_RANGE_OFF (-2.0) - Disables auto-ranging.  The DMM sets the range to the value it most recently calculated.
+- IVIDMM_VAL_AUTO_RANGE_ONCE (-3.0) - Configures the DMM to calculate the range before the next measurement.  The DMM uses this range value for all subsequent measurements.
+    After you set this property to IVIDMM_VAL_AUTO_RANGE_OFF or IVIDMM_VAL_AUTO_RANGE_ONCE, further queries of this property return the actual range.
+    When you set this property to IVIDMM_VAL_AUTO_RANGE_ON, you can obtain the actual range the DMM is currently using by getting the value of the IviDmm>>Configuration Information>>Auto Range Value [ARV] property.
+
+   "
+attribute: "Resolution"
+	"Basic Operation:Resolution"
+	fD readwrite local 001312D8
+"Specifies the the measurement resolution of the DMM in absolute units.
+Setting this property to lower values increases the measurement accuracy.  Setting this property to higher values increases the measurement speed.
+The valid range for this property depends on both the measurement function and the value of the IviDmm>>Basic Operation>>Range property.
+    "
+attribute: "Trigger Source"
+	"Trigger:Trigger Source"
+	iL enum { IVIDMM_VAL_IMMEDIATE=1, IVIDMM_VAL_EXTERNAL=2, IVIDMM_VAL_SOFTWARE_TRIG=3, IVIDMM_VAL_TTL0=111, IVIDMM_VAL_TTL1=112, IVIDMM_VAL_TTL2=113, IVIDMM_VAL_TTL3=114, IVIDMM_VAL_TTL4=115, IVIDMM_VAL_TTL5=116, IVIDMM_VAL_TTL6=117, IVIDMM_VAL_TTL7=118, IVIDMM_VAL_ECL0=119, IVIDMM_VAL_ECL1=120, IVIDMM_VAL_PXI_STAR=131, IVIDMM_VAL_RTSI_0=140, IVIDMM_VAL_RTSI_1=141, IVIDMM_VAL_RTSI_2=142, IVIDMM_VAL_RTSI_3=143, IVIDMM_VAL_RTSI_4=144, IVIDMM_VAL_RTSI_5=145, IVIDMM_VAL_RTSI_6=146} readwrite local 001312D4
+"Specifies the trigger source.  After you call either the Read or Initiate VIs, the DMM waits for the trigger you specify with this property.  After it receives the trigger, the DMM waits the length of time you specify with the IviDmm>>Trigger>>Trigger Delay property.  The DMM then takes a measurement.
+    
+IVIDMM_VAL_IMMEDIATE 1
+The DMM does not wait for a trigger of any kind.
+
+IVIDMM_VAL_EXTERNAL 2
+The DMM waits for a trigger on the external trigger input.
+
+IVIDMM_VAL_SOFTWARE_TRIG 3
+The DMM waits until you call the Send Software Trigger [SWT] VI.
+
+IVIDMM_VAL_TTL0 111
+The DMM waits until it receives a trigger on the PXI TRIG0 line (for PXI instruments) or the VXI TTL0 line (for VXI instruments).
+
+IVIDMM_VAL_TTL1 112
+The DMM waits until it receives a trigger on the PXI TRIG1 line (for PXI instruments) or the VXI TTL1 line (for VXI instruments).
+
+IVIDMM_VAL_TTL2 113
+The DMM waits until it receives a trigger on the PXI TRIG2 line (for PXI instruments) or the VXI TTL2 line (for VXI instruments).
+
+IVIDMM_VAL_TTL3 114
+The DMM waits until it receives a trigger on the PXI TRIG3 line (for PXI instruments) or the VXI TTL3 line (for VXI instruments).
+
+IVIDMM_VAL_TTL4 115
+The DMM waits until it receives a trigger on the PXI TRIG4 line (for PXI instruments) or the VXI TTL4 line (for VXI instruments).
+
+IVIDMM_VAL_TTL5 116
+The DMM waits until it receives a trigger on the PXI TRIG5 line (for PXI instruments) or the VXI TTL5 line (for VXI instruments).
+
+IVIDMM_VAL_TTL6 117
+The DMM waits until it receives a trigger on the PXI TRIG6 line (for PXI instruments) or the VXI TTL6 line (for VXI instruments).
+
+IVIDMM_VAL_TTL7 118
+The DMM waits until it receives a trigger on the PXI TRIG7 line (for PXI instruments) or the VXI TTL7 line (for VXI instruments).
+
+IVIDMM_VAL_ECL0 119
+The DMM waits until it receives a trigger on the VXI ECL0 line.
+
+IVIDMM_VAL_ECL1 120
+The DMM waits until it receives a trigger on the VXI ECL1 line.
+
+IVIDMM_VAL_PXI_STAR 131
+The DMM waits until it receives a trigger on the PXI STAR trigger bus.
+
+IVIDMM_VAL_RTSI_0 140
+The DMM waits until it receives a trigger on RTSI line 0 .
+
+IVIDMM_VAL_RTSI_1 141
+The DMM waits until it receives a trigger on RTSI line 1.
+
+IVIDMM_VAL_RTSI_2 142
+The DMM waits until it receives a trigger on RTSI line 2.
+
+IVIDMM_VAL_RTSI_3 143
+The DMM waits until it receives a trigger on RTSI line 3.
+
+IVIDMM_VAL_RTSI_4 144
+The DMM waits until it receives a trigger on RTSI line 4.
+
+IVIDMM_VAL_RTSI_5 145
+The DMM waits until it receives a trigger on RTSI line 5.
+
+IVIDMM_VAL_RTSI_6 146
+The DMM waits until it receives a trigger on RTSI line 6."
+attribute: "Trigger Delay"
+	"Trigger:Trigger Delay"
+	fD readwrite local 001312D5
+"Specifies the length of time the DMM waits after it receives the trigger and before it takes a measurement.  Use positive values to set the trigger delay in seconds.  Negative values are reserved for configuring the DMM to calculate the trigger delay automatically.
+    Setting this property to IVIDMM_VAL_AUTO_DELAY_ON configures the DMM to calculate the trigger delay before each measurement.  Setting this property to IVIDMM_VAL_AUTO_DELAY_OFF stops the DMM from calculating the trigger delay and sets the trigger delay to the last automatically calculated value.
+    "
+attribute: "Trigger Slope [TS]"
+	"Trigger:Trigger Slope [TS]"
+	iL enum { IVIDMM_VAL_POSITIVE=0, IVIDMM_VAL_NEGATIVE=1} readwrite local 0013141E
+"Specifies if the trigger occurs on the rising edge (IVIDMM_VAL_POSITIVE) or on the falling edge (IVIDMM_VAL_NEGATIVE) of the external trigger source.
+
+Note:
+(1) This property is part of the IviDmmTriggerSlope [TS] extension group.
+    
+IVIDMM_VAL_POSITIVE 0
+Positive slope
+
+IVIDMM_VAL_NEGATIVE 1
+Negative slope"
+attribute: "AC Minimum Frequency [AC]"
+	"AC Measurements:AC Minimum Frequency [AC]"
+	fD readwrite local 001312D6
+"Specifies the minimum frequency component of the input signal for AC measurements. The value of this property affects instrument behavior only when you set the IviDmm>>Basic Operation>>Function property to an AC measurement.
+
+Note:
+(1) This property is part of the IviDmmAcMeasurement [AC] extension group.
+    "
+attribute: "AC Maximum Frequency [AC]"
+	"AC Measurements:AC Maximum Frequency [AC]"
+	fD readwrite local 001312D7
+"Specifies the maximum frequency component of the input signal for AC measurements. The value of this property affects instrument behavior only when you set the IviDmm>>Basic Operation>>Function property to an AC measurement.
+
+Note:
+(1) This property is part of the IviDmmAcMeasurement [AC] extension group.
+    "
+attribute: "Frequency Voltage Range [FRQ]"
+	"Frequency Measurements:Frequency Voltage Range [FRQ]"
+	fD readwrite local 00131335
+"Specifies the expected maximum value of the input signal for frequency and period measurements.  The value of this property affects instrument behavior only when the IviDmm>>Basic Operation>>Function property is set to IVIDMM_VAL_FREQ or IVIDMM_VAL_PERIOD.
+
+Note:
+(1) This property is part of the IviDmmFrequencyMeasurement [FRQ] extension group.
+    "
+attribute: "Transducer Type [TMP]"
+	"Temperature Measurements:Transducer Type [TMP]"
+	iL enum { IVIDMM_VAL_THERMOCOUPLE=1, IVIDMM_VAL_THERMISTOR=2, IVIDMM_VAL_2_WIRE_RTD=3, IVIDMM_VAL_4_WIRE_RTD=4} readwrite local 00131399
+"Specifies the device used to measure the temperature.  The value of this property affects instrument behavior only when the IviDmm>>Basic Operation>>Function property is set to IVIDMM_VAL_TEMPERATURE.
+
+Note:
+(1) This property is part of the IviDmmTemperatureMeasurement [TMP] extension group.
+    
+IVIDMM_VAL_THERMOCOUPLE 1
+Thermocouple
+
+IVIDMM_VAL_THERMISTOR 2
+Thermistor
+
+IVIDMM_VAL_2_WIRE_RTD 3
+2-Wire Resistance Temperature Device
+
+IVIDMM_VAL_4_WIRE_RTD 4
+4-Wire Resistance Temperature Device"
+attribute: "Thermocouple Type [TC]"
+	"Temperature Measurements:Thermocouple:Thermocouple Type [TC]"
+	iL enum { IVIDMM_VAL_TEMP_TC_B=1, IVIDMM_VAL_TEMP_TC_C=2, IVIDMM_VAL_TEMP_TC_D=3, IVIDMM_VAL_TEMP_TC_E=4, IVIDMM_VAL_TEMP_TC_G=5, IVIDMM_VAL_TEMP_TC_J=6, IVIDMM_VAL_TEMP_TC_K=7, IVIDMM_VAL_TEMP_TC_N=8, IVIDMM_VAL_TEMP_TC_R=9, IVIDMM_VAL_TEMP_TC_S=10, IVIDMM_VAL_TEMP_TC_T=11, IVIDMM_VAL_TEMP_TC_U=12, IVIDMM_VAL_TEMP_TC_V=13} readwrite local 001313B7
+"Specifies the type of thermocouple used to measure the temperature.  The value of this property affects instrument behavior only when the IVIDMM_VAL_TEMP_TRANSDUCER_TYPE is set to IVIDMM_VAL_THERMOCOUPLE.
+
+Note:
+(1) This property is part of the IviDmmThermocouple [TC] extension group.
+    
+IVIDMM_VAL_TEMP_TC_B 1
+B-type
+
+IVIDMM_VAL_TEMP_TC_C 2
+C-type
+
+IVIDMM_VAL_TEMP_TC_D 3
+D-type
+
+IVIDMM_VAL_TEMP_TC_E 4
+E-type
+
+IVIDMM_VAL_TEMP_TC_G 5
+G-type
+
+IVIDMM_VAL_TEMP_TC_J 6
+J-type
+
+IVIDMM_VAL_TEMP_TC_K 7
+K-type
+
+IVIDMM_VAL_TEMP_TC_N 8
+N-type
+
+IVIDMM_VAL_TEMP_TC_R 9
+R-type
+
+IVIDMM_VAL_TEMP_TC_S 10
+S-type
+
+IVIDMM_VAL_TEMP_TC_T 11
+T-type
+
+IVIDMM_VAL_TEMP_TC_U 12
+U-type
+
+IVIDMM_VAL_TEMP_TC_V 13
+V-type"
+attribute: "Reference Junction Type [TC]"
+	"Temperature Measurements:Thermocouple:Reference Junction Type [TC]"
+	iL enum { IVIDMM_VAL_TEMP_REF_JUNC_INTERNAL=1, IVIDMM_VAL_TEMP_REF_JUNC_FIXED=2} readwrite local 001313B8
+"Specifies the type of reference junction to be used in the reference junction compensation of a thermocouple measurement.  The value of this property affects instrument behavior only when the IVIDMM_VAL_TEMP_TRANSDUCER_TYPE property is set to IVIDMM_VAL_THERMOCOUPLE.
+
+Note:
+(1) This property is part of the IviDmmThermocouple [TC] extension group.
+    
+IVIDMM_VAL_TEMP_REF_JUNC_INTERNAL 1
+Internal Sensor
+
+IVIDMM_VAL_TEMP_REF_JUNC_FIXED 2
+Fixed Value"
+attribute: "Fixed Reference Junction [TC]"
+	"Temperature Measurements:Thermocouple:Fixed Reference Junction [TC]"
+	fD readwrite local 001313B9
+"Specifies the external reference junction temperature when a fixed reference junction type thermocouple is used to take the temperature measurement.  The temperature is specified in degrees Celsius.  The value of this property affects instrument behavior only when the IviDmm>>Temperature Measurements>>Thermocouple>>Reference Junction Type [TC] property is set to IVIDMM_VAL_TEMP_REF_JUNC_FIXED.
+
+Note:
+(1) This property is part of the IviDmmThermocouple [TC] extension group.
+    "
+attribute: "RTD Alpha [RTD]"
+	"Temperature Measurements:Resistance Temperature Device:RTD Alpha [RTD]"
+	fD readwrite local 001313C1
+"Specifies the alpha parameter for a resistance temperature device.  The value of this property affects instrument behavior only when the IVIDMM_VAL_TEMP_TRANSDUCER_TYPE property is set to IVIDMM_VAL_2_WIRE_RTD or IVIDMM_VAL_4_WIRE_RTD.
+
+Note:
+(1) This property is part of the IviDmmResistanceTemperatureDevice [RTD] extension group.
+    "
+attribute: "RTD Resistance [RTD]"
+	"Temperature Measurements:Resistance Temperature Device:RTD Resistance [RTD]"
+	fD readwrite local 001313C2
+"Specifies the R0 parameter (resistance) for a resistance temperature device (RTD).  The RTD resistance is also known as the RTD reference value.  The value of this property affects instrument behavior only when the IVIDMM_VAL_TEMP_TRANSDUCER_TYPE property is set to IVIDMM_VAL_2_WIRE_RTD or IVIDMM_VAL_4_WIRE_RTD.
+
+Note:
+(1) This property is part of the IviDmmResistanceTemperatureDevice [RTD] extension group.
+    "
+attribute: "Thermistor Resistance [THM]"
+	"Temperature Measurements:Thermistor:Thermistor Resistance [THM]"
+	fD readwrite local 001313CB
+"Specifies the resistance of the thermistor in Ohms.  The value of this property affects instrument behavior only when the IviDmm>>Temperature Measurements>>Transducer Type [TMP] property is set to IVIDMM_VAL_THERMISTOR.
+
+Note:
+(1) This property is part of the IviDmmThermistor [THM] extension group.
+    "
+attribute: "Trigger Count [MP]"
+	"Multi-Point Acquisition:Trigger Count [MP]"
+	iL readwrite local 00131400
+"Specifies the number of triggers the DMM accepts before it returns to the idle state.
+
+Note:
+(1) This property is part of the IviDmmMultiPoint [MP] extension group.
+    "
+attribute: "Sample Count [MP]"
+	"Multi-Point Acquisition:Sample Count [MP]"
+	iL readwrite local 001313FD
+"Specifies the number of measurements the DMM takes each time it receives a trigger.
+
+Note:
+(1) This property is part of the IviDmmMultiPoint [MP] extension group.
+    "
+attribute: "Sample Trigger [MP]"
+	"Multi-Point Acquisition:Sample Trigger [MP]"
+	iL enum { IVIDMM_VAL_IMMEDIATE=1, IVIDMM_VAL_EXTERNAL=2, IVIDMM_VAL_SOFTWARE_TRIG=3, IVIDMM_VAL_INTERVAL=10, IVIDMM_VAL_TTL0=111, IVIDMM_VAL_TTL1=112, IVIDMM_VAL_TTL2=113, IVIDMM_VAL_TTL3=114, IVIDMM_VAL_TTL4=115, IVIDMM_VAL_TTL5=116, IVIDMM_VAL_TTL6=117, IVIDMM_VAL_TTL7=118, IVIDMM_VAL_ECL0=119, IVIDMM_VAL_ECL1=120, IVIDMM_VAL_PXI_STAR=131, IVIDMM_VAL_RTSI_0=140, IVIDMM_VAL_RTSI_1=141, IVIDMM_VAL_RTSI_2=142, IVIDMM_VAL_RTSI_3=143, IVIDMM_VAL_RTSI_4=144, IVIDMM_VAL_RTSI_5=145, IVIDMM_VAL_RTSI_6=146} readwrite local 001313FE
+"Specifies the sample trigger source. This property affects instrument operation only when the IviDmm>>Multi-Point Acquisition>>Sample Count [MP] property is greater than 1.
+When the DMM takes a measurement and the IviDmm>>Multi-Point Acquisition>>Sample Count [MP] property is greater than 1, the DMM does not take the next measurement until the event you specify with this property occurs.
+    When you set this property to IVIDMM_VAL_IMMEDIATE, the DMM does not wait for a trigger of any kind between measurements.  When you set this property to IVIDMM_VAL_EXTERNAL, the DMM waits for a trigger on the external trigger input before it takes the next measurement.  When you set this property to IVIDMM_VAL_SOFTWARE_TRIG, the DMM waits until you call the Send Software Trigger [SWT] VI before it takes the next measurement.  When you set this property to IVIDMM_VAL_INTERVAL, the DMM waits the length of time you specify with the IviDmm>>Multi-Point Acquisition>>Sample Interval [MP] property before it takes the next measurement.
+
+Note:
+(1) This property is part of the IviDmmMultiPoint [MP] extension group.
+    
+IVIDMM_VAL_IMMEDIATE 1
+The DMM does not wait for a trigger of any kind between measurements.
+
+IVIDMM_VAL_EXTERNAL 2
+The DMM waits between measurements for a trigger on the external trigger input.
+
+IVIDMM_VAL_SOFTWARE_TRIG 3
+The DMM waits between measurements until you call the Send Software Trigger [SWT] VI.
+
+IVIDMM_VAL_INTERVAL 10
+The DMM waits between measurements for the length of time you specify with the IviDmm>>Multi-Point Acquisition>>Sample Interval [MP] property.
+
+IVIDMM_VAL_TTL0 111
+The DMM waits between measurements until it receives a trigger on the TTL0 line.
+
+IVIDMM_VAL_TTL1 112
+The DMM waits between measurements until it receives a trigger on the TTL1 line.
+
+IVIDMM_VAL_TTL2 113
+The DMM waits between measurements until it receives a trigger on the TTL2 line.
+
+IVIDMM_VAL_TTL3 114
+The DMM waits between measurements until it receives a trigger on the TTL3 line.
+
+IVIDMM_VAL_TTL4 115
+The DMM waits between measurements until it receives a trigger on the TTL4 line.
+
+IVIDMM_VAL_TTL5 116
+The DMM waits between measurements until it receives a trigger on the TTL5 line.
+
+IVIDMM_VAL_TTL6 117
+The DMM waits between measurements until it receives a trigger on the TTL6 line.
+
+IVIDMM_VAL_TTL7 118
+The DMM waits between measurements until it receives a trigger on the TTL7 line.
+
+IVIDMM_VAL_ECL0 119
+The DMM waits between measurements until it receives a trigger on the ECL0 line.
+
+IVIDMM_VAL_ECL1 120
+The DMM waits between measurements until it receives a trigger on the ECL1 line.
+
+IVIDMM_VAL_PXI_STAR 131
+The DMM waits between measurements until it receives a trigger on the PXI STAR bus.
+
+IVIDMM_VAL_RTSI_0 140
+The DMM waits between measurements until it receives a trigger on the RTSI line 0 .
+
+IVIDMM_VAL_RTSI_1 141
+The DMM waits between measurements until it receives a trigger on the RTSI line 1.
+
+IVIDMM_VAL_RTSI_2 142
+The DMM waits between measurements until it receives a trigger on the RTSI line 2.
+
+IVIDMM_VAL_RTSI_3 143
+The DMM waits between measurements until it receives a trigger on the RTSI line 3.
+
+IVIDMM_VAL_RTSI_4 144
+The DMM waits between measurements until it receives a trigger on the RTSI line 4.
+
+IVIDMM_VAL_RTSI_5 145
+The DMM waits between measurements until it receives a trigger on the RTSI line 5.
+
+IVIDMM_VAL_RTSI_6 146
+The DMM waits between measurements until it receives a trigger on the RTSI line 6."
+attribute: "Sample Interval [MP]"
+	"Multi-Point Acquisition:Sample Interval [MP]"
+	fD readwrite local 001313FF
+"Specifies the interval between samples in seconds. This property affects instrument operation only when the IviDmm>>Multi-Point Acquisition>>Sample Count [MP] property is greater than 1 and the IviDmm>>Multi-Point Acquisition>>Sample Trigger [MP] property is set to IVIDMM_VAL_INTERVAL.  In this case, the DMM waits between measurements for the length the time you specify with this property.
+
+Note:
+(1) This property is part of the IviDmmMultiPoint [MP] extension group.
+    "
+attribute: "Meas Complete Destination [MP]"
+	"Multi-Point Acquisition:Meas Complete Destination [MP]"
+	iL enum { IVIDMM_VAL_NONE=-1, IVIDMM_VAL_EXTERNAL=2, IVIDMM_VAL_TTL0=111, IVIDMM_VAL_TTL1=112, IVIDMM_VAL_TTL2=113, IVIDMM_VAL_TTL3=114, IVIDMM_VAL_TTL4=115, IVIDMM_VAL_TTL5=116, IVIDMM_VAL_TTL6=117, IVIDMM_VAL_TTL7=118, IVIDMM_VAL_ECL0=119, IVIDMM_VAL_ECL1=120, IVIDMM_VAL_PXI_STAR=131, IVIDMM_VAL_RTSI_0=140, IVIDMM_VAL_RTSI_1=141, IVIDMM_VAL_RTSI_2=142, IVIDMM_VAL_RTSI_3=143, IVIDMM_VAL_RTSI_4=144, IVIDMM_VAL_RTSI_5=145, IVIDMM_VAL_RTSI_6=146} readwrite local 00131401
+"After each measurement, the DMM generates a measurement-complete signal.  This properties specifies the destination of the measurement-complete signal.  This signal is commonly referred to as Voltmeter Complete.
+
+Note:
+(1) This property is part of the IviDmmMultiPoint [MP] extension group.
+    
+IVIDMM_VAL_NONE -1
+The DMM does not send the measurement-complete signal.
+
+IVIDMM_VAL_EXTERNAL 2
+The DMM sends the measurement-complete signal on the external trigger line.
+
+IVIDMM_VAL_TTL0 111
+The DMM sends the measurement-complete signal on TTL0 line.
+
+IVIDMM_VAL_TTL1 112
+The DMM sends the measurement-complete signal on TTL1 line.
+
+IVIDMM_VAL_TTL2 113
+The DMM sends the measurement-complete signal on TTL2 line.
+
+IVIDMM_VAL_TTL3 114
+The DMM sends the measurement-complete signal on TTL3 line.
+
+IVIDMM_VAL_TTL4 115
+The DMM sends the measurement-complete signal on TTL4 line.
+
+IVIDMM_VAL_TTL5 116
+The DMM sends the measurement-complete signal on TTL5 line.
+
+IVIDMM_VAL_TTL6 117
+The DMM sends the measurement-complete signal on TTL6 line.
+
+IVIDMM_VAL_TTL7 118
+The DMM sends the measurement-complete signal on TTL7 line.
+
+IVIDMM_VAL_ECL0 119
+The DMM sends the measurement-complete signal on ECL0 line.
+
+IVIDMM_VAL_ECL1 120
+The DMM sends the measurement-complete signal on ECL1 line.
+
+IVIDMM_VAL_PXI_STAR 131
+The DMM sends the measurement-complete signal on PXI STAR bus.
+
+IVIDMM_VAL_RTSI_0 140
+The DMM sends the measurement-complete signal on RTSI line 0 .
+
+IVIDMM_VAL_RTSI_1 141
+The DMM sends the measurement-complete signal on RTSI line 1.
+
+IVIDMM_VAL_RTSI_2 142
+The DMM sends the measurement-complete signal on RTSI line 2.
+
+IVIDMM_VAL_RTSI_3 143
+The DMM sends the measurement-complete signal on RTSI line 3.
+
+IVIDMM_VAL_RTSI_4 144
+The DMM sends the measurement-complete signal on RTSI line 4.
+
+IVIDMM_VAL_RTSI_5 145
+The DMM sends the measurement-complete signal on RTSI line 5.
+
+IVIDMM_VAL_RTSI_6 146
+The DMM sends the measurement-complete signal on RTSI line 6."
+attribute: "Auto Range Value [ARV]"
+	"Configuration Information:Auto Range Value [ARV]"
+	fD readonly local 0013141B
+"Always returns the actual range the DMM is currently using, even when the DMM is auto-ranging.
+
+Note:
+(1) This property is part of the IviDmmAutoRangeValue [ARV] extension group.
+    "
+attribute: "Aperture Time [DI]"
+	"Configuration Information:Aperture Time [DI]"
+	fD readonly local 00131411
+"Returns the measurement aperture time for the current configuration.  The units for this property are either seconds or powerline cycles (PLCs) and are determined by the value of the IviDmm>>Configuration Information>>Aperture Time Units [DI] property.
+
+Note:
+(1) This property is part of the IviDmmDeviceInfo [DI] extension group.
+    "
+attribute: "Aperture Time Units [DI]"
+	"Configuration Information:Aperture Time Units [DI]"
+	iL readonly local 00131412
+"Returns the units for the property IviDmm>>Configuration Information>>Aperture Time [DI].  Possible values are the following:
+
+Defined Values:
+    IVIDMM_VAL_SECONDS (0) - The units for the IviDmm>>Configuration Information>>Aperture Time [DI] property are seconds.
+    IVIDMM_VAL_POWER_LINE_CYCLES (1) - The units for the IviDmm>>Configuration Information>>Aperture Time [DI] property are powerline cycles.
+
+Note:
+(1) This property is part of the IviDmmDeviceInfo [DI] extension group.
+    "
+attribute: "Auto Zero [AZ]"
+	"Measurement Operation Options:Auto Zero [AZ]"
+	iL enum { IVIDMM_VAL_AUTO_ZERO_OFF=0, IVIDMM_VAL_AUTO_ZERO_ON=1, IVIDMM_VAL_AUTO_ZERO_ONCE=2} readwrite local 0013141C
+"Specifies the auto-zero mode.  In general, the auto-zero capability of a DMM normalizes all measurements based on a Zero Reading.  When auto-zeroing is enabled, the DMM internally disconnects the input signal and takes a Zero Reading.  The DMM then subtracts the Zero Reading from the measurement.  This prevents offset voltages present in the DMM's input circuitry from affecting measurement accuracy.
+
+Note:
+(1) This property is part of the IviDmmAutoZero [AZ] extension group.
+    
+IVIDMM_VAL_AUTO_ZERO_OFF 0
+Disables the DMM from taking any more Zero Readings.  The DMM subtracts the last Zero Reading from all subsequent values it measures.
+
+IVIDMM_VAL_AUTO_ZERO_ON 1
+Configures the DMM to take a Zero Reading for each measurement.  The DMM subtracts the Zero Reading from the value it measures.
+
+IVIDMM_VAL_AUTO_ZERO_ONCE 2
+Configures the DMM to take a Zero Reading immediately.  The DMM then subtracts this Zero Reading from all subsequent values it measures."
+attribute: "Powerline Frequency [PLF]"
+	"Measurement Operation Options:Powerline Frequency [PLF]"
+	fD readwrite local 0013141D
+"Specifies the power line frequency in hertz.
+
+Note:
+(1) This property is part of the IviDmmPowerLineFrequency [PLF] extension group.
+    "
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Major Version"
+	iL readonly local 00100789
+"The major version number of the class driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Minor Version"
+	iL readonly local 0010078A
+"The minor version number of the class driver.
+    " 
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Major Version"
+	iL readonly local 00100787
+"The major version number of this instrument driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Minor Version"
+	iL readonly local 00100788
+"The minor version number of the specific driver.
+    "
+attribute: "Channel Count"
+	"Obsolete:Inherent IVI Settings:Specific Driver Capabilities:Channel Count"
+	iL readonly local 0010065B
+"Indicates the number of channels that the specific driver supports.  
+    For each property for which the IVI_VAL_MULTI_CHANNEL flag property is set, the instrument driver maintains a separate cache value for each channel.
+    "   

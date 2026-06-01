@@ -1,0 +1,10 @@
+Windows 95/98/ME	w95
+Windows NT/2000/XP	nt
+Windows 3.1	w31
+68K Macintosh	68k
+Power Macintosh	pmac
+Solaris 1.x	sol1
+Solaris 2.x	sol2
+HP-UX	hp
+Linux	lnx
+PowerMAX	pmax	

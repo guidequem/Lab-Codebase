@@ -1,0 +1,2 @@
+go to 
+C:\Program Files\National Instruments\LabVIEW 8.6\examples\measure\maxmpl

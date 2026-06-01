@@ -1,0 +1,921 @@
+library: ivifgen.dll
+
+class: "IviFgen"
+flags: 16
+sorted: no
+super: ivi, IviFgenObsolete, iviResourceMgr
+attribute: "Range Check"
+	"Inherent IVI Settings:User Options:Range Check"
+	bool readwrite local 00100592
+"Specifies whether to validate property values and VI parameters.  If enabled, the instrument driver validates the parameter values that you pass to driver VIs.  Range checking parameters is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable range checking and maximize performance.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Query Instrument Status"
+	"Inherent IVI Settings:User Options:Query Instrument Status"
+	bool readwrite local 00100593
+"Specifies whether the instrument driver queries the instrument status after each operation.  Querying the instrument status is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable status checking and maximize performance
+    The instrument driver can choose to ignore status checking for particular properties regardless of the setting of this property.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Cache"
+	"Inherent IVI Settings:User Options:Cache"
+	bool readwrite local 00100594
+"Specifies whether to cache the value of properties.  When caching is enabled, the instrument driver keeps track of the current instrument settings and avoids sending redundant commands to the instrument.  Thus, you can significantly increase execution speed.
+    The instrument driver can choose always to cache or never to cache particular properties regardless of the setting of this property.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Simulate"
+	"Inherent IVI Settings:User Options:Simulate"
+	bool readwrite local 00100595
+"Specifies whether or not to simulate instrument driver I/O operations.  If simulation is enabled, instrument driver VIs perform range checking and set and get properties, but they do not perform instrument I/O.  For output parameters that represent instrument data, the instrument driver VIs return calculated values.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Use Specific Simulation"
+	"Inherent IVI Settings:User Options:Use Specific Simulation"
+	bool readwrite local 001005A7
+"Specifies whether to simulate instrument driver I/O operations in the specific or class driver.  This property affects instrument driver operation only when the IviFgen>>Inherent IVI Settings>>User Options>>Simulate property is set to TRUE.
+    The default value is FALSE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Record Value Coercions"
+	"Inherent IVI Settings:User Options:Record Value Coercions"
+	bool readwrite local 00100596
+"Specifies whether the instrument driver keeps a list of the value coercions it makes for ViInt32 and ViReal64 properties.  If IviFgen>>Inherent IVI Settings>>User Options>>Spy is set to TRUE, you use the NI-Spy utility to view coercion information.  If IviFgen>>Inherent IVI Settings>>User Options>>Spy is set to FALSE you call Get Next Coercion Record to extract and delete the oldest coercion record from the list.
+    The default value is FALSE.   Use the IVI Configuration utility or the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Interchange Check"
+	"Inherent IVI Settings:User Options:Interchange Check"
+	bool readwrite local 001005A5
+"Specifies whether to perform interchangeability checking and retrieve interchangeability warnings when you call the Initiate Generation VI.
+
+The default value is FALSE.
+
+Interchangeability warnings indicate that using your application with a different instrument might cause different behavior.  If IviFgen>>Inherent IVI Settings>>User Options>>Spy is set to FALSE, you call Get Next Interchange Warning to extract interchange warnings.  Call the Clear Interchange Warnings VI to clear the list of interchangeability warnings without reading them.
+If IviFgen>>Inherent IVI Settings>>User Options>>Spy is set to TRUE, you can use the NI Spy utility to view interchange warnings.
+
+Interchangeability checking examines the properties in a capability group only if you specify a value for at least one property within that group.  Interchangeability warnings can occur under the following conditions:
+
+(1) A property affects the behavior of the instrument and you have not set that property.
+
+(2) The IviFgen class defines values for a property and you have set that property to a value not defined by the IviFgen class.
+
+(3) The IviFgen class defines a property as read-only and you have set that property.
+
+The IviFgen class provides the following exceptions to these interchangeability checking rules.  The exceptions are listed under the capability group to which they refer:
+
+(1) IviFgenBase Capabilities:
+
+ - The IviFgen>>Basic Operation>>Output Impedance property is required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+(2) IviFgenStdFunc Capabilities:
+
+ - Interchangeability checking is performed on this group when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_FUNC.
+
+ - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+ - If the IviFgen>>Standard Function Output>>Waveform property is set to IVIFGEN_VAL_WFM_DC, the IviFgen>>Standard Function Output>>Amplitude, IviFgen>>Standard Function Output>>Frequency, and IviFgen>>Standard Function Output>>Start Phase properties are not required to be in a user-specified state.
+
+ - If the IviFgen>>Standard Function Output>>Waveform property is not set to IVIFGEN_VAL_WFM_SQUARE, the IviFgen>>Standard Function Output>>Duty Cycle High property is not required to be in a user-specified state.
+
+(3) IviFgenArbWfm Capabilities:
+
+ - Interchangeability checking is performed on this group when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_ARB.  - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+(4) IviFgenArbFrequency Capabilities:
+
+ - Interchangeability checking is performed on this group when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_ARB.  - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Arbitrary Waveform Output>>Sample Rate property is not in a user-specified state.
+
+ - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+(5) IviFgenArbSeq Capabilities:
+
+ - Interchangeability checking is performed on this group when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_SEQ.
+
+ - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+(6) IviFgenTrigger Capabilities:
+
+ - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Operation Mode property is set to IVIFGEN_VAL_OPERATE_BURST.
+
+ - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+(7) IviFgenInternalTrigger Capabilities:
+
+ - This group's properties are required to be in a user-specified state only if the IviFgen>>Triggering>>Trigger Source property is set to IVIFGEN_VAL_INTERNAL_TRIGGER on a channel.
+
+(8) IviFgenBurst Capabilities:
+
+ - This group's properties are required to be in a user-specified state only if the IviFgen>>Basic Operation>>Operation Mode property is set to IVIFGEN_VAL_OPERATE_BURST.
+
+ - This group's properties are required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+(9) IviFgenModulateAM Capabilities:
+
+ - The IviFgen>>Amplitude Modulation>>AM Enabled property is required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+ - The IviFgen>>Amplitude Modulation>>AM Source property is required to be in a user-specified state on a channel only if the IviFgen>>Amplitude Modulation>>AM Enabled property is set to TRUE for that channel.
+
+ - The IviFgen>>Amplitude Modulation>>AM Internal Waveform, IviFgen>>Amplitude Modulation>>AM Internal Frequency, and IviFgen>>Amplitude Modulation>>AM Internal Depth properties are required to be in a user-specified state only if the IviFgen>>Amplitude Modulation>>AM Enabled property is set to TRUE on at least one channel.
+
+(10) IviFgenModulateFM Capabilities:
+
+ - The IviFgen>>Frequency Modulation>>FM Enabled property is required to be in a user-specified state on a channel only if the IviFgen>>Basic Operation>>Output Enabled property is set to TRUE for that channel.
+
+ - The IviFgen>>Frequency Modulation>>FM Source property is required to be in a user-specified state on a channel only if the IviFgen>>Frequency Modulation>>FM Enabled property is set to TRUE for that channel.
+
+ - The IviFgen>>Frequency Modulation>>FM Internal Waveform , IviFgen>>Frequency Modulation>>FM Internal Frequency , and IviFgen>>Frequency Modulation>>FM Internal Deviation properties are required to be in a user-specified state only if the IviFgen>>Frequency Modulation>>FM Enabled [FM] property is set to TRUE on at least one channel.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Spy"
+	"Inherent IVI Settings:User Options:Spy"
+	bool readwrite local 001005A6
+"Specifies whether to log class VI calls to the NI Spy utility.  If spying is enabled, you can use NI Spy to view the input and output parameters, return values, coercion records, and interchangeability warnings of class VI calls.
+    The default value is TRUE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Description"
+	"Inherent IVI Settings:Class Driver Identification:Description"
+	string readonly local 00100796
+"A string that contains a brief description of the class driver
+    "
+attribute: "Class Driver Prefix"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Prefix"
+	string readonly local 001006BD
+"A string that contains the prefix for the class driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Class Driver Vendor"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Vendor"
+	string readonly local 00100795
+"A string that contains the name of the vendor that supplies this class driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Class Driver Identification:Revision"
+	string readonly local 001007B8
+"A string that contains additional version information about the class driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Major Version"
+	iL readonly local 00100797
+"The major version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100798
+"The minor version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Description"
+	"Inherent IVI Settings:Specific Driver Identification:Description"
+	string readonly local 00100792
+"A string that contains a brief description of the specific driver
+    "
+attribute: "Specific Driver Prefix"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Prefix"
+	string readonly local 001006BE
+"A string that contains the prefix for the instrument driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Specific Driver Locator"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Locator"
+	string readonly local 001006BF
+"Indicates the location at which the class driver attempts to find the specific driver module file.
+"
+attribute: "Specific Driver Vendor"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Vendor"
+	string readonly local 00100791
+"A string that contains the name of the vendor that supplies this driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Specific Driver Identification:Revision"
+	string readonly local 001007B7
+"A string that contains additional version information about the specific driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Major Version"
+	iL readonly local 00100793
+"The major version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100794
+"The minor version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Supported Instrument Models"
+	"Inherent IVI Settings:Specific Driver Capabilities:Supported Instrument Models"
+	string readonly local 001006D7
+"Contains a model code of the instrument. For specific drivers that support more than one device, this property contains a comma-separated list of supported instrument models.
+    "
+attribute: "Group Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Group Capabilities"
+	string readonly local 00100721
+"Indicates the IviFgen capability groups that the specific instrument driver supports.  This property is a comma-delimited list of the following group names:
+
+'IviFgenBase' - Supports fundamental function generator capabilities.
+
+'IviFgenStdFunc' - Supports IviFgenBase with the capability to generate standard periodic waveforms.
+
+'IviFgenArbWfm' - Supports IviFgenBase with the capability to create and generate user-defined arbitrary waveforms.
+
+'IviFgenArbFrequency' - Supports IviFgenArbWfm with the capability to set the rate at which an entire waveform buffer is generated.
+
+'IviFgenArbSeq' - Supports IviFgenArbWfm  with the capability to create and generate sequences of user-defined arbitrary waveforms.
+
+'IviFgenTrigger' - Supports IviFgen with the capability to trigger signal generation.
+
+'IviFgenInternalTrigger' - Supports IviFgenTrigger with the capability to generate triggers internally.
+
+'IviFgenSoftwareTrigger' - Supports IviFgenTrigger with the capability to receive software triggers.
+
+'IviFgenBurst' - Supports IviFgenBase with the capability to generate discrete numbers of waveform cycles based on a trigger event.
+
+'IviFgenModulateAM' - Supports IviFgenBase with the capability to apply amplitude modulation to an output signal.
+
+'IviFgenModulateFM' - Supports IviFgenBase with the capability to apply frequency modulation to an output signal.
+    "
+attribute: "Function Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Function Capabilities"
+	string readonly local 00100722
+"Indicates the IviFgen VIs that the specific instrument driver supports.  This property is a comma-delimited list of the following functions:
+
+    'IviFgen_init'
+    'IviFgen_close'
+    'IviFgen_reset'
+    'IviFgen_self_test'
+    'IviFgen_error_query'
+    'IviFgen_error_message'
+    'IviFgen_revision_query'
+    'IviFgen_ConfigureOutputMode'
+    'IviFgen_ConfigureOperationMode'
+    'IviFgen_ConfigureRefClockSource'
+    'IviFgen_ConfigureOutputImpedance'
+    'IviFgen_ConfigureOutputEnabled'
+    'IviFgen_InitiateGeneration'
+    'IviFgen_AbortGeneration'
+    'IviFgen_ConfigureStandardWaveform'
+    'IviFgen_QueryArbWfmCapabilities'
+    'IviFgen_CreateArbWaveform'
+    'IviFgen_ConfigureSampleRate'
+    'IviFgen_ConfigureArbFrequency'
+    'IviFgen_ConfigureArbWaveform'
+    'IviFgen_ClearArbWaveform'
+    'IviFgen_QueryArbSeqCapabilities'
+    'IviFgen_CreateArbSequence'
+    'IviFgen_ConfigureArbSequence'
+    'IviFgen_ClearArbSequence'
+    'IviFgen_ClearArbMemory'
+    'IviFgen_ConfigureTriggerSource'
+    'IviFgen_ConfigureInternalTriggerRate'
+    'IviFgen_SendSoftwareTrigger'
+    'IviFgen_ConfigureBurstCount'
+    'IviFgen_ConfigureAMEnabled'
+    'IviFgen_ConfigureAMSource'
+    'IviFgen_ConfigureAMInternal'
+    'IviFgen_ConfigureFMEnabled'
+    'IviFgen_ConfigureFMSource'
+    
+    "
+attribute: "Attribute Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Attribute Capabilities"
+	string readonly local 00100723
+"Indicates the IviFgen properties that the specific instrument driver supports.  This property is a comma-delimited list of the following properties:
+
+    'IVIFGEN_ATTR_OUTPUT_MODE'
+    'IVIFGEN_ATTR_OPERATION_MODE'
+    'IVIFGEN_ATTR_REF_CLOCK_SOURCE'
+    'IVIFGEN_ATTR_OUTPUT_ENABLED'
+    'IVIFGEN_ATTR_OUTPUT_IMPEDANCE'
+    'IVIFGEN_ATTR_FUNC_WAVEFORM'
+    'IVIFGEN_ATTR_FUNC_AMPLITUDE'
+    'IVIFGEN_ATTR_FUNC_DC_OFFSET'
+    'IVIFGEN_ATTR_FUNC_FREQUENCY'
+    'IVIFGEN_ATTR_FUNC_START_PHASE'
+    'IVIFGEN_ATTR_FUNC_DUTY_CYCLE_HIGH'
+    'IVIFGEN_ATTR_ARB_WAVEFORM_HANDLE'
+    'IVIFGEN_ATTR_ARB_GAIN'
+    'IVIFGEN_ATTR_ARB_OFFSET'
+    'IVIFGEN_ATTR_ARB_SAMPLE_RATE'
+    'IVIFGEN_ATTR_ARB_FREQUENCY'
+    'IVIFGEN_ATTR_MAX_NUM_WAVEFORMS'
+    'IVIFGEN_ATTR_WAVEFORM_QUANTUM'
+    'IVIFGEN_ATTR_MIN_WAVEFORM_SIZE'
+    'IVIFGEN_ATTR_MAX_WAVEFORM_SIZE'
+    'IVIFGEN_ATTR_ARB_SEQUENCE_HANDLE'
+    'IVIFGEN_ATTR_MAX_NUM_SEQUENCES'
+    'IVIFGEN_ATTR_MIN_SEQUENCE_LENGTH'
+    'IVIFGEN_ATTR_MAX_SEQUENCE_LENGTH'
+    'IVIFGEN_ATTR_MAX_LOOP_COUNT'
+    'IVIFGEN_ATTR_TRIGGER_SOURCE'
+    'IVIFGEN_ATTR_INTERNAL_TRIGGER_RATE'
+    'IVIFGEN_ATTR_BURST_COUNT'
+    'IVIFGEN_ATTR_AM_ENABLED'
+    'IVIFGEN_ATTR_AM_SOURCE'
+    'IVIFGEN_ATTR_AM_INTERNAL_DEPTH'
+    'IVIFGEN_ATTR_AM_INTERNAL_WAVEFORM'
+    'IVIFGEN_ATTR_AM_INTERNAL_FREQUENCY'
+    'IVIFGEN_ATTR_FM_ENABLED'
+    'IVIFGEN_ATTR_FM_SOURCE'
+    'IVIFGEN_ATTR_FM_INTERNAL_DEVIATION'
+    'IVIFGEN_ATTR_FM_INTERNAL_WAVEFORM'
+    'IVIFGEN_ATTR_FM_INTERNAL_FREQUENCY'
+    "
+attribute: "Channel Count"
+	"Inherent IVI Settings:Specific Driver Capabilities:Channel Count"
+	iL readonly local 0010065B
+"Indicates the number of channels that the specific driver supports.  
+    For each property for which the IVI_VAL_MULTI_CHANNEL flag property is set, the instrument driver maintains a separate cache value for each channel.
+    "
+attribute: "Manufacturer"
+	"Inherent IVI Settings:Instrument Identification:Manufacturer"
+	string readonly local 0010078F
+"A string that contains the name of the instrument manufacturer you are currently using.
+    "
+attribute: "Model"
+	"Inherent IVI Settings:Instrument Identification:Model"
+	string readonly local 00100790
+"A string that contains the model number or name of the instrument that you are currently using.
+    "
+attribute: "Firmware Revision"
+	"Inherent IVI Settings:Instrument Identification:Firmware Revision"
+	string readonly local 0010078E
+"A string that contains the firmware revision information for the instrument you are currently using.
+    "
+attribute: "Driver Setup"
+	"Inherent IVI Settings:Advanced Session Information:Driver Setup"
+	string readonly local 00100597
+"     Some cases exist where you must specify instrument driver options at initialization time.  An example of this is specifying a particular instrument model from among a family of instruments that the driver supports.  This is useful when using simulation.  
+     You can specify driver-specific options through the DriverSetup keyword in the optionsString parameter to the Init With Options VI.  If you open an instrument using a logical name, you can also specify the options through the IVI Configuration Utility.
+     The default value is an empty string.
+     "
+attribute: "Logical Name"
+	"Inherent IVI Settings:Advanced Session Information:Logical Name"
+	string readonly local 001006C1
+"A string containing the logical name you specified when opening the current IVI session.
+     You may pass a logical name to the Initialize or Initialize With Options VIs.  The IVI Configuration utility must contain an entry for the logical name.  The logical name entry refers to a virtual instrument section in the IVI Configuration file.  The virtual instrument section specifies a physical device and initial user options.
+    "
+attribute: "IO Resource Descriptor"
+	"Inherent IVI Settings:Advanced Session Information:IO Resource Descriptor"
+	string readonly local 001006C0
+"Indicates the resource descriptor the driver uses to identify the physical device.
+    If you initialize the driver with a logical name, this property contains the resource descriptor that corresponds to the entry in the IVI Configuration utility.  
+    If you initialize the instrument driver with the resource descriptor, this property contains that value.
+    "
+attribute: "Output Mode"
+	"Basic Operation:Output Mode"
+	iL enum { IVIFGEN_VAL_OUTPUT_FUNC=0, IVIFGEN_VAL_OUTPUT_ARB=1, IVIFGEN_VAL_OUTPUT_SEQ=2} readwrite local 001312D1
+"Determines the kind of waveform the function generator produces.  The value you specify determines which VIs and properties you use to configure the waveform the function generator produces.
+    When you set this property to IVIFGEN_VAL_OUTPUT_FUNC, you use the following properties and VIs to configure standard waveforms:
+
+IviFgen>>Standard Function Output>>Waveform
+IviFgen>>Standard Function Output>>Amplitude
+IviFgen>>Standard Function Output>>DC Offset
+IviFgen>>Standard Function Output>>Frequency
+IviFgen>>Standard Function Output>>Start Phase
+IviFgen>>Standard Function Output>>Duty Cycle High
+
+Configure Standard Waveform
+
+    When you set this property to IVIFGEN_VAL_OUTPUT_ARB, you use the following properties and VIs to configure arbitrary waveforms:
+
+IviFgen>>Arbitrary Waveform Output>>Arbitrary Waveform Handle
+IviFgen>>Arbitrary Waveform Output>>Arbitrary Waveform Gain
+IviFgen>>Arbitrary Waveform Output>>Arbitrary Waveform Offset
+IviFgen>>Arbitrary Waveform Output>>Sample Rate
+
+Create Arbitrary Waveform
+Clear Arbitrary Waveform
+Configure Arbitrary Waveform
+Configure Sample Rate
+    If your instrument allows you to specify the rate at which an entire arbitrary waveform is generated, you can also use the following properties and VIs to configure arbitrary waveforms:
+
+IviFgen>>Arbitrary Waveform Output>>Arb Frequency
+
+Configure Arb Frequency
+
+    When you set this property to IVIFGEN_VAL_OUTPUT_SEQ, you use the following properties and VIs to configure sequences:
+
+IviFgen>>Arbitrary Sequence Output>>Arbitrary Sequence Handle
+IviFgen>>Arbitrary Waveform Output>>Arbitrary Waveform Gain
+IviFgen>>Arbitrary Waveform Output>>Arbitrary Waveform Offset
+IviFgen>>Arbitrary Waveform Output>>Sample Rate
+
+Create Arbitrary Sequence
+Clear Arbitrary Sequence
+Clear Arbitrary Memory
+Configure Arbitrary Sequence
+      
+IVIFGEN_VAL_OUTPUT_FUNC 0
+Configures the function generator to produce standard waveforms.
+
+IVIFGEN_VAL_OUTPUT_ARB 1
+Configures the function generator to produce arbitrary waveforms.
+
+IVIFGEN_VAL_OUTPUT_SEQ 2
+Configures the function generator to produce sequences of arbitrary waveforms."
+attribute: "Operation Mode"
+	"Basic Operation:Operation Mode"
+	iL enum { IVIFGEN_VAL_OPERATE_CONTINUOUS=0, IVIFGEN_VAL_OPERATE_BURST=1} readwrite local 001312D5
+"This property specifies how the function generator produces waveforms. For example, you can configure the instrument to generate output continuously, or to generate a discrete number of waveform cycles based on a trigger event.
+      
+IVIFGEN_VAL_OPERATE_CONTINUOUS 0
+Configures the function generator to generate output continuously.
+
+IVIFGEN_VAL_OPERATE_BURST 1
+Configures the function generator to generate a burst of waveform cycles."
+attribute: "Reference Clock Source"
+	"Basic Operation:Reference Clock Source"
+	iL enum { IVIFGEN_VAL_REF_CLOCK_INTERNAL=0, IVIFGEN_VAL_REF_CLOCK_EXTERNAL=1, IVIFGEN_VAL_REF_CLOCK_RTSI_CLOCK=2} readwrite local 001312D2
+"Specifies the reference clock source.  The function generator derives frequencies and sample rates that it uses to generate waveforms from the source you specify.
+      
+IVIFGEN_VAL_REF_CLOCK_INTERNAL 0
+The function generator produces the reference clock internally.
+
+IVIFGEN_VAL_REF_CLOCK_EXTERNAL 1
+The function generator receives the reference clock signal from an external source.
+
+IVIFGEN_VAL_REF_CLOCK_RTSI_CLOCK 2
+The function generator receives the reference clock signal from the RTSI clock source."
+attribute: "Output Enabled"
+	"Basic Operation:Output Enabled"
+	bool readwrite local 001312D3
+"This channel-based property specifies whether the signal the function generator produces appears at the output connector.
+      
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Output Impedance"
+	"Basic Operation:Output Impedance"
+	fD readwrite local 001312D4
+"This channel-based property specifies the function generator's output impedance at the output connector.
+      "
+attribute: "Waveform"
+	"Standard Function Output:Waveform"
+	iL enum { IVIFGEN_VAL_WFM_SINE=1, IVIFGEN_VAL_WFM_SQUARE=2, IVIFGEN_VAL_WFM_TRIANGLE=3, IVIFGEN_VAL_WFM_RAMP_UP=4, IVIFGEN_VAL_WFM_RAMP_DOWN=5, IVIFGEN_VAL_WFM_DC=6} readwrite local 00131335
+"This channel-based property specifies which standard waveform the function generator produces.
+    You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_FUNC.
+
+Note:
+(1) This property is part of the IviFgenStdFunc extension group.
+    
+IVIFGEN_VAL_WFM_SINE 1
+Configures the function generator to produce a sinusoid waveform.
+
+IVIFGEN_VAL_WFM_SQUARE 2
+Configures the function generator to produce a square waveform.
+
+IVIFGEN_VAL_WFM_TRIANGLE 3
+Configures the function generator to produce a triangle waveform.
+
+IVIFGEN_VAL_WFM_RAMP_UP 4
+Configures the function generator to produce a positive ramp waveform.
+
+IVIFGEN_VAL_WFM_RAMP_DOWN 5
+Configures the function generator to produce a negative ramp waveform.
+
+IVIFGEN_VAL_WFM_DC 6
+Configures the function generator to produce a constant voltage."
+attribute: "Amplitude [STD]"
+	"Standard Function Output:Amplitude [STD]"
+	fD readwrite local 00131336
+"This channel-based property specifies the amplitude of the standard waveform the function generator produces.  This value is the amplitude at the output terminal.  The units are volts peak-to-peak (Vpp).  For example, to produce a waveform ranging from -5.0 to +5.0 volts, you set this value to 10.0 volts.
+    You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_FUNC.  This property does not affect function generator behavior when you set the IviFgen>>Standard Function Output>>Waveform [STD] property to IVIFGEN_VAL_WFM_DC.
+
+Note:
+(1) This property is part of the IviFgenStdFunc [STD] extension group.
+    "
+attribute: "DC Offset [STD]"
+	"Standard Function Output:DC Offset [STD]"
+	fD readwrite local 00131337
+"This channel-based property specifies the DC offset of the standard waveform the function generator produces.  This value is the offset at the output terminal.  The units are volts (V).  The value is the offset from ground to the center of the waveform you specify with the IviFgen>>Standard Function Output>>Waveform [STD] property.  For example, a standard waveform ranging from +5.0 volts to 0.0 volts has a DC offset of 2.5 volts.
+    You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_FUNC.
+
+Note:
+(1) This property is part of the IviFgenStdFunc [STD] extension group.
+    "
+attribute: "Frequency [STD]"
+	"Standard Function Output:Frequency [STD]"
+	fD readwrite local 00131338
+"This channel-based property specifies the frequency of the standard waveform the function generator produces.  The units are hertz (Hz).  You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_FUNC.
+    This property does not affect function generator behavior when you set the IviFgen>>Standard Function Output>>Waveform [STD] property to IVIFGEN_VAL_WFM_DC.
+
+Note:
+(1) This property is part of the IviFgenStdFunc [STD] extension group.
+    "
+attribute: "Start Phase [STD]"
+	"Standard Function Output:Start Phase [STD]"
+	fD readwrite local 00131339
+"This channel-based property specifies the horizontal offset of the standard waveform the function generator produces.  You specify this property in degrees of one waveform cycle.  For example, a 180 degree phase offset means output generation begins half way through the waveform.  A start phase of 360 degrees offsets the output by an entire waveform cycle.  It is therefore identical to a start phase of 0 degrees.
+    You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_FUNC.  This property does not affect function generator behavior when you set the IviFgen>>Standard Function Output>>Waveform [STD] property to IVIFGEN_VAL_WFM_DC.
+
+Note:
+(1) This property is part of the IviFgenStdFunc [STD] extension group.
+    "
+attribute: "Duty Cycle High [STD]"
+	"Standard Function Output:Duty Cycle High [STD]"
+	fD readwrite local 0013133A
+"This channel-based property specifies the length of time the output voltage level remains high in a square waveform.  You specify this property as a percentage of one waveform cycle.
+    You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_FUNC and the IviFgen>>Standard Function Output>>Waveform [STD] property to IVIFGEN_VAL_WFM_SQUARE.
+
+Note:
+(1) This property is part of the IviFgenStdFunc [STD] extension group.
+    "
+attribute: "Arbitrary Waveform Handle [ARB]"
+	"Arbitrary Waveform Output:Arbitrary Waveform Handle [ARB]"
+	iL readwrite local 00131399
+"This channel-based property identifies which arbitrary waveform the function generator produces.  You can create multiple arbitrary waveforms using the Create Arbitrary Waveform [ARB] VI.  The Create Arbitrary Waveform [ARB] VI returns a handle that you use to identify the particular waveform.  To configure the function generator to produce a particular waveform, you set this property to the waveform's handle.
+    You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_ARB.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Arbitrary Waveform Gain [ARB]"
+	"Arbitrary Waveform Output:Arbitrary Waveform Gain [ARB]"
+	fD readwrite local 0013139A
+"This channel-based property specifies the factor by which the function generator scales the arbitrary waveform data.  When you create arbitrary waveforms, you must first normalize the data points to the range -1.0 to +1.0.  You use this property to scale the arbitrary waveform to other ranges.  For example, when you set this property to 2.0, the output signal ranges from -2.0 to +2.0 volts.
+    You use this property when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_ARB or IVIFGEN_VAL_OUTPUT_SEQ.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Arbitrary Waveform Offset [ARB]"
+	"Arbitrary Waveform Output:Arbitrary Waveform Offset [ARB]"
+	fD readwrite local 0013139B
+"This channel-based property specifies the value the function generator adds to the arbitrary waveform data.  When you create arbitrary waveforms, you must first normalize the data points to the range -1.0 to +1.0.  You use this property to shift the arbitrary waveform's range.The units are volts (V).  For example, when you set this property to 1.0, the output signal ranges from 2.0 volts to 0.0 volts.
+    You use this property when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_ARB or IVIFGEN_VAL_OUTPUT_SEQ.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Sample Rate [ARB]"
+	"Arbitrary Waveform Output:Sample Rate [ARB]"
+	fD readwrite local 0013139C
+"Specifies the rate at which the function generator outputs the points in arbitrary waveforms.  The units are samples per second.
+    You use this property when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_ARB or IVIFGEN_VAL_OUTPUT_SEQ.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Arb Frequency [AF]"
+	"Arbitrary Waveform Output:Arb Frequency [AF]"
+	fD readwrite local 001313A1
+"Specifies the rate at which the function generator outputs an entire arbitrary waveform.  The units are arbitrary waveforms per second.
+    You use this property when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_ARB.
+
+Note:
+(1) This property is part of the IviFgenArbFrequency [AF] extension group.
+    "
+attribute: "Max Number of Waveforms [ARB]"
+	"Arbitrary Waveform Output:Max Number of Waveforms [ARB]"
+	iL readonly local 0013139D
+"Returns the maximum number of arbitrary waveforms that the function generator allows.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Waveform Quantum [ARB]"
+	"Arbitrary Waveform Output:Waveform Quantum [ARB]"
+	iL readonly local 0013139E
+"The size of each arbitrary waveform must be a multiple of a quantum value.  This property returns the quantum value the function generator allows.
+For example, when this property returns a value of 8, all waveform sizes must be a multiple of 8.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Min Waveform Size [ARB]"
+	"Arbitrary Waveform Output:Min Waveform Size [ARB]"
+	iL readonly local 0013139F
+"Returns the minimum number of points the function generator allows in an arbitrary waveform.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Max Waveform Size [ARB]"
+	"Arbitrary Waveform Output:Max Waveform Size [ARB]"
+	iL readonly local 001313A0
+"Returns the maximum number of points the function generator allows in an arbitrary waveform.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbWfm [ARB] extension group.
+    "
+attribute: "Arbitrary Sequence Handle [SEQ]"
+	"Arbitrary Sequence Output:Arbitrary Sequence Handle [SEQ]"
+	iL readwrite local 001313A3
+"This channel-based property identifies which sequence the function generator produces.  You can create multiple sequences using the Create Arbitrary Sequence [SEQ] VI.  The Create Arbitrary Sequence [SEQ] VI returns a handle that you use to identify the particular sequence.  To configure the function generator to produce a particular sequence, you set this property to the sequence's handle.
+    You use this property only when the IviFgen>>Basic Operation>>Output Mode property is set to IVIFGEN_VAL_OUTPUT_SEQ.
+
+Note:
+(1) This property is part of the IviFgenArbSeq [SEQ] extension group.
+    
+  "
+attribute: "Max Number of Sequences [SEQ]"
+	"Arbitrary Sequence Output:Max Number of Sequences [SEQ]"
+	iL readonly local 001313A4
+"Returns the maximum number of arbitrary sequences the function generator allows.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbSeq [SEQ] extension group.
+    "
+attribute: "Min Sequence Length [SEQ]"
+	"Arbitrary Sequence Output:Min Sequence Length [SEQ]"
+	iL readonly local 001313A5
+"Returns the minimum number of arbitrary waveforms the function generator allows in a sequence.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbSeq [SEQ] extension group.
+    "
+attribute: "Max Sequence Length [SEQ]"
+	"Arbitrary Sequence Output:Max Sequence Length [SEQ]"
+	iL readonly local 001313A6
+"Returns the maximum number of arbitrary waveforms the function generator allows in a sequence.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbSeq [SEQ] extension group.
+    "
+attribute: "Max Loop Count [SEQ]"
+	"Arbitrary Sequence Output:Max Loop Count [SEQ]"
+	iL readonly local 001313A7
+"Returns the maximum number of times the function generator can repeat a waveform in a sequence.  Typically, this value is constant for the function generator.
+
+Note:
+(1) This property is part of the IviFgenArbSeq [SEQ] extension group.
+    "
+attribute: "Trigger Source [TRG]"
+	"Triggering:Trigger Source [TRG]"
+	iL enum { IVIFGEN_VAL_EXTERNAL=1, IVIFGEN_VAL_SOFTWARE_TRIG=2, IVIFGEN_VAL_INTERNAL_TRIGGER=3, IVIFGEN_VAL_TTL0=111, IVIFGEN_VAL_TTL1=112, IVIFGEN_VAL_TTL2=113, IVIFGEN_VAL_TTL3=114, IVIFGEN_VAL_TTL4=115, IVIFGEN_VAL_TTL5=116, IVIFGEN_VAL_TTL6=117, IVIFGEN_VAL_TTL7=118, IVIFGEN_VAL_ECL0=119, IVIFGEN_VAL_ECL1=120, IVIFGEN_VAL_PXI_STAR=131, IVIFGEN_VAL_RTSI_0=141, IVIFGEN_VAL_RTSI_1=142, IVIFGEN_VAL_RTSI_2=143, IVIFGEN_VAL_RTSI_3=144, IVIFGEN_VAL_RTSI_4=145, IVIFGEN_VAL_RTSI_5=146, IVIFGEN_VAL_RTSI_6=147} readwrite local 001313FE
+"This channel-based property specifies the trigger source. After the function generator receives a trigger, it generates an output signal based on the operation mode.
+
+Note:
+(1) This property is part of the IviFgenTrigger [TRG] extension group.
+    
+IVIFGEN_VAL_EXTERNAL 1
+The function generator waits for a trigger on the external trigger input.
+
+IVIFGEN_VAL_SOFTWARE_TRIG 2
+The function generator waits until you call the Send Software Trigger [SWT] VI.
+
+IVIFGEN_VAL_INTERNAL_TRIGGER 3
+The function generator waits for an internal trigger.
+
+IVIFGEN_VAL_TTL0 4
+The function generator waits until it receives a trigger on the PXI TRIG0 line (for PXI instruments) or the VXI TTL0 line (for VXI instruments).
+
+IVIFGEN_VAL_TTL1 5
+The function generator waits until it receives a trigger on the PXI TRIG1 line (for PXI instruments) or the VXI TTL1 line (for VXI instruments).
+
+IVIFGEN_VAL_TTL2 6
+The function generator waits until it receives a trigger on the PXI TRIG2 line (for PXI instruments) or the VXI TTL2 line (for VXI instruments).
+
+IVIFGEN_VAL_TTL3 7
+The function generator waits until it receives a trigger on the PXI TRIG3 line (for PXI instruments) or the VXI TTL3 line (for VXI instruments).
+
+IVIFGEN_VAL_TTL4 8
+The function generator waits until it receives a trigger on the PXI TRIG4 line (for PXI instruments) or the VXI TTL4 line (for VXI instruments).
+
+IVIFGEN_VAL_TTL5 9
+The function generator waits until it receives a trigger on the PXI TRIG5 line (for PXI instruments) or the VXI TTL5 line (for VXI instruments).
+
+IVIFGEN_VAL_TTL6 10
+The function generator waits until it receives a trigger on the PXI TRIG6 line (for PXI instruments) or the VXI TTL6 line (for VXI instruments).
+
+IVIFGEN_VAL_TTL7 11
+The function generator waits until it receives a trigger on the PXI TRIG7 line (for PXI instruments) or the VXI TTL7 line (for VXI instruments).
+
+IVIFGEN_VAL_ECL0 12
+The function generator waits until it receives a trigger on the VXI ECL0 line.
+
+IVIFGEN_VAL_ECL1 13
+The function generator waits until it receives a trigger on the VXI ECL1 line.
+
+IVIFGEN_VAL_PXI_STAR 14
+The function generator waits until it receives a trigger on the PXI STAR trigger bus.
+
+IVIFGEN_VAL_RTSI_0 15
+The function generator waits until it receives a trigger on RTSI line 0.
+
+IVIFGEN_VAL_RTSI_1 16
+The function generator waits until it receives a trigger on RTSI line 1.
+
+IVIFGEN_VAL_RTSI_2 17
+The function generator waits until it receives a trigger on RTSI line 2.
+
+IVIFGEN_VAL_RTSI_3 18
+The function generator waits until it receives a trigger on RTSI line 3.
+
+IVIFGEN_VAL_RTSI_4 19
+The function generator waits until it receives a trigger on RTSI line 4.
+
+IVIFGEN_VAL_RTSI_5 20
+The function generator waits until it receives a trigger on RTSI line 5.
+
+IVIFGEN_VAL_RTSI_6 21
+The function generator waits until it receives a trigger on RTSI line 6."
+attribute: "Internal Trigger Rate [IT]"
+	"Triggering:Internal Trigger Rate [IT]"
+	fD readwrite local 00131406
+"This property specifies the rate at which the function generator's internal trigger source produces a trigger, in triggers per second.
+This property affects function generator behavior only when the IviFgen>>Triggering>>Trigger Source [TRG] property is set to IVIFGEN_VAL_INTERNAL_TRIGGER on a channel.
+
+Note:
+(1) This property is part of the IviFgenInternalTrigger [IT] extension group.
+    "
+attribute: "Burst Count [BST]"
+	"Burst:Burst Count [BST]"
+	iL readwrite local 0013142E
+"This channel-based property specifies the number of waveform cycles that the function generator produces after it receives a trigger.
+This property affects function generator behavior only when the IviFgen>>Basic Operation>>Operation Mode property is set to IVIFGEN_VAL_OPERATE_BURST.
+
+Note:
+(1) This property is part of the IviFgenBurst [BST] extension group.
+    "
+attribute: "AM Enabled [AM]"
+	"Amplitude Modulation:AM Enabled [AM]"
+	bool readwrite local 00131461
+"This channel-based property specifies whether the function generator applies amplitude modulation to the output signal.
+
+Note:
+(1) This property is part of the IviFgenModulateAM [AM] extension group.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "AM Source [AM]"
+	"Amplitude Modulation:AM Source [AM]"
+	iL enum { IVIFGEN_VAL_AM_INTERNAL=0, IVIFGEN_VAL_AM_EXTERNAL=1} readwrite local 00131462
+"This channel-based property specifies the signal that the function generator uses to modulate the output signal.
+
+Note:
+(1) This property is part of the IviFgenModulateAM [AM] extension group.
+    
+IVIFGEN_VAL_AM_INTERNAL 0
+Internal AM Modulating Source.
+
+IVIFGEN_VAL_AM_EXTERNAL 1
+External AM Modulating Source."
+attribute: "AM Internal Depth [AM]"
+	"Amplitude Modulation:AM Internal Depth [AM]"
+	fD readwrite local 00131463
+"Specifies the extent of modulation the function generator applies to the carrier signal.  The units are a percentage of full modulation.  At 0% depth, the output amplitude equals the carrier signal's amplitude.  At 100% depth, the output amplitude equals twice the the carrier signal's amplitude.
+    This property affects function generator behavior only when the IviFgen>>Amplitude Modulation>>AM Source [AM] property is set to IVIFGEN_VAL_AM_INTERNAL.
+
+Note:
+(1) This property is part of the IviFgenModulateAM [AM] extension group.
+    "
+attribute: "AM Internal Waveform [AM]"
+	"Amplitude Modulation:AM Internal Waveform [AM]"
+	iL enum { IVIFGEN_VAL_AM_INTERNAL_SINE=1, IVIFGEN_VAL_AM_INTERNAL_SQUARE=2, IVIFGEN_VAL_AM_INTERNAL_TRIANGLE=3, IVIFGEN_VAL_AM_INTERNAL_RAMP_UP=4, IVIFGEN_VAL_AM_INTERNAL_RAMP_DOWN=5} readwrite local 00131464
+"Specifies the standard waveform type that the function generator uses to modulate the output signal.
+    This property affects function generator behavior only when the IviFgen>>Amplitude Modulation>>AM Source [AM] property is set to IVIFGEN_VAL_AM_INTERNAL.
+
+Note:
+(1) This property is part of the IviFgenModulateAM [AM] extension group.
+    
+IVIFGEN_VAL_AM_INTERNAL_SINE 1
+Configures the function generator to modulate the carrier signal with a sinusoid waveform.
+
+IVIFGEN_VAL_AM_INTERNAL_SQUARE 2
+Configures the function generator to modulate the carrier signal with a square waveform.
+
+IVIFGEN_VAL_AM_INTERNAL_TRIANGLE 3
+Configures the function generator to modulate the carrier signal with a triangle waveform.
+
+IVIFGEN_VAL_AM_INTERNAL_RAMP_UP 4
+Configures the function generator to modulate the carrier signal with a positive ramp waveform.
+
+IVIFGEN_VAL_AM_INTERNAL_RAMP_DOWN 5
+Configures the function generator to modulate the carrier signal with a negative ramp waveform.
+"
+attribute: "AM Internal Frequency [AM]"
+	"Amplitude Modulation:AM Internal Frequency [AM]"
+	fD readwrite local 00131465
+"Specifies the frequency of the standard waveform that the function generator uses to modulate the output signal.  The units are Hertz (Hz).
+    This property affects function generator behavior only when the IviFgen>>Amplitude Modulation>>AM Source [AM] property is set to IVIFGEN_VAL_AM_INTERNAL.
+
+Note:
+(1) This property is part of the IviFgenModulateAM [AM] extension group.
+    "
+attribute: "FM Enabled [FM]"
+	"Frequency Modulation:FM Enabled [FM]"
+	bool readwrite local 001314C5
+"Specifies whether the function generator applies frequency modulation to the output signal.
+
+Note:
+(1) This property is part of the IviFgenModulateFM [FM] extension group.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "FM Source [FM]"
+	"Frequency Modulation:FM Source [FM]"
+	iL enum { IVIFGEN_VAL_FM_INTERNAL=0, IVIFGEN_VAL_FM_EXTERNAL=1} readwrite local 001314C6
+"Specifies the signal the function generator uses to modulate the output signal.
+
+Note:
+(1) This property is part of the IviFgenModulateFM [FM] extension group.
+    
+IVIFGEN_VAL_FM_INTERNAL 0
+Internal FM Modulating Source.
+
+IVIFGEN_VAL_FM_EXTERNAL 1
+External FM Modulating Source."
+attribute: "FM Internal Deviation [FM]"
+	"Frequency Modulation:FM Internal Deviation [FM]"
+	fD readwrite local 001314C7
+"Specifies the maximum frequency deviation the modulating waveform applies to the carrier waveform.  This deviation corresponds to the maximum amplitude level of the modulating signal.  The units are Hertz (Hz).
+    This property affects function generator behavior only when the IviFgen>>Frequency Modulation>>FM Source [FM] property is set to IVIFGEN_VAL_FM_INTERNAL.
+
+Note:
+(1) This property is part of the IviFgenModulateFM [FM] extension group.
+    "
+attribute: "FM Internal Waveform [FM]"
+	"Frequency Modulation:FM Internal Waveform [FM]"
+	iL enum { IVIFGEN_VAL_FM_INTERNAL_SINE=1, IVIFGEN_VAL_FM_INTERNAL_SQUARE=2, IVIFGEN_VAL_FM_INTERNAL_TRIANGLE=3, IVIFGEN_VAL_FM_INTERNAL_RAMP_UP=4, IVIFGEN_VAL_FM_INTERNAL_RAMP_DOWN=5} readwrite local 001314C8
+"Specifies the standard waveform type that the function generator uses to modulate the output signal.
+    This property affects function generator behavior only when the IviFgen>>Frequency Modulation>>FM Source [FM] property is set to IVIFGEN_VAL_FM_INTERNAL.
+
+Note:
+(1) This property is part of the IviFgenModulateFM [FM] extension group.
+    
+IVIFGEN_VAL_FM_INTERNAL_SINE 1
+Configures the function generator to modulate the carrier signal with a sinusoid waveform.
+
+IVIFGEN_VAL_FM_INTERNAL_SQUARE 2
+Configures the function generator to modulate the carrier signal with a square waveform.
+
+IVIFGEN_VAL_FM_INTERNAL_TRIANGLE 3
+Configures the function generator to modulate the carrier signal with a triangle waveform.
+
+IVIFGEN_VAL_FM_INTERNAL_RAMP_UP 4
+Configures the function generator to modulate the carrier signal with a positive ramp waveform.
+
+IVIFGEN_VAL_FM_INTERNAL_RAMP_DOWN 5
+Configures the function generator to modulate the carrier signal with a negative ramp waveform.
+"
+attribute: "FM Internal Frequency [FM]"
+	"Frequency Modulation:FM Internal Frequency [FM]"
+	fD readwrite local 001314C9
+"Specifies the frequency of the standard waveform that the function generator uses to modulate the output signal.  The units are Hertz (Hz).
+    This property affects function generator behavior only when the IviFgen>>Frequency Modulation>>FM Source [FM] property is set to IVIFGEN_VAL_FM_INTERNAL.
+
+Note:
+(1) This property is part of the IviFgenModulateFM [FM] extension group.
+    "
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Major Version"
+	iL readonly local 00100789
+"The major version number of the class driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Minor Version"
+	iL readonly local 0010078A
+"The minor version number of the class driver.
+    "
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Major Version"
+	iL readonly local 00100787
+"The major version number of this instrument driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Minor Version"
+	iL readonly local 00100788
+"The minor version number of the specific driver.
+    "

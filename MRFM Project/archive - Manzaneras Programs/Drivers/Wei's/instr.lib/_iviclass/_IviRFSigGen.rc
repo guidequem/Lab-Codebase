@@ -1,0 +1,887 @@
+library: IviRFSigGen.dll
+
+class: "IviRFSigGen"
+flags: 16
+sorted: no
+implements: ivi, iviResourceMgr
+attribute: "Range Check"
+	"Inherent IVI Settings:User Options:Range Check"
+	bool readwrite local 00100592
+"Specifies whether to validate property values and VI parameters.  If enabled, the instrument driver validates the parameter values that you pass to driver VIs.  Range checking parameters is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable range checking and maximize performance.
+    The default value is TRUE.   Use the IviRFSigGen Initialize With Options VI to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Query Instrument Status"
+	"Inherent IVI Settings:User Options:Query Instrument Status"
+	bool readwrite local 00100593
+"Specifies whether the instrument driver queries the instrument status after each operation.  Querying the instrument status is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable status checking and maximize performance
+    The instrument driver can choose to ignore status checking for particular properties regardless of the setting of this property.
+    The default value is FALSE.   Use the IviRFSigGen Initialize With Options.vi to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Cache"
+	"Inherent IVI Settings:User Options:Cache"
+	bool readwrite local 00100594
+"Specifies whether to cache the value of properties.  When caching is enabled, the instrument driver keeps track of the current instrument settings and avoids sending redundant commands to the instrument.  Thus, you can significantly increase execution speed.
+    The instrument driver can choose always to cache or never to cache particular properties regardless of the setting of this property.
+    The default value is TRUE.  Use the IviRFSigGen Initialize With Options VI to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Simulate"
+	"Inherent IVI Settings:User Options:Simulate"
+	bool readwrite local 00100595
+"Specifies whether or not to simulate instrument driver I/O operations.  For output parameters that represent instrument data, the instrument driver VIs return calculated values.
+    The default value is FALSE.   Use the IviRFSigGen Initialize With Options VI to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Record Value Coercions"
+	"Inherent IVI Settings:User Options:Record Value Coercions"
+	bool readwrite local 00100596
+"Specifies whether the IVI engine keeps a list of the value coercions it makes for integer and real type properties.  You call IviRFSigGen Get Next Coercion Record VI to extract and delete the oldest coercion record from the list.
+    The default value is FALSE.   Use the IviRFSigGen Initialize With Options VI to override this value.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Interchange Check"
+	"Inherent IVI Settings:User Options:Interchange Check"
+	bool readwrite local 001005A5
+"Specifies whether to perform interchangeability checking and retrieve interchangeability warnings.
+
+The default value is FALSE.
+
+Interchangeability warnings indicate that using your application with a different instrument might cause different behavior.  You call IviRFSigGen Get Next Interchange Warning to extract interchange warnings.  Call the IviRFSigGen Clear Interchange Warnings VI to clear the list of interchangeability warnings without reading them.
+Interchangeability checking logs a warning for each property you have not set that affects the behavior of the instrument.
+    
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Description"
+	"Inherent IVI Settings:Driver Identification:Description"
+	string readonly local 00100792
+"A string that contains a brief description of the specific driver.
+    "
+attribute: "Driver Prefix"
+	"Inherent IVI Settings:Driver Identification:Driver Prefix"
+	string readonly local 001006BE
+"A string that contains the prefix for the instrument driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Driver Vendor"
+	"Inherent IVI Settings:Driver Identification:Driver Vendor"
+	string readonly local 00100791
+"A string that contains the name of the vendor that supplies this driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Driver Identification:Revision"
+	string readonly local 001007B7
+"A string that contains additional version information about this instrument driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Driver Identification:Class Specification Major Version"
+	iL readonly local 00100793
+"The major version number of the class specification with which this driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100794
+"The minor version number of the class specification with which this driver is compliant.
+    "
+attribute: "Channel Count"
+	"Inherent IVI Settings:Driver Capabilities:Channel Count"
+	iL readonly local 0010065B
+"Indicates the number of channels that the specific instrument driver supports.  
+    For each property for which the IVI_VAL_MULTI_CHANNEL flag is set, the IVI engine maintains a separate cache value for each channel.
+    "
+attribute: "Supported Instrument Models"
+	"Inherent IVI Settings:Driver Capabilities:Supported Instrument Models"
+	string readonly local 001006D7
+"Contains a model code of the instrument. For drivers that support more than one device, this property contains a comma-separated list of supported instrument models.
+    "
+attribute: "Class Group Capabilities"
+	"Inherent IVI Settings:Driver Capabilities:Class Group Capabilities"
+	string readonly local 00100721
+"A string that contains a comma-separated list of class-extention groups that this driver implements.
+    "
+attribute: "Manufacturer"
+	"Inherent IVI Settings:Instrument Identification:Manufacturer"
+	string readonly local 0010078F
+"A string that contains the name of the instrument manufacturer you are currently using.
+    "
+attribute: "Model"
+	"Inherent IVI Settings:Instrument Identification:Model"
+	string readonly local 00100790
+"A string that contains the model number or name of the instrument that you are currently using.
+    "
+attribute: "Firmware Revision"
+	"Inherent IVI Settings:Instrument Identification:Firmware Revision"
+	string readonly local 0010078E
+"A string that contains the firmware revision information for the instrument you are currently using.
+    "
+attribute: "Logical Name"
+	"Inherent IVI Settings:Advanced Session Information:Logical Name"
+	string readonly local 001006C1
+"A string containing the logical name you specified when opening the current IVI session.
+     You may pass a logical name to the IviRFSigGen Initialize or IviRFSigGen Initialize With Options VIs.  The IVI Configuration utility must contain an entry for the logical name.  The logical name entry refers to a virtual instrument section in the IVI Configuration file.  The virtual instrument section specifies a physical device and initial user options.
+    "
+attribute: "I/O Resource Descriptor"
+	"Inherent IVI Settings:Advanced Session Information:I/O Resource Descriptor"
+	string readonly local 001006C0
+"Indicates the resource descriptor the driver uses to identify the physical device.
+    If you initialize the driver with a logical name, this property contains the resource descriptor that corresponds to the entry in the IVI Configuration utility.  
+    If you initialize the instrument driver with the resource descriptor, this property contains that value.
+    "
+attribute: "Driver Setup"
+	"Inherent IVI Settings:Advanced Session Information:Driver Setup"
+	string readonly local 00100597
+"Some cases exist where you must specify instrument driver options at initialization time.  An example of this is specifying a particular instrument model from among a family of instruments that the driver supports.  This is useful when using simulation.  You can specify driver-specific options through the DriverSetup keyword in the optionsString parameter to the IviRFSigGen Initialize With Options VI.  If you open an instrument using a logical name, you can also specify the options through the IVI Configuration Utility.
+    The default value is an empty string.
+    "
+attribute: "Frequency"
+	"RF:Frequency"
+	fD readwrite local 001312D1
+"Specifies the frequency of the generated RF output signal."
+attribute: "Power Level"
+	"RF:Power Level"
+	fD readwrite local 001312D2
+"Specifies the amplitude (power level) of the RF output signal. The value is in dBm."
+attribute: "ALC Enabled"
+	"RF:ALC Enabled"
+	bool readwrite local 001312D3
+"Specifies whether to enable or disable Automatic Level Control (ALC).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Output Enabled"
+	"RF:Output Enabled"
+	bool readwrite local 001312D4
+"Specifies whether to enable or disable the RF output signal.
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "AM Enabled [AM]"
+	"Analog Modulation:AM:AM Enabled [AM]"
+	bool readwrite local 001312DB
+"Specifies whether the signal generator applies amplitude modulation to the RF output signal (TRUE) or not (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "AM Source [AM]"
+	"Analog Modulation:AM:AM Source [AM]"
+	string readwrite local 001312DC
+"Specifies the source of the signal that is used as the modulating signal. If more than one source is specified, the voltages of all sources (internal and external) are summed.  Multiple source names are separated by commas."
+attribute: "AM Scaling [AM]"
+	"Analog Modulation:AM:AM Scaling [AM]"
+	iL enum { IVIRFSIGGEN_VAL_AM_SCALING_LINEAR=1, IVIRFSIGGEN_VAL_AM_SCALING_LOGARITHMIC=2} readwrite local 001312DD
+"Specifies linear or logarithmic attenuation for amplitude modulation. The unit of the IviRFSigGen>>Analog Modulation>>AM>>AM Depth [AM] property is changed with this setting.
+IVIRFSIGGEN_VAL_AM_SCALING_LINEAR 1
+Enables linear attenuation for amplitude modulation.
+
+IVIRFSIGGEN_VAL_AM_SCALING_LOGARITHMIC 2
+Enables logarithmic attenuation for amplitude modulation."
+attribute: "AM External Coupling [AM]"
+	"Analog Modulation:AM:AM External Coupling [AM]"
+	iL enum { IVIRFSIGGEN_VAL_AM_EXTERNAL_COUPLING_AC=1, IVIRFSIGGEN_VAL_AM_EXTERNAL_COUPLING_DC=2} readwrite local 001312DE
+"Specifies the coupling of the external source of the modulating signal.
+IVIRFSIGGEN_VAL_AM_EXTERNAL_COUPLING_AC 1
+The external source is coupled for AC only.
+
+IVIRFSIGGEN_VAL_AM_EXTERNAL_COUPLING_DC 2
+The external source is coupled for both DC and AC"
+attribute: "AM Nominal Voltage [AM]"
+	"Analog Modulation:AM:AM Nominal Voltage [AM]"
+	fD readonly local 001312DF
+"This is the voltage at which the instrument achieves the amount of modulation specified by the IviRFSigGen>>Analog Modulation>>AM>>AM Depth [AM] property.
+
+Note: This property is read only."
+attribute: "AM Depth [AM]"
+	"Analog Modulation:AM:AM Depth [AM]"
+	fD readwrite local 001312E0
+"Specifies the extend of modulation the signal generator applies to the RF-signal (carrier waveform) with the modulating signal as a result of summing all sources, internal and external.
+If the IviRFSigGen>>Analog Modulation>>AM>>AM Scaling [AM] property is set to Linear, then the units are percent (%). If the IviRFSigGen>>Analog Modulation>>AM>>AM Scaling [AM] property is set to logarithmic, then the units are dBm."
+attribute: "FM Enabled [FM]"
+	"Analog Modulation:FM:FM Enabled [FM]"
+	bool readwrite local 001312E5
+"Specifies whether the signal generator applies frequency modulation to the RF output signal (TRUE) or not (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "FM Source [FM]"
+	"Analog Modulation:FM:FM Source [FM]"
+	string readwrite local 001312E6
+"Specifies the source of the signal that is used as the modulating signal. If more than one source is specified, the voltages of all sources (internal and external) are summed.  Multiple source names are separated by commas."
+attribute: "FM External Coupling [FM]"
+	"Analog Modulation:FM:FM External Coupling [FM]"
+	iL enum { IVIRFSIGGEN_VAL_FM_EXTERNAL_COUPLING_AC=1, IVIRFSIGGEN_VAL_FM_EXTERNAL_COUPLING_DC=2} readwrite local 001312E7
+"Specifies the coupling of the external source of the modulating signal.
+IVIRFSIGGEN_VAL_FM_EXTERNAL_COUPLING_AC 1
+The external source is coupled for AC only.
+
+IVIRFSIGGEN_VAL_FM_EXTERNAL_COUPLING_DC 2
+The external source is coupled for both DC and AC."
+attribute: "FM Nominal Voltage [FM]"
+	"Analog Modulation:FM:FM Nominal Voltage [FM]"
+	fD readonly local 001312E8
+"This is the voltage at which the instrument achieves the amount of modulation specified by the IviRFSigGen>>Analog Modulation>>FM>>FM Deviation [FM] property.
+
+Note: This property is read only."
+attribute: "FM Deviation [FM]"
+	"Analog Modulation:FM:FM Deviation [FM]"
+	fD readwrite local 001312E9
+"Specifies the extent of modulation (peak frequency deviation) the signal generator applies to the RF-signal (carrier waveform) with the modulating signal as a result of summing all sources,internal and external. 
+The units are Hz."
+attribute: "PM Enabled [PM]"
+	"Analog Modulation:PM:PM Enabled [PM]"
+	bool readwrite local 001312EF
+"Specifies whether the signal generator applies phase modulation to the RF output signal (TRUE) or not (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "PM Source [PM]"
+	"Analog Modulation:PM:PM Source [PM]"
+	string readwrite local 001312F0
+"Specifies the source of the signal that is used as the modulating signal. If more than one source is specified, the voltages of all sources (internal and external) are summed.  Multiple source names are separated by commas."
+attribute: "PM External Coupling [PM]"
+	"Analog Modulation:PM:PM External Coupling [PM]"
+	iL enum { IVIRFSIGGEN_VAL_PM_EXTERNAL_COUPLING_AC=1, IVIRFSIGGEN_VAL_PM_EXTERNAL_COUPLING_DC=2} readwrite local 001312F1
+"Specifies the coupling of the external source of the modulating signal.
+IVIRFSIGGEN_VAL_PM_EXTERNAL_COUPLING_AC 1
+The external source is coupled for AC only.
+
+IVIRFSIGGEN_VAL_PM_EXTERNAL_COUPLING_DC 2
+The external source is coupled for both DC and AC."
+attribute: "PM Nominal Voltage [PM]"
+	"Analog Modulation:PM:PM Nominal Voltage [PM]"
+	fD readonly local 001312F2
+"This is the voltage at which the instrument achieves the amount of modulation specified by the IviRFSigGen>>Analog Modulation>>PM>>PM Deviation [PM] property. 
+
+Note: This property is read only."
+attribute: "PM Deviation [PM]"
+	"Analog Modulation:PM:PM Deviation [PM]"
+	fD readwrite local 001312F3
+"Specifies the extent of modulation (peak phase deviation) the signal generator applies to the RF-signal (carrier waveform) with the modulating signal. The units are radians."
+attribute: "Modulation Source Count [MS]"
+	"Analog Modulation:Source:Modulation Source Count [MS]"
+	iL readonly local 001312F9
+"Specifies how many analog modulation sources are available."
+attribute: "Pulse Modulation Enabled [PULM]"
+	"Pulse Modulation:Pulse Modulation Enabled [PULM]"
+	bool readwrite local 00131303
+"Specifies whether the signal generator applies pulse modulation to the RF output signal (TRUE) or not (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Pulse Modulation Source [PULM]"
+	"Pulse Modulation:Pulse Modulation Source [PULM]"
+	iL enum { IVIRFSIGGEN_VAL_PULSE_MODULATION_SOURCE_INTERNAL=1, IVIRFSIGGEN_VAL_PULSE_MODULATION_SOURCE_EXTERNAL=2} readwrite local 00131304
+"Specifies the source of the signal that is used as the modulating signal.
+IVIRFSIGGEN_VAL_PULSE_MODULATION_SOURCE_INTERNAL 1
+An internal pulse generator (IviRFSigGenPulseGenerator Extension Group) is used for modulation.
+
+IVIRFSIGGEN_VAL_PULSE_MODULATION_SOURCE_EXTERNAL 2
+An external generator is used for modulation."
+attribute: "Pulse Modulation External Polarity [PULM]"
+	"Pulse Modulation:Pulse Modulation External Polarity [PULM]"
+	iL enum { IVIRFSIGGEN_VAL_PULSE_MODULATION_EXTERNAL_POLARITY_NORMAL=1, IVIRFSIGGEN_VAL_PULSE_MODULATION_EXTERNAL_POLARITY_INVERSE=2} readwrite local 00131305
+"Specifies the polarity of the external source signal.
+IVIRFSIGGEN_VAL_PULSE_MODULATION_EXTERNAL_POLARITY_NORMAL 1
+The signal generator modulates the carrier signal with normal pulse polarity.
+
+IVIRFSIGGEN_VAL_PULSE_MODULATION_EXTERNAL_POLARITY_INVERSE 2
+The signal generator modulates the carrier signal with inverted pulse polarity."
+attribute: "Active LF Generator [LF]"
+	"LF Generator:Active LF Generator [LF]"
+	string readwrite local 00131335
+"Specifies the LF generator which is currently active. The values for this property correspond to the LFGenerator repeated capability."
+attribute: "LF Generator Count [LF]"
+	"LF Generator:LF Generator Count [LF]"
+	iL readonly local 00131338
+"Specifies the number of LF generator sources available for a particular instrument."
+attribute: "LF Generator Frequency [LF]"
+	"LF Generator:LF Generator Frequency [LF]"
+	fD readwrite local 00131336
+"Specifies the frequency of the active LF generator. The unit is Hz."
+attribute: "LF Generator Waveform [LF]"
+	"LF Generator:LF Generator Waveform [LF]"
+	iL enum { IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_SINE=1, IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_SQUARE=2, IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_TRIANGLE=3, IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_RAMP_UP=4, IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_RAMP_DOWN=5} readwrite local 00131337
+"Specifies the waveform of the active LF generator.
+IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_SINE 1
+Configures the LF generator to produce a sinusoidal waveform.
+
+IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_SQUARE 2
+Configures the LF generator to produce a square waveform.
+
+IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_TRIANGLE 3
+Configures the LF generator to produce a triangle waveform.
+
+IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_RAMP_UP 4
+Configures the LF generator to produce a rising ramp waveform.
+
+IVIRFSIGGEN_VAL_LF_GENERATOR_WAVEFORM_RAMP_DOWN 5
+Configures the LF generator to produce a falling ramp waveform."
+attribute: "LF Generator Output Amplitude [LFO]"
+	"LF Generator:LF Generator Outputs:LF Generator Output Amplitude [LFO]"
+	fD readwrite local 0013133F
+"Specifies the output voltage of the LF generator. The unit is V."
+attribute: "LF Generator Output Enabled [LFO]"
+	"LF Generator:LF Generator Outputs:LF Generator Output Enabled [LFO]"
+	bool readwrite local 00131340
+"Specifies whether the LF generator applies an output signal (TRUE) or not (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Pulse Internal Trigger Period [PG]"
+	"Pulse Generator:Pulse Internal Trigger Period [PG]"
+	fD readwrite local 00131349
+"Specifies the period of the pulse generators output signal (if Pulse Trigger Source is set to Internal). The units are in seconds."
+attribute: "Pulse Width [PG]"
+	"Pulse Generator:Pulse Width [PG]"
+	fD readwrite local 0013134A
+"Specifies the width of the output pulse. The units are in seconds."
+attribute: "Pulse Gating Enabled [PG]"
+	"Pulse Generator:Pulse Gating Enabled [PG]"
+	bool readwrite local 0013134B
+"Specifies whether pulse gating is enabled(TRUE) or disabled(FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Pulse Trigger Source [PG]"
+	"Pulse Generator:Pulse Trigger Source [PG]"
+	iL enum { IVIRFSIGGEN_VAL_PULSE_TRIGGER_SOURCE_INTERNAL=1, IVIRFSIGGEN_VAL_PULSE_TRIGGER_SOURCE_EXTERNAL=2} readwrite local 0013134C
+"Specifies the source of the signal the pulse generator uses to generate one pulse.
+IVIRFSIGGEN_VAL_PULSE_TRIGGER_SOURCE_INTERNAL 1
+No external trigger is used. The pulse period is specified by the IviRFSigGen>>Pulse Generator>>Pulse Internal Trigger Period [PG] property.
+
+IVIRFSIGGEN_VAL_PULSE_TRIGGER_SOURCE_EXTERNAL 2
+The pulse is started with a trigger after the delay time specified by the IviRFSigGen>>Pulse Generator>>Pulse External Trigger Delay [PG] property."
+attribute: "Pulse External Trigger Slope [PG]"
+	"Pulse Generator:Pulse External Trigger Slope [PG]"
+	iL enum { IVIRFSIGGEN_VAL_PULSE_EXTERNAL_TRIGGER_SLOPE_POSITIVE=1, IVIRFSIGGEN_VAL_PULSE_EXTERNAL_TRIGGER_SLOPE_NEGATIVE=2} readwrite local 0013134D
+"Specifies whether the event occurs on the rising or falling edge of the input signal.
+IVIRFSIGGEN_VAL_PULSE_EXTERNAL_TRIGGER_SLOPE_POSITIVE 1
+Enables rising edge triggering.
+
+IVIRFSIGGEN_VAL_PULSE_EXTERNAL_TRIGGER_SLOPE_NEGATIVE 2
+Enables falling edge triggering."
+attribute: "Pulse External Trigger Delay [PG]"
+	"Pulse Generator:Pulse External Trigger Delay [PG]"
+	fD readwrite local 0013134E
+"Specifies the delay for starting the output pulse with respect to the trigger input. The units are in seconds."
+attribute: "Pulse Double Enabled [DPG]"
+	"Pulse Generator:Double Pulse Generators:Pulse Double Enabled [DPG]"
+	bool readwrite local 00131353
+"Specifies whether double pulse mode is used (TRUE) or not (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Pulse Double Delay [DPG]"
+	"Pulse Generator:Double Pulse Generators:Pulse Double Delay [DPG]"
+	fD readwrite local 00131354
+"Specifies the delay of the second pulse. The units are in seconds."
+attribute: "Pulse Output Enabled [PGO]"
+	"Pulse Generator:Pulse Generator Output:Pulse Output Enabled [PGO]"
+	bool readwrite local 0013135E
+"Specifies whether the output of the pulse generator is on  (TRUE) or off (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Pulse Output Polarity [PGO]"
+	"Pulse Generator:Pulse Generator Output:Pulse Output Polarity [PGO]"
+	iL enum { IVIRFSIGGEN_VAL_PULSE_OUTPUT_POLARITY_NORMAL=1, IVIRFSIGGEN_VAL_PULSE_OUTPUT_POLARITY_INVERSE=2} readwrite local 0013135D
+"Specifies the polarity of the output signal.
+IVIRFSIGGEN_VAL_PULSE_OUTPUT_POLARITY_NORMAL 1
+Specifies normal polarity.
+
+IVIRFSIGGEN_VAL_PULSE_OUTPUT_POLARITY_INVERSE 2
+Specifies inverted polarity."
+attribute: "Sweep Mode [SWP]"
+	"Sweep:Sweep Mode [SWP]"
+	iL enum { IVIRFSIGGEN_VAL_SWEEP_MODE_NONE=1, IVIRFSIGGEN_VAL_SWEEP_MODE_FREQUENCY_SWEEP=2, IVIRFSIGGEN_VAL_SWEEP_MODE_POWER_SWEEP=3, IVIRFSIGGEN_VAL_SWEEP_MODE_FREQUENCY_STEP=4, IVIRFSIGGEN_VAL_SWEEP_MODE_POWER_STEP=5, IVIRFSIGGEN_VAL_SWEEP_MODE_LIST=6} readwrite local 00131399
+"Specifies the sweep mode applied to the output signal.
+IVIRFSIGGEN_VAL_SWEEP_MODE_NONE 1
+The RF output of the signal generator is a non-swept signal (Continuous Wave). Frequency and power level from base capability group is used.
+
+IVIRFSIGGEN_VAL_SWEEP_MODE_FREQUENCY_SWEEP 2
+The signal generator sweeps the RF output signal's frequency in an analog form (non-stepped).
+
+IVIRFSIGGEN_VAL_SWEEP_MODE_POWER_SWEEP 3
+The signal generator sweeps the RF output signal's power level in an analog form (non-stepped).
+
+IVIRFSIGGEN_VAL_SWEEP_MODE_FREQUENCY_STEP 4
+The signal generator sweeps the RF output signals frequency in steps.
+
+IVIRFSIGGEN_VAL_SWEEP_MODE_POWER_STEP 5
+The signal generator sweeps the RF output signals power level in steps.
+
+IVIRFSIGGEN_VAL_SWEEP_MODE_LIST 6
+The signal generator uses two lists with frequency and power level values to sweep the RF output signals."
+attribute: "Sweep Trigger Source [SWP]"
+	"Sweep:Sweep Trigger Source [SWP]"
+	iL enum { IVIRFSIGGEN_VAL_SWEEP_TRIGGER_SOURCE_IMMEDIATE=1, IVIRFSIGGEN_VAL_SWEEP_TRIGGER_SOURCE_EXTERNAL=2, IVIRFSIGGEN_VAL_SWEEP_TRIGGER_SOURCE_SOFTWARE=3} readwrite local 0013139A
+"Specifies the trigger used to start a sweep operation.
+IVIRFSIGGEN_VAL_SWEEP_TRIGGER_SOURCE_IMMEDIATE 1
+The sweep system does not wait for a trigger of any kind, so it is running continuously.
+
+IVIRFSIGGEN_VAL_SWEEP_TRIGGER_SOURCE_EXTERNAL 2
+The sweep is started with an external signal.
+
+IVIRFSIGGEN_VAL_SWEEP_TRIGGER_SOURCE_SOFTWARE 3
+The sweep is started with a software programmable trigger."
+attribute: "Frequency Sweep Start [FSW]"
+	"Sweep:Frequency Sweep:Frequency Sweep Start [FSW]"
+	fD readwrite local 001313A3
+"Specifies the start frequency of the sweep. If the stop frequency is less than the start frequency, the frequency decreases during the sweep. The units are in Hz."
+attribute: "Frequency Sweep Stop [FSW]"
+	"Sweep:Frequency Sweep:Frequency Sweep Stop [FSW]"
+	fD readwrite local 001313A4
+"Specifies the stop frequency of the sweep. If the stop frequency is less than the start frequency, the frequency decreases during the sweep. The units are in Hz."
+attribute: "Frequency Sweep Time [FSW]"
+	"Sweep:Frequency Sweep:Frequency Sweep Time [FSW]"
+	fD readwrite local 001313A5
+"Specifies the duration of one sweep from start to stop frequency. The units are in seconds."
+attribute: "Power Sweep Start [PSW]"
+	"Sweep:Power Sweep:Power Sweep Start [PSW]"
+	fD readwrite local 001313AD
+"Specifies the start power of the sweep. If the stop power is less than the start power, the power decreases in value during the sweep. The units are in dBm."
+attribute: "Power Sweep Stop [PSW]"
+	"Sweep:Power Sweep:Power Sweep Stop [PSW]"
+	fD readwrite local 001313AE
+"Specifies the stop power of the sweep. If the stop power is less than the start power, the power decreases in value during the sweep. The units are in dBm."
+attribute: "Power Sweep Time [PSW]"
+	"Sweep:Power Sweep:Power Sweep Time [PSW]"
+	fD readwrite local 001313AF
+"Specifies the duration of one sweep from start to stop power. The units are in seconds."
+attribute: "Frequency Step Start [FST]"
+	"Sweep:Frequency Step:Frequency Step Start [FST]"
+	fD readwrite local 001313C1
+"Specifies the start frequency of the stepped sweep. If the stop frequency is less than the start frequency, the frequency decreases during the sweep. The units are in Hz."
+attribute: "Frequency Step Stop [FST]"
+	"Sweep:Frequency Step:Frequency Step Stop [FST]"
+	fD readwrite local 001313C2
+"Specifies the stop frequency of the stepped sweep. If the stop frequency is less than the start frequency, the frequency decreases during the sweep. The units are in Hz."
+attribute: "Frequency Step Scaling [FST]"
+	"Sweep:Frequency Step:Frequency Step Scaling [FST]"
+	iL enum { IVIRFSIGGEN_VAL_FREQUENCY_STEP_SCALING_LINEAR=1, IVIRFSIGGEN_VAL_FREQUENCY_STEP_SCALING_LOGARITHMIC=2} readwrite local 001313C3
+"Specifies the spacing of the steps.
+IVIRFSIGGEN_VAL_FREQUENCY_STEP_SCALING_LINEAR 1
+Enables linear scaling.
+
+IVIRFSIGGEN_VAL_FREQUENCY_STEP_SCALING_LOGARITHMIC 2
+Enables logarithmic scaling."
+attribute: "Frequency Step Size [FST]"
+	"Sweep:Frequency Step:Frequency Step Size [FST]"
+	fD readwrite local 001313C4
+"Specifies the step size. The units are in Hz when the IviRFSigGen>>Sweep>>Frequency Step>>Frequency Step Scaling [FST] property is set to IVIRFSIGGEN_VAL_FREQUENCY_STEP_SCALING_LINEAR. 
+The value is unitless (factor) when the  IviRFSigGen>>Sweep>>Frequency Step>>Frequency Step Scaling [FST] property is set to IVIRFSIGGEN_VAL_FREQUENCY_STEP_SCALING_LOGARITHMIC."
+attribute: "Frequency Step Single Step Enabled [FST]"
+	"Sweep:Frequency Step:Frequency Step Single Step Enabled [FST]"
+	bool readwrite local 001313C5
+"Specifies whether the trigger initiates the next step (TRUE), or the next step is taken after dwell time (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Frequency Step Dwell [FST]"
+	"Sweep:Frequency Step:Frequency Step Dwell [FST]"
+	fD readwrite local 001313C6
+"Specifies the duration time of one step. The units are in seconds.
+Dwell time starts immediate after tigger or next step; no settling time is added.
+This property is ignored if Frequency Step Single Step Enabled is set to TRUE."
+attribute: "Power Step Start [PST]"
+	"Sweep:Power Step:Power Step Start [PST]"
+	fD readwrite local 001313D5
+"Specifies the start power of the stepped sweep. If the stop power is less than the start power, the power decreases in value during the sweep. The units are in dBm."
+attribute: "Power Step Stop [PST]"
+	"Sweep:Power Step:Power Step Stop [PST]"
+	fD readwrite local 001313D6
+"Specifies the stop power of the stepped sweep. If the stop power is less than the start power, the power decreases in value during the sweep. The units are in dBm."
+attribute: "Power Step Size [PST]"
+	"Sweep:Power Step:Power Step Size [PST]"
+	fD readwrite local 001313D7
+"Specifies the step size. The units are in dBm."
+attribute: "Single Step Enabled [PST]"
+	"Sweep:Power Step:Single Step Enabled [PST]"
+	bool readwrite local 001313D8
+"Specifies whether the trigger initiates the next step (TRUE), or the next step is taken after dwell time (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "Power Step Dwell [PST]"
+	"Sweep:Power Step:Power Step Dwell [PST]"
+	fD readwrite local 001313D9
+"Specifies the duration time of one step. The units are in seconds.
+This property is ignored if Frequency Step Single Step Enabled is set to TRUE."
+attribute: "List Selected Name [LST]"
+	"Sweep:List:List Selected Name [LST]"
+	string readwrite local 001313E9
+"Specifies the name of the selected list to become active. The name must be one of the lists created ."
+attribute: "List Single Step Enabled [LST]"
+	"Sweep:List:List Single Step Enabled [LST]"
+	bool readwrite local 001313EA
+"Enables or disables single step mode.
+TRUE: The list will advance when the next trigger event occurs.
+FALSE: The list will advance immediatly after the dwell time ends.
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "List Dwell [LST]"
+	"Sweep:List:List Dwell [LST]"
+	fD readwrite local 001313EB
+"Specifies the duration time of one step. The units are in seconds.
+This property is ignored if List Single Step Enabled is set to TRUE."
+attribute: "ALC Source [ALC]"
+	"ALC:ALC Source [ALC]"
+	iL enum { IVIRFSIGGEN_VAL_ALC_SOURCE_INTERNAL=1, IVIRFSIGGEN_VAL_ALC_SOURCE_EXTERNAL=2} readwrite local 001313FD
+"Specifies the source of the controlling voltage for the Automatic Level Control.
+IVIRFSIGGEN_VAL_ALC_SOURCE_INTERNAL 1
+The ALC is controlled by an internal measurement source.
+
+IVIRFSIGGEN_VAL_ALC_SOURCE_EXTERNAL 2
+The ALC is controlled by an external voltage."
+attribute: "ALC Bandwidth [ALC]"
+	"ALC:ALC Bandwidth [ALC]"
+	fD readwrite local 001313FE
+"Specifies the bandwidth of Automatic Level Control."
+attribute: "Reference Oscillator Source [RO]"
+	"Reference Oscillator:Reference Oscillator Source [RO]"
+	iL enum { IVIRFSIGGEN_VAL_REFERENCE_OSCILLATOR_SOURCE_INTERNAL=1, IVIRFSIGGEN_VAL_REFERENCE_OSCILLATOR_SOURCE_EXTERNAL=2} readwrite local 00131411
+"Specifies the reference frequency source used to generate the exact RF output frequency.
+IVIRFSIGGEN_VAL_REFERENCE_OSCILLATOR_SOURCE_INTERNAL 1
+An internal reference oscillator is used.
+
+IVIRFSIGGEN_VAL_REFERENCE_OSCILLATOR_SOURCE_EXTERNAL 2
+An external reference oscillator is used."
+attribute: "Reference Oscillator External Frequency [RO]"
+	"Reference Oscillator:Reference Oscillator External Frequency [RO]"
+	fD readwrite local 00131412
+"Specifies the frequency of the external signal, which is used as reference for internal RF frequency generation. This value is used only if the IviRFSigGen>>Reference Oscillator>>Reference Oscillator Source [RO] property is set to External."
+attribute: "IQ Enabled [MIQ]"
+	"IQ:IQ Enabled [MIQ]"
+	bool readwrite local 00131461
+"Specifies whether the signal generator applies IQ (vector) modulation to the output RF signal (TRUE) or not (FALSE).
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "IQ Nominal Voltage [MIQ]"
+	"IQ:IQ Nominal Voltage [MIQ]"
+	fD readonly local 00131462
+"This is the voltage at which the instrument achieves full modulation. The value is calculated by SQRT(I^2+Q^2)."
+attribute: "IQ Source [MIQ]"
+	"IQ:IQ Source [MIQ]"
+	iL enum { IVIRFSIGGEN_VAL_IQ_SOURCE_DIGITAL_MODULATION_BASE=1, IVIRFSIGGEN_VAL_IQ_SOURCE_CDMA_BASE=2, IVIRFSIGGEN_VAL_IQ_SOURCE_TDMA_BASE=3, IVIRFSIGGEN_VAL_IQ_SOURCE_ARB_GENERATOR=4, IVIRFSIGGEN_VAL_IQ_SOURCE_EXTERNAL=5} readwrite local 00131463
+"Specifies the source of the signal that the signal generator uses for IQ modulation.
+IVIRFSIGGEN_VAL_IQ_SOURCE_DIGITAL_MODULATION_BASE 1
+The signal generator uses the internally generated digital modulation signal to apply IQ modulation to the output RF signal.
+
+IVIRFSIGGEN_VAL_IQ_SOURCE_CDMA_BASE 2
+The signal generator uses the internally generated CDMA signal to apply IQ modulation to the output RF signal.
+
+IVIRFSIGGEN_VAL_IQ_SOURCE_TDMA_BASE 3
+The signal generator uses the internally generated TDMA signal to apply IQ modulation to the output RF signal.
+
+IVIRFSIGGEN_VAL_IQ_SOURCE_ARB_GENERATOR 4
+The signal generator uses the internally generated Arb signal to apply IQ modulation to the output RF signal.
+
+IVIRFSIGGEN_VAL_IQ_SOURCE_EXTERNAL 5
+The signal generator uses data from an external source for IQ modulation."
+attribute: "IQSwap Enabled [MIQ]"
+	"IQ:IQSwap Enabled [MIQ]"
+	bool readwrite local 00131464
+"Enables or disables the inverse phase rotation of the IQ signal by swapping the I and Q inputs.  If TRUE, the RF signal generator applies non-inverse phase rotation of the IQ signal.  If FALSE, the RF signal generator applies inverse phase rotation of the IQ signal.
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "IQ Impairment Enabled [IQI]"
+	"IQ:IQ Impairment:IQ Impairment Enabled [IQI]"
+	bool readwrite local 00131475
+"Enables IQ impairment. When set to TRUE, the following impairment properties are applied.
+ 
+IviRFSigGen>>IQ>>IQ Impairment>>IQ I-Offset [IQI]
+IviRFSigGen>>IQ>>IQ Impairment>>IQ Q-Offset [IQI]
+IviRFSigGen>>IQ>>IQ Impairment>>IQ Ratio [IQI]
+IviRFSigGen>>IQ>>IQ Impairment>>IQ Skew [IQI]
+VI_TRUE 1
+True
+
+VI_FALSE 0
+False"
+attribute: "IQ I Offset [IQI]"
+	"IQ:IQ Impairment:IQ I Offset [IQI]"
+	fD readwrite local 00131476
+"Specifies an origin offset voltage to the I signal. The range of values allowed is -100% to +100%. The value is expressed as percentage (%)."
+attribute: "IQ Q Offset [IQI]"
+	"IQ:IQ Impairment:IQ Q Offset [IQI]"
+	fD readwrite local 00131477
+"Specifies an origin offset voltage to the Q signal. The range of values allowed is -100% to +100%. The value is expressed as percentage (%)."
+attribute: "IQ Ratio [IQI]"
+	"IQ:IQ Impairment:IQ Ratio [IQI]"
+	fD readwrite local 00131478
+"Specifies the gain imbalance between the I and Q channels. For no imbalance this value is set to 0 %. The value is expressed as percentage (%)."
+attribute: "IQ Skew [IQI]"
+	"IQ:IQ Impairment:IQ Skew [IQI]"
+	fD readwrite local 00131479
+"Specifies the adjustment of the phase angle between the I and Q vectors. If this skew is zero, the phase angle is 90 degrees. The units are degrees."
+attribute: "ARB Clock Frequency [ARB]"
+	"ARB Generator:ARB Clock Frequency [ARB]"
+	fD readwrite local 00131494
+"Specifies the sample frequency. The waveform is generated with this clock frequency."
+attribute: "ARB Filter Frequency [ARB]"
+	"ARB Generator:ARB Filter Frequency [ARB]"
+	fD readwrite local 00131495
+"Specifies the cut-off frequency of the low pass filter. The waveform is filtered before output with this filter for antialiasing. The filter frequency normally is lower than the clock frequency. The units are Hertz."
+attribute: "ARB Selected Waveform [ARB]"
+	"ARB Generator:Waveform:ARB Selected Waveform [ARB]"
+	string readwrite local 00131493
+"Specifies the selected waveform from the pool of available waveforms."
+attribute: "ARB Max Number Waveforms [ARB]"
+	"ARB Generator:Waveform:ARB Max Number Waveforms [ARB]"
+	iL readonly local 00131496
+"Returns the max number of waveforms the instrument can hold in the memory. The number may depend on the length of the waveform already in the pool of waveforms saved in the instrument. "
+attribute: "ARB Waveform Quantum [ARB]"
+	"ARB Generator:Waveform:ARB Waveform Quantum [ARB]"
+	iL readonly local 00131497
+"Returns the waveform quantum where the waveform length is a multiple of this quantum. If the waveform quantum is 1, there is no restriction on the waveform length other than min and max size."
+attribute: "ARB Waveform Size Min [ARB]"
+	"ARB Generator:Waveform:ARB Waveform Size Min [ARB]"
+	iL readwrite local 00131498
+"Returns the minimum size of the waveform length in number of samples. The waveform length must equal or greater than this minimum size. If the minimum size is 1, there is no restriction on the waveform length other than max size and quantum."
+attribute: "ARB Waveform Size Max [ARB]"
+	"ARB Generator:Waveform:ARB Waveform Size Max [ARB]"
+	iL readonly local 00131499
+"Returns the maximum waveform length in the number of samples. The waveform length must be equal or less than this maximum size."
+attribute: "ARB Trigger Source [ARB]"
+	"ARB Generator:Trigger:ARB Trigger Source [ARB]"
+	iL enum { IVIRFSIGGEN_VAL_ARB_TRIGGER_SOURCE_IMMEDIATE=1, IVIRFSIGGEN_VAL_ARB_TRIGGER_SOURCE_EXTERNAL=2, IVIRFSIGGEN_VAL_ARB_TRIGGER_SOURCE_SOFTWARE=3} readwrite local 0013149A
+"Specifies how the Arb waveform is started (triggered).
+IVIRFSIGGEN_VAL_ARB_TRIGGER_SOURCE_IMMEDIATE 1
+The ARB generator system does not wait for a trigger. The ARB runs continuously.
+
+IVIRFSIGGEN_VAL_ARB_TRIGGER_SOURCE_EXTERNAL 2
+The sweep is started with an external signal.
+
+IVIRFSIGGEN_VAL_ARB_TRIGGER_SOURCE_SOFTWARE 3
+The sweep is started with a software programmable trigger."
+attribute: "ARB External Trigger Slope [ARB]"
+	"ARB Generator:Trigger:ARB External Trigger Slope [ARB]"
+	iL enum { IVIRFSIGGEN_VAL_ARB_EXTERNAL_TRIGGER_SLOPE_POSITIVE=1, IVIRFSIGGEN_VAL_ARB_EXTERNAL_TRIGGER_SLOPE_NEGATIVE=2} readwrite local 0013149B
+"Specifies whether the trigger event occurs on the rising or falling edge of the input signal.
+IVIRFSIGGEN_VAL_ARB_EXTERNAL_TRIGGER_SLOPE_POSITIVE 1
+Enables rising edge triggering.
+
+IVIRFSIGGEN_VAL_ARB_EXTERNAL_TRIGGER_SLOPE_NEGATIVE 2
+Enables falling edge triggering."
+attribute: "DigitalModulationBase Standard Count [DMB]"
+	"Digital Modulation:DigitalModulationBase Standard Count [DMB]"
+	iL readonly local 001314C5
+"Specifies the number of DigitalModulationBase standards available for a particular instrument."
+attribute: "DigitalModulationBase Selected Standard [DMB]"
+	"Digital Modulation:DigitalModulationBase Selected Standard [DMB]"
+	string readwrite local 001314C6
+"Specifies the actual standard used by the instrument. The coding, mapping, symbol rate or bit clock frequency, filter together with the according filter parameters, FSK deviation or ASK depth (in case of FSK or ASK modulation) are set as defined in the selected standard. "
+attribute: "DigitalModulationBase Data Source [DMB]"
+	"Digital Modulation:DigitalModulationBase Data Source [DMB]"
+	iL enum { IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_DATA_SOURCE_EXTERNAL=1, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_DATA_SOURCE_PRBS=2, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_DATA_SOURCE_BIT_SEQUENCE=3} readwrite local 001314C7
+"Specifies the source of data. The data is used to modulate the RF signal according to the standard selected with the DigitalModulationBase Selected Standard property.
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_DATA_SOURCE_EXTERNAL 1
+The data from an external device connected to the instrument is used.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_DATA_SOURCE_PRBS 2
+The internal PRBS (Pseudo Random Binary Sequence) generator is used as data source.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_DATA_SOURCE_BIT_SEQUENCE 3
+A constant bit sequence is used as data source and repeated continuously."
+attribute: "DigitalModulationBase PRBS Type [DMB]"
+	"Digital Modulation:DigitalModulationBase PRBS Type [DMB]"
+	iL enum { IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS9=1, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS11=2, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS15=3, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS16=4, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS20=5, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS21=6, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS23=7} readwrite local 001314C8
+"Specifies the type of the PRBS as defined in the CCITT-V.52 standard. The PRBS (Pseudo Random Binary Sequence) is used only if DigitalModulationBase Data Source is set to PRBS.
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS9 1
+Length of PRBS sequence is 2^9 -1.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS11 2
+Length of PRBS sequence is 2^11 -1.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS15 3
+Length of PRBS sequence is 2^15 -1.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS16 4
+Length of PRBS sequence is 2^16 -1.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS20 5
+Length of PRBS sequence is 2^20 -1.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS21 6
+Length of PRBS sequence is 2^21 -1.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_PRBS_TYPE_PRBS23 7
+Length of PRBS sequence is 2^23 -1."
+attribute: "DigitalModulationBase Selected Bit Sequence [DMB]"
+	"Digital Modulation:DigitalModulationBase Selected Bit Sequence [DMB]"
+	string readwrite local 001314C9
+"Specifies name of the bit sequence (stream) used as data for digital modulation. The sequence is used only if DigitalModulationBase Data Source is set to BitSequence."
+attribute: "DigitalModulationBase Clock Source [DMB]"
+	"Digital Modulation:DigitalModulationBase Clock Source [DMB]"
+	iL enum { IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_CLOCK_SOURCE_INTERNAL=1, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_CLOCK_SOURCE_EXTERNAL=2} readwrite local 001314CA
+"Specifies the source of the clock signal used to generate the digital modulation according to the selected standard.
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_CLOCK_SOURCE_INTERNAL 1
+An internal clock generator is used.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_CLOCK_SOURCE_EXTERNAL 2
+A connected external clock generator (bit or symbol clock frequency) is used."
+attribute: "DigitalModulationBase External Clock Type [DMB]"
+	"Digital Modulation:DigitalModulationBase External Clock Type [DMB]"
+	iL enum { IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_EXTERNAL_CLOCK_TYPE_BIT=1, IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_EXTERNAL_CLOCK_TYPE_SYMBOL=2} readwrite local 001314CB
+"Specifies the type of the external clock signal used to generate the digital modulation. This value is used only if the DigitalModulationBase Clock Source property is set to External.
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_EXTERNAL_CLOCK_TYPE_BIT 1
+The external clock frequency is equal to the bit clock frequency of the digital modulation.
+
+IVIRFSIGGEN_VAL_DIGITAL_MODULATION_BASE_EXTERNAL_CLOCK_TYPE_SYMBOL 2
+The external clock frequency is equal to the symbol clock frequency of the digital modulation."
+attribute: "CDMA Standard Count [CDMA]"
+	"CDMA:CDMA Standard Count [CDMA]"
+	iL readonly local 00131529
+"Returns the number of CDMA standards available for a particular instrument."
+attribute: "CDMA Selected Standard [CDMA]"
+	"CDMA:CDMA Selected Standard [CDMA]"
+	string readwrite local 0013152A
+"Specifies the actual standard used by the instrument. The modulation type, bit clock frequency and filter together with the according filter parameters are set as defined in the selected standard."
+attribute: "CDMA Test Model Count [CDMA]"
+	"CDMA:CDMA Test Model Count [CDMA]"
+	iL readonly local 0013152D
+"Returns the number of CDMA test models available for a particular instrument."
+attribute: "CDMA Selected Test Model [CDMA]"
+	"CDMA:CDMA Selected Test Model [CDMA]"
+	string readwrite local 0013152E
+"Specifies the actual CDMA test model used by the instrument."
+attribute: "CDMA Clock Source [CDMA]"
+	"CDMA:CDMA Clock Source [CDMA]"
+	iL enum { IVIRFSIGGEN_VAL_CDMA_CLOCK_SOURCE_INTERNAL=1, IVIRFSIGGEN_VAL_CDMA_CLOCK_SOURCE_EXTERNAL=2} readwrite local 0013152F
+"Specifies the source of the clock signal used to generate the digital modulation according to the selected standard.
+IVIRFSIGGEN_VAL_CDMA_CLOCK_SOURCE_INTERNAL 1
+The internal clock generator is used.
+
+IVIRFSIGGEN_VAL_CDMA_CLOCK_SOURCE_EXTERNAL 2
+A connected external clock generator (bit or symbol clock frequency) is used."
+attribute: "CDMA Trigger Source [CDMA]"
+	"CDMA:Trigger:CDMA Trigger Source [CDMA]"
+	iL enum { IVIRFSIGGEN_VAL_CDMA_TRIGGER_SOURCE_IMMEDIATE=1, IVIRFSIGGEN_VAL_CDMA_TRIGGER_SOURCE_EXTERNAL=2, IVIRFSIGGEN_VAL_CDMA_TRIGGER_SOURCE_SOFTWARE=3} readwrite local 0013152B
+"Specifies the source of the trigger signal that starts the channel coding generation.
+IVIRFSIGGEN_VAL_CDMA_TRIGGER_SOURCE_IMMEDIATE 1
+The CDMA generator system does not wait for a trigger. Each channel coding is run continuously.
+
+IVIRFSIGGEN_VAL_CDMA_TRIGGER_SOURCE_EXTERNAL 2
+Each channel coding is started with an external signal.
+
+IVIRFSIGGEN_VAL_CDMA_TRIGGER_SOURCE_SOFTWARE 3
+Each channel coding is started with a software programmable trigger."
+attribute: "CDMA External Trigger Slope [CDMA]"
+	"CDMA:Trigger:CDMA External Trigger Slope [CDMA]"
+	iL enum { IVIRFSIGGEN_VAL_CDMA_EXTERNAL_TRIGGER_SLOPE_POSITIVE=1, IVIRFSIGGEN_VAL_CDMA_EXTERNAL_TRIGGER_SLOPE_NEGATIVE=2} readwrite local 0013152C
+"Specifies whether the trigger event occurs on the rising or falling edge of the input signal.
+IVIRFSIGGEN_VAL_CDMA_EXTERNAL_TRIGGER_SLOPE_POSITIVE 1
+Enables rising edge triggering.
+
+IVIRFSIGGEN_VAL_CDMA_EXTERNAL_TRIGGER_SLOPE_NEGATIVE 2
+Enables falling edge triggering."
+attribute: "TDMA Standard Count [TDMA]"
+	"TDMA:TDMA Standard Count [TDMA]"
+	iL readonly local 0013158D
+"Specifies the number of TDMA standards available for a particular instrument. "
+attribute: "TDMA Selected Standard [TDMA]"
+	"TDMA:TDMA Selected Standard [TDMA]"
+	string readwrite local 0013158E
+"Specifies the actual standard used by the instrument. The coding, mapping, symbol rate or bit clock frequency, filter together with the according filter parameters, FSK deviation or ASK depth (in case of FSK or ASK modulation) are set as defined in the selected standard."
+attribute: "TDMA Frame Count [TDMA]"
+	"TDMA:TDMA Frame Count [TDMA]"
+	iL readonly local 00131591
+"Specifies the number of TDMA frames available for a particular instrument."
+attribute: "TDMA Selected Frame [TDMA]"
+	"TDMA:TDMA Selected Frame [TDMA]"
+	string readwrite local 00131592
+"Specifies the actual frame used by the instrument. It is selected from the list queried with the Get TDMA Frame Names VI."
+attribute: "TDMA Clock Source [TDMA]"
+	"TDMA:TDMA Clock Source [TDMA]"
+	iL enum { IVIRFSIGGEN_VAL_TDMA_CLOCK_SOURCE_INTERNAL=1, IVIRFSIGGEN_VAL_TDMA_CLOCK_SOURCE_EXTERNAL=2} readwrite local 00131593
+"Specifies the source of the clock signal used to generate the digital modulation according to the selected standard.
+IVIRFSIGGEN_VAL_TDMA_CLOCK_SOURCE_INTERNAL 1
+The internal clock generator is used.
+
+IVIRFSIGGEN_VAL_TDMA_CLOCK_SOURCE_EXTERNAL 2
+A connected external clock generator (bit or symbol clock frequency) is used."
+attribute: "TDMA Clock Type [TDMA]"
+	"TDMA:TDMA Clock Type [TDMA]"
+	iL enum { IVIRFSIGGEN_VAL_TDMA_EXTERNAL_CLOCK_TYPE_BIT=1, IVIRFSIGGEN_VAL_TDMA_EXTERNAL_CLOCK_TYPE_SYMBOL=2} readwrite local 00131594
+"Specifies the type of the external clock signal used to generate the digital modulation. This value is used only if the IviRFSigGen>>TDMA>>TDMA Clock Source [TDMA] property is set to External.
+IVIRFSIGGEN_VAL_TDMA_EXTERNAL_CLOCK_TYPE_BIT 1
+The external clock frequency is equal to the bit clock frequency of the digital modulation.
+
+IVIRFSIGGEN_VAL_TDMA_EXTERNAL_CLOCK_TYPE_SYMBOL 2
+The external clock frequency is equal to the symbol clock frequency of the digital modulation."
+attribute: "TDMA Trigger Source [TDMA]"
+	"TDMA:Trigger:TDMA Trigger Source [TDMA]"
+	iL enum { IVIRFSIGGEN_VAL_TDMA_TRIGGER_SOURCE_IMMEDIATE=1, IVIRFSIGGEN_VAL_TDMA_TRIGGER_SOURCE_EXTERNAL=2, IVIRFSIGGEN_VAL_TDMA_TRIGGER_SOURCE_SOFTWARE=3} readwrite local 0013158F
+"Specifies the source of the trigger signal that starts the frame/slots generation.
+IVIRFSIGGEN_VAL_TDMA_TRIGGER_SOURCE_IMMEDIATE 1
+The TDMA generator system does not wait for a trigger of any kind, so it is running the frames continuously.
+
+IVIRFSIGGEN_VAL_TDMA_TRIGGER_SOURCE_EXTERNAL 2
+Each frame is started with an external signal.
+
+IVIRFSIGGEN_VAL_TDMA_TRIGGER_SOURCE_SOFTWARE 3
+Each frame is started with a software programmable trigger."
+attribute: "TDMA External Trigger Slope [TDMA]"
+	"TDMA:Trigger:TDMA External Trigger Slope [TDMA]"
+	iL enum { IVIRFSIGGEN_VAL_TDMA_EXTERNAL_TRIGGER_SLOPE_POSITIVE=1, IVIRFSIGGEN_VAL_TDMA_EXTERNAL_TRIGGER_SLOPE_NEGATIVE=2} readwrite local 00131590
+"Specifies whether the trigger event occurs on the rising or falling edge of the input signal.
+IVIRFSIGGEN_VAL_TDMA_EXTERNAL_TRIGGER_SLOPE_POSITIVE 1
+Enables rising edge triggering.
+
+IVIRFSIGGEN_VAL_TDMA_EXTERNAL_TRIGGER_SLOPE_NEGATIVE 2
+Enables falling edge triggering."

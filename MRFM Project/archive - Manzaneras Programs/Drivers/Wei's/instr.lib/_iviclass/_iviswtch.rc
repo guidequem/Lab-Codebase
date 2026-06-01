@@ -1,0 +1,677 @@
+library: iviswtch.dll
+
+class: "IviSwtch"
+flags: 16
+sorted: no
+super: ivi, IviSwtchObsolete, iviResourceMgr
+attribute: "Range Check"
+	"Inherent IVI Settings:User Options:Range Check"
+	bool readwrite local 00100592
+"Specifies whether to validate property values and VI parameters.  If enabled, the instrument driver validates the parameter values that you pass to driver VIs.  Range checking parameters is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable range checking and maximize performance.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Query Instrument Status"
+	"Inherent IVI Settings:User Options:Query Instrument Status"
+	bool readwrite local 00100593
+"Specifies whether the instrument driver queries the instrument status after each operation.  Querying the instrument status is very useful for debugging.  After you validate your program, you can set this property to FALSE to disable status checking and maximize performance
+    The instrument driver can choose to ignore status checking for particular properties regardless of the setting of this property.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Cache"
+	"Inherent IVI Settings:User Options:Cache"
+	bool readwrite local 00100594
+"Specifies whether to cache the value of properties.  When caching is enabled, the instrument driver keeps track of the current instrument settings and avoids sending redundant commands to the instrument.  Thus, you can significantly increase execution speed.
+    The instrument driver can choose always to cache or never to cache particular properties regardless of the setting of this property.
+    The default value is TRUE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Simulate"
+	"Inherent IVI Settings:User Options:Simulate"
+	bool readwrite local 00100595
+"Specifies whether or not to simulate instrument driver I/O operations.  If simulation is enabled, instrument driver VIs perform range checking and set and get properties, but they do not perform instrument I/O.  For output parameters that represent instrument data, the instrument driver VIs return calculated values.
+    The default value is FALSE.   Use the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Use Specific Simulation"
+	"Inherent IVI Settings:User Options:Use Specific Simulation"
+	bool readwrite local 001005A7
+"Specifies whether to simulate instrument driver I/O operations in the specific or class driver.  This property affects instrument driver operation only when the IviSwtch>>Inherent IVI Settings>>User Options>>Simulate property is set to TRUE.
+    The default value is FALSE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Record Value Coercions"
+	"Inherent IVI Settings:User Options:Record Value Coercions"
+	bool readwrite local 00100596
+"Specifies whether the instrument driver keeps a list of the value coercions it makes for ViInt32 and ViReal64 properties.  If IviSwtch>>Inherent IVI Settings>>User Options>>Spy is set to TRUE, you use the NI-Spy utility to view coercion information.  If IviSwtch>>Inherent IVI Settings>>User Options>>Spy is set to FALSE you call Get Next Coercion Record to extract and delete the oldest coercion record from the list.
+    The default value is FALSE.   Use the IVI Configuration utility or the Initialize With Options VI to override this value.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Interchange Check"
+	"Inherent IVI Settings:User Options:Interchange Check"
+	bool readwrite local 001005A5
+"Specifies whether to perform interchangeability checking and retrieve interchangeability warnings when you call the Connect Channels, Set Path, and Initiate Scan [SCN] VIs.  The default value is FALSE.  Interchangeability warnings indicate that using your application with a different instrument might cause different behavior.  If IviSwtch>>Inherent IVI Settings>>User Options>>Spy is set to FALSE, you call Get Next Interchange Warning to extract interchange warnings.  Call the Clear Interchange Warnings VI to clear the list of interchangeability warnings without reading them.
+If IviSwtch>>Inherent IVI Settings>>User Options>>Spy is set to TRUE, you can use the NI Spy utility to view interchange warnings.
+     Interchangeability checking examines the properties in a capability group only if you specify a value for at least one property within that group.  Interchangeability warnings can occur under the following conditions:
+
+(1) A property affects the behavior of the instrument and you have not set that property.
+
+(2) The IviSwtch class defines values for a property and you have set that property to a value not defined by the IviSwtch class.
+
+(3) The IviSwtch class defines a property as read-only and you have set that property.
+
+
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Spy"
+	"Inherent IVI Settings:User Options:Spy"
+	bool readwrite local 001005A6
+"Specifies whether to log class VI calls to the NI Spy utility.  If spying is enabled, you can use NI Spy to view the input and output parameters, return values, coercion records, and interchangeability warnings of class VI calls.
+    The default value is TRUE.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Description"
+	"Inherent IVI Settings:Class Driver Identification:Description"
+	string readonly local 00100796
+"A string that contains a brief description of the class driver
+    "
+attribute: "Class Driver Prefix"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Prefix"
+	string readonly local 001006BD
+"A string that contains the prefix for the class driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Class Driver Vendor"
+	"Inherent IVI Settings:Class Driver Identification:Class Driver Vendor"
+	string readonly local 00100795
+"A string that contains the name of the vendor that supplies this class driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Class Driver Identification:Revision"
+	string readonly local 001007B8
+"A string that contains additional version information about the class driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Major Version"
+	iL readonly local 00100797
+"The major version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Class Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100798
+"The minor version number of the class specification with which the class driver is compliant.
+    "
+attribute: "Description"
+	"Inherent IVI Settings:Specific Driver Identification:Description"
+	string readonly local 00100792
+"A string that contains a brief description of the specific driver
+    "
+attribute: "Specific Driver Prefix"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Prefix"
+	string readonly local 001006BE
+"A string that contains the prefix for the instrument driver.  The name of each user-callable VI in this driver starts with this prefix.
+    "
+attribute: "Specific Driver Locator"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Locator"
+	string readonly local 001006BF
+"Indicates the location at which the class driver attempts to find the specific driver module file.
+"
+attribute: "Specific Driver Vendor"
+	"Inherent IVI Settings:Specific Driver Identification:Specific Driver Vendor"
+	string readonly local 00100791
+"A string that contains the name of the vendor that supplies this driver.
+    "
+attribute: "Revision"
+	"Inherent IVI Settings:Specific Driver Identification:Revision"
+	string readonly local 001007B7
+"A string that contains additional version information about the specific driver.
+    "
+attribute: "Class Specification Major Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Major Version"
+	iL readonly local 00100793
+"The major version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Class Specification Minor Version"
+	"Inherent IVI Settings:Specific Driver Identification:Class Specification Minor Version"
+	iL readonly local 00100794
+"The minor version number of the class specification with which the specific driver is compliant.
+    "
+attribute: "Supported Instrument Models"
+	"Inherent IVI Settings:Specific Driver Capabilities:Supported Instrument Models"
+	string readonly local 001006D7
+"Contains a model code of the instrument. For specific drivers that support more than one device, this property contains a comma-separated list of supported instrument models.
+    "
+attribute: "Group Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Group Capabilities"
+	string readonly local 00100721
+"Indicates the IviSwtch capability groups that the specific instrument driver supports.  This property is a comma-delimited list of the following group names:
+
+'IviSwtch' - Supports fundamental switch capabilities.
+
+'IviSwtchScanner' - Supports IviSwtch with the capability to scan channels.
+
+'IviSwtchSoftwareTrigger' - Supports IviSwtchScanner with the capability to receive software triggers.
+
+    "
+attribute: "Function Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Function Capabilities"
+	string readonly local 00100722
+"Indicates the IviSwtch VIs that the specific instrument driver supports.  This property is a comma-delimited list of the following functions:
+
+    'IviSwtch_init'
+    'IviSwtch_close'
+    'IviSwtch_reset'
+    'IviSwtch_self_test'
+    'IviSwtch_error_query'
+    'IviSwtch_error_message'
+    'IviSwtch_revision_query'
+    'IviSwtch_Connect'
+    'IviSwtch_Disconnect'
+    'IviSwtch_GetPath'
+    'IVISwtch_SetPath'
+    'IviSwtch_CanConnect'
+    'IviSwtch_DisconnectAll'
+    'IviSwtch_IsDebounced'
+    'IviSwtch_WaitForDebounce'
+    'IviSwtch_InitiateScan'
+    'IviSwtch_AbortScan'
+    'IviSwtch_IsScanning'
+    'IviSwtch_WaitForScanComplete'
+    'IviSwtch_ConfigureScanList'
+    'IviSwtch_ConfigureScanTrigger'
+    'IviSwtch_SendSoftwareTrigger'
+    "
+attribute: "Attribute Capabilities"
+	"Inherent IVI Settings:Specific Driver Capabilities:Attribute Capabilities"
+	string readonly local 00100723
+"Indicates the IviSwtch properties that the specific instrument driver supports.  This property is a comma-delimited list of the following properties:
+
+    'IVISWTCH_ATTR_BANDWIDTH'
+    'IVISWTCH_ATTR_CHARACTERISTIC_IMPEDANCE'
+    'IVISWTCH_ATTR_IS_CONFIGURATION_CHANNEL'
+    'IVISWTCH_ATTR_IS_DEBOUNCED'
+    'IVISWTCH_ATTR_IS_SOURCE_CHANNEL'
+    'IVISWTCH_ATTR_MAX_AC_VOLTAGE'
+    'IVISWTCH_ATTR_MAX_CARRY_AC_CURRENT'
+    'IVISWTCH_ATTR_MAX_CARRY_AC_POWER'
+    'IVISWTCH_ATTR_MAX_CARRY_DC_CURRENT'
+    'IVISWTCH_ATTR_MAX_CARRY_DC_POWER'
+    'IVISWTCH_ATTR_MAX_DC_VOLTAGE'
+    'IVISWTCH_ATTR_MAX_SWITCHING_AC_CURRENT'
+    'IVISWTCH_ATTR_MAX_SWITCHING_AC_POWER'
+    'IVISWTCH_ATTR_MAX_SWITCHING_DC_CURRENT'
+    'IVISWTCH_ATTR_MAX_SWITCHING_DC_POWER'
+    'IVISWTCH_ATTR_SETTLING_TIME'
+    'IVISWTCH_ATTR_WIRE_MODE'
+    'IVISWTCH_ATTR_NUM_OF_ROWS'
+    'IVISWTCH_ATTR_NUM_OF_COLUMNS'
+    'IVISWTCH_ATTR_SCAN_LIST'
+    'IVISWTCH_ATTR_SCAN_MODE'
+    'IVISWTCH_ATTR_TRIGGER_INPUT'
+    'IVISWTCH_ATTR_SCAN_ADVANCED_OUTPUT'
+    'IVISWTCH_ATTR_SCAN_DELAY'
+    'IVISWTCH_ATTR_IS_SCANNING'
+    "
+attribute: "Channel Count"
+	"Inherent IVI Settings:Specific Driver Capabilities:Channel Count"
+	iL readonly local 0010065B
+"Indicates the number of channels that the specific driver supports.  
+    For each property for which the IVI_VAL_MULTI_CHANNEL flag property is set, the instrument driver maintains a separate cache value for each channel.
+    "
+attribute: "Manufacturer"
+	"Inherent IVI Settings:Instrument Identification:Manufacturer"
+	string readonly local 0010078F
+"A string that contains the name of the instrument manufacturer you are currently using.
+    "
+attribute: "Model"
+	"Inherent IVI Settings:Instrument Identification:Model"
+	string readonly local 00100790
+"A string that contains the model number or name of the instrument that you are currently using.
+    "
+attribute: "Firmware Revision"
+	"Inherent IVI Settings:Instrument Identification:Firmware Revision"
+	string readonly local 0010078E
+"A string that contains the firmware revision information for the instrument you are currently using.
+    "
+attribute: "Driver Setup"
+	"Inherent IVI Settings:Advanced Session Information:Driver Setup"
+	string readonly local 00100597
+"     Some cases exist where you must specify instrument driver options at initialization time.  An example of this is specifying a particular instrument model from among a family of instruments that the driver supports.  This is useful when using simulation.  
+     You can specify driver-specific options through the DriverSetup keyword in the optionsString parameter to the Init With Options VI.  If you open an instrument using a logical name, you can also specify the options through the IVI Configuration Utility.
+     The default value is an empty string.
+     "
+attribute: "Logical Name"
+	"Inherent IVI Settings:Advanced Session Information:Logical Name"
+	string readonly local 001006C1
+"A string containing the logical name you specified when opening the current IVI session.
+     You may pass a logical name to the Initialize or Initialize With Options VIs.  The IVI Configuration utility must contain an entry for the logical name.  The logical name entry refers to a virtual instrument section in the IVI Configuration file.  The virtual instrument section specifies a physical device and initial user options.
+    "
+attribute: "IO Resource Descriptor"
+	"Inherent IVI Settings:Advanced Session Information:IO Resource Descriptor"
+	string readonly local 001006C0
+"Indicates the resource descriptor the driver uses to identify the physical device.
+    If you initialize the driver with a logical name, this property contains the resource descriptor that corresponds to the entry in the IVI Configuration utility.  
+    If you initialize the instrument driver with the resource descriptor, this property contains that value.
+    "
+attribute: "Is Source Channel"
+	"Channel Configuration:Is Source Channel"
+	bool readwrite local 001312D1
+"This channel-based property specifies whether you want to identify the channel as a source channel.  Typically, you set this property to TRUE when you attach the channel to a power supply, a function generator, or an active measurement point on the unit under test, and you do not want to connect the channel to another source.  The driver prevents source channels from connecting to each other.  The Connect Channels VI returns the IVISWTCH_ERROR_ATTEMPT_TO_CONNECT_SOURCES when you attempt to connect two channels that you identify as source channels.
+
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Is Configuration Channel"
+	"Channel Configuration:Is Configuration Channel"
+	bool readwrite local 001312D3
+"This channel-based property specifies whether to reserve the channel for internal path creation.  A channel that is available for internal path creation is called a configuration channel.  The driver may use configuration channels to create paths between two channels you specify in the Connect Channels VI.  Configuration channels are not available for external connections.
+    Set this property to TRUE to mark the channel as a configuration channel.  Set this property to FALSE to mark the channel as available for external connections.
+    After you identify a channel as a configuration channel, you cannot use that channel for external connections.  The Connect Channels VI returns the IVISWTCH_ERROR_IS_CONFIGURATION_CHANNEL error when you attempt to establish a connection between a configuration channel and any other channel.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Is Debounced"
+	"Module Characteristics:Is Debounced"
+	bool readonly local 001312D2
+"This property indicates whether the entire switch module has settled since the last switching command.  A value of TRUE indicates that all signals going through the switch module are valid.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Settling Time"
+	"Module Characteristics:Settling Time"
+	fD readwrite local 001312D4
+"This channel-based property returns the maximum length of time from after you make a connection until the signal flowing through the channel settles.
+    The units are seconds.
+    "
+attribute: "Bandwidth"
+	"Module Characteristics:Bandwidth"
+	fD readonly local 001312D5
+"This channel-based property returns the bandwidth for the channel.
+    The units are hertz.
+    "
+attribute: "Maximum DC Voltage"
+	"Module Characteristics:Maximum DC Voltage"
+	fD readonly local 001312D6
+"This channel-based property returns the maximum DC voltage the channel can switch.
+    The units are volts.
+    "
+attribute: "Maximum AC Voltage"
+	"Module Characteristics:Maximum AC Voltage"
+	fD readonly local 001312D7
+"This channel-based property returns the maximum AC voltage the channel can switch.
+    The units are volts RMS.
+    "
+attribute: "Maximum Switching DC Current"
+	"Module Characteristics:Maximum Switching DC Current"
+	fD readonly local 001312D8
+"This channel-based property returns the maximum DC current the channel can switch.
+    The units are amperes.
+    "
+attribute: "Maximum Switching AC Current"
+	"Module Characteristics:Maximum Switching AC Current"
+	fD readonly local 001312D9
+"This channel-based property returns the maximum AC current the channel can switch.
+    The units are amperes RMS.
+    "
+attribute: "Maximum Carry DC Current"
+	"Module Characteristics:Maximum Carry DC Current"
+	fD readonly local 001312DA
+"This channel-based property returns the maximum DC current the channel can carry.
+    The units are amperes.
+    "
+attribute: "Maximum Carry AC Current"
+	"Module Characteristics:Maximum Carry AC Current"
+	fD readonly local 001312DB
+"This channel-based property returns the maximum AC current the channel can carry.
+    The units are amperes RMS.
+    "
+attribute: "Maximum Switching DC Power"
+	"Module Characteristics:Maximum Switching DC Power"
+	fD readonly local 001312DC
+"This channel-based property returns the maximum DC power the channel can switch.
+    The units are watts.
+    "
+attribute: "Maximum Switching AC Power"
+	"Module Characteristics:Maximum Switching AC Power"
+	fD readonly local 001312DD
+"This channel-based property returns the maximum AC power the channel can switch.
+    The units are volt-amperes.
+    "
+attribute: "Maximum Carry DC Power"
+	"Module Characteristics:Maximum Carry DC Power"
+	fD readonly local 001312DE
+"This channel-based property returns the maximum DC power the channel can carry.
+    The units are watts.
+    "
+attribute: "Maximum Carry AC Power"
+	"Module Characteristics:Maximum Carry AC Power"
+	fD readonly local 001312DF
+"This channel-based property returns the maximum AC power the channel can carry.
+    The units are volt-amperes.
+    "
+attribute: "Characteristic Impedance"
+	"Module Characteristics:Characteristic Impedance"
+	fD readonly local 001312E0
+"This channel-based property returns the characteristic impedance for the channel.
+    The units are ohms.    "
+attribute: "Scan List [SCN]"
+	"Scanning Configuration:Scan List [SCN]"
+	string readwrite local 001312E4
+"This property contains a scan list, which is a string that specifies channel connections and trigger conditions.  The Initiate Scan [SCN] VI makes or breaks connections and waits for triggers according to the instructions in the scan list.
+    The scan list is comprised of channel names that you separate with special characters.  These special characters determine the operations the scanner performs on the channels when it executes this scan list.
+
+To create a path between two channels, use the following character between the two channel names:
+    -> (a dash followed by a '>' sign)
+Example: 'CH1->CH2' tells the switch to make a path from channel CH1 to channel CH2.
+
+To break or clear a path, use the following character as a prefix before the path:
+    ~ (tilde)
+Example: '~CH1->CH2' tells the switch to break the path from channel CH1 to channel CH2.
+
+To tell the switch module to wait for a trigger event, use the following character as a separator between paths:
+    ; (semicolon)
+Example: 'CH1->CH2;CH3->CH4' tells the switch to make the path from channel CH1 to channel CH2, wait for a trigger, and then make the path from CH3 to CH4.
+
+To tell the switch module to create multiple paths simultaneously, use the following character as a separator between the paths:
+    , (comma)
+Example: 'A->B;CH1->CH2,CH3->CH4' instructs the scanner to make the path between channels A and B, wait for a trigger, and then simultaneously make the paths between channels CH1 and CH2 and between channels CH3 and CH4.
+
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    "
+attribute: "Scan Mode [SCN]"
+	"Scanning Configuration:Scan Mode [SCN]"
+	iL enum { IVISWTCH_VAL_NONE=0, IVISWTCH_VAL_BREAK_BEFORE_MAKE=1, IVISWTCH_VAL_BREAK_AFTER_MAKE=2} readwrite local 001312E5
+"This property specifies what happens to existing connections that conflict with the connections you make in a scan list.  For example, if CH1 is already connected to CH2 and the scan list instructs the switch module to connect CH1 to CH3, this property specifies what happens to the connection between CH1 and CH2.
+    If the value of this property is IVISWTCH_VAL_NONE, the switch module takes no action on existing paths.  If the value is IVISWTCH_VAL_BREAK_BEFORE_MAKE, the switch module breaks conflicting paths before making new ones.  If the value is IVISWTCH_VAL_BREAK_AFTER_MAKE, the switch module breaks conflicting paths after making new ones.
+    Most switch modules support only one of the possible values.  In such cases, this property serves as an indicator of the module's behavior.
+
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    
+IVISWTCH_VAL_NONE 0
+No implicit action on connections when scanning
+
+IVISWTCH_VAL_BREAK_BEFORE_MAKE 1
+When scanning, the switch module breaks existing connections before making new connections.
+
+IVISWTCH_VAL_BREAK_AFTER_MAKE 2
+When scanning, the switch module breaks existing connections after making new connections."
+attribute: "Continuous Scan [SCN]"
+	"Scanning Configuration:Continuous Scan [SCN]"
+	bool readwrite local 001312EA
+"This property specifies whether the switch module continues scanning from the top of the scan list after reaching the end of the list.  A value of TRUE indicates that the switch module continuously scans.  A value of FALSE indicates that the switch module does not continuously scan.
+    If you set this property to TRUE, the VI Wait For Scan To Complete [SCN] always times out, and you must call Abort Scan [SCN] to stop the scan.
+
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Trigger Input [SCN]"
+	"Scanning Configuration:Trigger Input [SCN]"
+	iL enum { IVISWTCH_VAL_IMMEDIATE=1, IVISWTCH_VAL_EXTERNAL=2, IVISWTCH_VAL_SOFTWARE_TRIG=3, IVISWTCH_VAL_TTL0=111, IVISWTCH_VAL_TTL1=112, IVISWTCH_VAL_TTL2=113, IVISWTCH_VAL_TTL3=114, IVISWTCH_VAL_TTL4=115, IVISWTCH_VAL_TTL5=116, IVISWTCH_VAL_TTL6=117, IVISWTCH_VAL_TTL7=118, IVISWTCH_VAL_ECL0=119, IVISWTCH_VAL_ECL1=120, IVISWTCH_VAL_PXI_STAR=125, IVISWTCH_VAL_RTSI_0=140, IVISWTCH_VAL_RTSI_1=141, IVISWTCH_VAL_RTSI_2=142, IVISWTCH_VAL_RTSI_3=143, IVISWTCH_VAL_RTSI_4=144, IVISWTCH_VAL_RTSI_5=145, IVISWTCH_VAL_RTSI_6=146} readwrite local 001312E6
+"This property specifies the source of the trigger for which the switch module can wait when processing a scan list.  The switch module waits for a trigger when it encounters a semicolon in a scan list.  When the trigger occurs, the switch module advances to the next entry in the scan list.
+
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    
+IVISWTCH_VAL_IMMEDIATE 1
+Immediate Trigger. The switch module does not wait for a trigger before processing the next entry in the scan list.
+
+IVISWTCH_VAL_EXTERNAL 2
+External Trigger. The switch module waits until it receives a trigger from an external source through the external trigger input before processing the next entry in the scan list.
+
+IVISWTCH_VAL_SOFTWARE_TRIG 3
+The switch module waits until you call the Send Software Trigger [SWT] VI before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL0 111
+The switch module waits until it receives a trigger on the VXIbus TTL0 or PXI TRIG0 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL1 112
+The switch module waits until it receives a trigger on the VXIbus TTL1 or PXI TRIG1 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL2 113
+The switch module waits until it receives a trigger on the VXIbus TTL2 or PXI TRIG2 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL3 114
+The switch module waits until it receives a trigger on the VXIbus TTL3 or PXI TRIG3 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL4 115
+The switch module waits until it receives a trigger on the VXIbus TTL4 or PXI TRIG4 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL5 116
+The switch module waits until it receives a trigger on the VXIbus TTL5 or PXI TRIG5 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL6 117
+The switch module waits until it receives a trigger on the VXIbus TTL6 or PXI TRIG6 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_TTL7 118
+The switch module waits until it receives a trigger on the VXIbus TTL7 or PXI TRIG7 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_ECL0 119
+The switch module waits until it receives a trigger on the VXIbus ECL0 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_ECL1 120
+The switch module waits until it receives a trigger on the VXIbus ECL1 line before processing the next entry in the scan list.
+
+IVISWTCH_VAL_PXI_STAR 125
+The switch module waits until it receives a trigger on the PXI STAR trigger bus before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_0 140
+The switch module waits until it receives a trigger on RTSI line 0 before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_1 141
+The switch module waits until it receives a trigger on RTSI line 1 before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_2 142
+The switch module waits until it receives a trigger on RTSI line 2 before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_3 143
+The switch module waits until it receives a trigger on RTSI line 3 before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_4 144
+The switch module waits until it receives a trigger on RTSI line 4 before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_5 145
+The switch module waits until it receives a trigger on RTSI line 5 before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_6 146
+The switch module waits until it receives a trigger on RTSI line 6 before processing the next entry in the scan list."
+attribute: "Scan Advanced Output [SCN]"
+	"Scanning Configuration:Scan Advanced Output [SCN]"
+	iL enum { IVISWTCH_VAL_NONE=0, IVISWTCH_VAL_EXTERNAL=2, IVISWTCH_VAL_GPIB_SRQ=5, IVISWTCH_VAL_TTL0=111, IVISWTCH_VAL_TTL1=112, IVISWTCH_VAL_TTL2=113, IVISWTCH_VAL_TTL3=114, IVISWTCH_VAL_TTL4=115, IVISWTCH_VAL_TTL5=116, IVISWTCH_VAL_TTL6=117, IVISWTCH_VAL_TTL7=118, IVISWTCH_VAL_ECL0=119, IVISWTCH_VAL_ECL1=120, IVISWTCH_VAL_PXI_STAR=125, IVISWTCH_VAL_RTSI_0=140, IVISWTCH_VAL_RTSI_1=141, IVISWTCH_VAL_RTSI_2=142, IVISWTCH_VAL_RTSI_3=143, IVISWTCH_VAL_RTSI_4=144, IVISWTCH_VAL_RTSI_5=145, IVISWTCH_VAL_RTSI_6=146} readwrite local 001312E7
+"This property specifies the method you want to use to notify another instrument that all signals going through the switch module have settled following the processing of one entry in the scan list.
+
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    
+IVISWTCH_VAL_NONE 0
+The switch module does not produce a Scan Advanced Output trigger.
+
+IVISWTCH_VAL_EXTERNAL 2
+External Trigger. The switch module produces the Scan Advanced Output trigger on the external trigger output.
+
+IVISWTCH_VAL_GPIB_SRQ 5
+The switch module produces the GPIB Service Request in place of the Scan Advanced Output trigger.
+
+IVISWTCH_VAL_TTL0 111
+The switch module produces the Scan Advanced Output on the VXIbus TTL0 or PXI TRIG0 line.
+
+IVISWTCH_VAL_TTL1 112
+The switch module produces the Scan Advanced Output on the VXIbus TTL1 or PXI TRIG1 line.
+
+IVISWTCH_VAL_TTL2 113
+The switch module produces the Scan Advanced Output on the VXIbus TTL2 or PXI TRIG2 line.
+
+IVISWTCH_VAL_TTL3 114
+The switch module produces the Scan Advanced Output on the VXIbus TTL3 or PXI TRIG3 line.
+
+IVISWTCH_VAL_TTL4 115
+The switch module produces the Scan Advanced Output on the VXIbus TTL4 or PXI TRIG4 line.
+
+IVISWTCH_VAL_TTL5 116
+The switch module produces the Scan Advanced Output on the VXIbus TTL5 or PXI TRIG5 line.
+
+IVISWTCH_VAL_TTL6 117
+The switch module produces the Scan Advanced Output on the VXIbus TTL6 or PXI TRIG6 line.
+
+IVISWTCH_VAL_TTL7 118
+The switch module produces the Scan Advanced Output on the VXIbus TTL7 or PXI TRIG7 line.
+
+IVISWTCH_VAL_ECL0 119
+The switch module produces the Scan Advanced Output on the VXIbus ECL0 line.
+
+IVISWTCH_VAL_ECL1 120
+The switch module produces the Scan Advanced Output on the VXIbus ECL1 line.
+
+IVISWTCH_VAL_PXI_STAR 125
+The switch module produces the Scan Advanced Output on the PXI STAR trigger bus before processing the next entry in the scan list.
+
+IVISWTCH_VAL_RTSI_0 140
+The switch module produces the Scan Advanced Output on RTSI line 0.
+
+IVISWTCH_VAL_RTSI_1 141
+The switch module produces the Scan Advanced Output on RTSI line 1.
+
+IVISWTCH_VAL_RTSI_2 142
+The switch module produces the Scan Advanced Output on RTSI line 2.
+
+IVISWTCH_VAL_RTSI_3 143
+The switch module produces the Scan Advanced Output on RTSI line 3.
+
+IVISWTCH_VAL_RTSI_4 144
+The switch module produces the Scan Advanced Output on RTSI line 4.
+
+IVISWTCH_VAL_RTSI_5 145
+The switch module produces the Scan Advanced Output on RTSI line 5.
+
+IVISWTCH_VAL_RTSI_6 146
+The switch module produces the Scan Advanced Output on RTSI line 6."
+attribute: "Is Scanning [SCN]"
+	"Scanning Configuration:Is Scanning [SCN]"
+	bool readonly local 001312E8
+"This property indicates whether the switch module has completed the scan operation.  The value TRUE indicates that the scan is complete.
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    
+TRUE 1
+True
+
+FALSE 0
+False"
+attribute: "Scan Delay [SCN]"
+	"Scanning Configuration:Scan Delay [SCN]"
+	fD readwrite local 001312E9
+"This property specifies the minimum amount of time the switch module waits before it asserts the scan advanced output trigger after opening or closing the switch.  The switch module always waits for debounce before asserting the trigger.  Thus, the actual delay will always be the greater value of the settling time and the value you specify as the switch delay.
+The units are seconds.
+    Due to different designs of the switch modules, the actual time might be longer.  
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    "
+attribute: "Number of Rows [SCN]"
+	"Matrix Configuration:Number of Rows [SCN]"
+	iL readonly local 001312E2
+"This property returns the number of rows of a matrix or scanner.  If the switch module is a scanner, this value is the number of output channels.
+    The IviSwtch>>Matrix Configuration>>Wire mode property affects the number of available rows.  For example, if your module has 2 output lines and you use the two-wire mode, then the number of rows you have available is 1.
+
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    "
+attribute: "Number of Columns [SCN]"
+	"Matrix Configuration:Number of Columns [SCN]"
+	iL readonly local 001312E3
+"This property returns the number of columns of a matrix or scanner.  If the switch module is a scanner, this value is the number of input channels.
+    The IviSwtch>>Matrix Configuration>>Wire mode property affects the number of available columns.  For example, if your module has 8 input lines and you use the four-wire mode, then the number of columns you have available is 2.
+
+Notes:
+
+(1) This property is part of the IviSwtchScanner [SCN] extension group.
+    "
+attribute: "Wire mode"
+	"Matrix Configuration:Wire mode"
+	iL enum { IVISWTCH_VAL_1_WIRE=1, IVISWTCH_VAL_2_WIRE=2, IVISWTCH_VAL_3_WIRE=3, IVISWTCH_VAL_4_WIRE=4} readonly local 001312E1
+"This property specifies the wire mode of the switch module.
+    This property affects the values of the IviSwtch>>Matrix Configuration>>Number of Rows [SCN] and IviSwtch>>Matrix Configuration>>Number of Columns [SCN] properties.   The actual number of input and output lines on the switch module is fixed, but the number of channels depends on how many lines constitute each channel.
+    
+IVISWTCH_VAL_1_WIRE 1
+Single-wire mode. Each channel corresponds to one I/O line
+
+IVISWTCH_VAL_2_WIRE 2
+Two-wire mode. Each channel corresponds to two I/O lines
+
+IVISWTCH_VAL_3_WIRE 3
+Three-wire mode. Each channel corresponds to three I/O lines
+
+IVISWTCH_VAL_4_WIRE 4
+Four-wire mode. Each channel corresponds to four I/O lines"
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Major Version"
+	iL readonly local 00100789
+"The major version number of the class driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Class Driver Identification:Minor Version"
+	iL readonly local 0010078A
+"The minor version number of the class driver.
+    "
+attribute: "Major Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Major Version"
+	iL readonly local 00100787
+"The major version number of this instrument driver.
+    "
+attribute: "Minor Version"
+	"Obsolete:Inherent IVI Settings:Specific Driver Identification:Minor Version"
+	iL readonly local 00100788
+"The minor version number of the specific driver.
+    "    
