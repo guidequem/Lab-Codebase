@@ -7,7 +7,7 @@ import base64
 import pyautogui as pg
 
 def sendMessage(msg):
-    webhook = 'https://hooks.slack.com/services/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'
+    webhook = '' #place webhook here
     payload = {"text":msg}
     try:
         r = requests.post(webhook,json = payload)
